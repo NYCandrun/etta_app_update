@@ -77,7 +77,7 @@ pub fn get(
             "SELECT payload_json, mastery_band, model_version \
              FROM content_cache \
              WHERE concept_id = ?1 AND content_type = ?2 AND created_at >= ?3 \
-             ORDER BY created_at DESC LIMIT 1",
+             ORDER BY created_at DESC, id DESC LIMIT 1",
             params![concept_id, content_type, cutoff],
             |r| {
                 Ok((
@@ -119,7 +119,7 @@ fn trim_to_recent(conn: &Connection, concept_id: &str, content_type: &str) -> Re
          WHERE concept_id = ?1 AND content_type = ?2 AND id NOT IN ( \
             SELECT id FROM content_cache \
             WHERE concept_id = ?1 AND content_type = ?2 \
-            ORDER BY created_at DESC LIMIT ?3 )",
+            ORDER BY created_at DESC, id DESC LIMIT ?3 )",
         params![concept_id, content_type, KEEP_PER_KEY],
     )
     .map_err(|e| format!("cache trim: {e}"))?;
@@ -183,6 +183,25 @@ mod tests {
         .unwrap();
         let miss = get(&conn, "alg_001", "lesson").unwrap();
         assert!(miss.is_none(), "tampered payload must read as a miss");
+    }
+
+    /// Two entries written with the SAME created_at must resolve to the one
+    /// inserted last (highest id). Without the `id DESC` tiebreaker the read
+    /// could return the stale payload after a rapid regenerate.
+    #[test]
+    fn same_timestamp_returns_newest_by_id() {
+        let conn = db();
+        let ts = chrono::Utc::now().to_rfc3339();
+        for payload in [r#"{"v":1}"#, r#"{"v":2}"#] {
+            conn.execute(
+                "INSERT INTO content_cache(concept_id, content_type, payload_json, created_at) \
+                 VALUES('alg_001','lesson', ?1, ?2)",
+                params![payload, ts],
+            )
+            .unwrap();
+        }
+        let hit = get(&conn, "alg_001", "lesson").unwrap().unwrap();
+        assert_eq!(hit.payload_json, r#"{"v":2}"#, "newest row must win");
     }
 
     #[test]
