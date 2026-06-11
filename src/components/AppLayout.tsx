@@ -1,5 +1,6 @@
 import { NavLink, Outlet } from "react-router-dom";
 import { cn } from "../lib/cn";
+import { ProgressIndicators } from "./ProgressIndicators";
 
 const NAV = [
   { to: "/dashboard", label: "Dashboard" },
@@ -37,6 +38,9 @@ export function AppLayout() {
               </li>
             ))}
           </ul>
+          <div className="ml-auto">
+            <ProgressIndicators />
+          </div>
         </nav>
       </header>
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-6">

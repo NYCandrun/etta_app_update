@@ -74,6 +74,53 @@ body {
     Arial, sans-serif;
 }
 
+/*
+ * Lesson/explanation typography (blocklist: a real `.prose` style; NEVER apply
+ * font-mono to prose — monospace is reserved for code and math). KaTeX brings
+ * its own font for math; everything else uses the system sans stack above.
+ */
+.prose {
+  @apply text-text;
+  font-size: 1rem;
+  line-height: 1.7;
+  max-width: 65ch;
+}
+.prose p {
+  margin: 0 0 1rem 0;
+}
+.prose p:last-child {
+  margin-bottom: 0;
+}
+.prose h1,
+.prose h2,
+.prose h3 {
+  @apply font-semibold text-text;
+  line-height: 1.3;
+  margin: 1.5rem 0 0.75rem 0;
+}
+.prose h1 {
+  font-size: 1.5rem;
+}
+.prose h2 {
+  font-size: 1.25rem;
+}
+.prose h3 {
+  font-size: 1.1rem;
+}
+.prose ul,
+.prose ol {
+  margin: 0 0 1rem 1.25rem;
+}
+.prose li {
+  margin: 0.25rem 0;
+}
+/* Code and math ARE monospace — the only place font-mono is used in prose. */
+.prose code {
+  @apply rounded bg-surface-muted px-1 py-0.5 text-text;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.9em;
+}
+
 /* Respect reduced-motion globally without using the universal selector
    (blocklist #28e: never `* { transition }`). */
 @media (prefers-reduced-motion: reduce) {
