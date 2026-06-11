@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Card, InlineError, Skeleton, useToast } from "../components/ui";
+import { Button, Card, InlineError, OfflineNotice, Skeleton, useToast } from "../components/ui";
 import { CurriculumDiagram } from "../components/CurriculumDiagram";
 import { ConceptList } from "../components/ConceptList";
 import { ProgressIndicators } from "../components/ProgressIndicators";
 import { ipc } from "../lib/ipc";
+import { useOnline } from "../lib/useOnline";
 import { LABELS } from "../lib/labels";
 import { useCurriculumStore } from "../stores/useCurriculumStore";
 import type { Concept, DailySession } from "../types/contract";
@@ -21,6 +22,7 @@ import type { Concept, DailySession } from "../types/contract";
 export function DashboardPage() {
   const navigate = useNavigate();
   const { showError } = useToast();
+  const online = useOnline();
   const concepts = useCurriculumStore((s) => s.concepts);
   const setConcepts = useCurriculumStore((s) => s.setConcepts);
 
@@ -147,19 +149,33 @@ export function DashboardPage() {
                 Nothing scheduled right now — browse concepts below to begin.
               </p>
             )}
+            {!online && (
+              <OfflineNotice
+                className="mt-4"
+                detail="You're offline. Lessons and quizzes need a connection, so starting a session is paused. You can still browse your curriculum below."
+              />
+            )}
             <div className="mt-5 flex items-center justify-between">
               {continueConcept ? (
                 <button
                   type="button"
                   onClick={() => navigate(`/lesson/${continueConcept.id}`)}
-                  className="rounded text-sm text-primary underline hover:no-underline"
+                  disabled={!online}
+                  aria-disabled={!online}
+                  title={!online ? "Lessons need a connection" : undefined}
+                  className="rounded text-sm text-primary underline hover:no-underline disabled:cursor-not-allowed disabled:text-text-muted disabled:no-underline"
                 >
                   Continue where you left off: {continueConcept.title}
                 </button>
               ) : (
                 <span />
               )}
-              <Button onClick={startSession} disabled={!firstConceptId}>
+              <Button
+                onClick={startSession}
+                disabled={!firstConceptId || !online}
+                aria-disabled={!online}
+                title={!online ? "Lessons need a connection" : undefined}
+              >
                 {LABELS.startLearning}
               </Button>
             </div>

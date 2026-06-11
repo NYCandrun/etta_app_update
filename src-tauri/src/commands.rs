@@ -13,7 +13,7 @@ use tauri::State;
 use crate::contract::AppSettings;
 use crate::db::AppState;
 use crate::mastery::{self, MasterySnapshot};
-use crate::{cache, keychain, settings, validate};
+use crate::{cache, export, keychain, settings, validate};
 
 /// Lock the shared connection. A poisoned mutex is an unrecoverable bug, so we
 /// surface a generic error rather than panicking across the IPC boundary.
@@ -144,4 +144,20 @@ pub fn write_mastery_snapshot(
 #[tauri::command]
 pub fn app_name() -> String {
     "Etta".to_string()
+}
+
+// ---- Data export (milestone 5, #14 / #40a) ----
+
+/// Build the complete user-data export as a pretty-printed JSON string. Contains
+/// no secrets (the API key lives only in the keychain and is never read here)
+/// and no file paths (defensive scrub). The frontend writes this to a file named
+/// `etta-export-YYYY-MM-DD.json` via the OS save dialog.
+#[tauri::command]
+pub fn export_data(state: State<'_, AppState>) -> Result<String, String> {
+    let c = conn(&state)?;
+    let doc = export::build_export(&c)?;
+    serde_json::to_string_pretty(&doc).map_err(|e| {
+        tracing::error!(error = %e, "serialize export failed");
+        "could not serialize your data export".to_string()
+    })
 }

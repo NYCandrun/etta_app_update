@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 854 810" width="854" height="810" role="img" aria-labelledby="etta-map-title etta-map-desc" preserveAspectRatio="xMidYMid meet">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 854 810" width="100%" height="auto" style="max-width:854px;height:auto;display:block" role="img" aria-labelledby="etta-map-title etta-map-desc" preserveAspectRatio="xMidYMid meet">
   <title id="etta-map-title">Etta curriculum map</title>
   <desc id="etta-map-desc">Etta curriculum across 12 domains in 4 phases. Phase 1 · Foundations; Phase 2 · Calculus &amp; Linear Algebra; Phase 3 · Classical &amp; Modern Physics; Phase 4 · Astrophysics. Domains: Algebra (56 concepts, phase 1), Pre-Calculus (25 concepts, phase 1), Trigonometry (28 concepts, phase 1), Differential Equations (27 concepts, phase 2), Linear Algebra (30 concepts, phase 2), Multivariable Calculus (33 concepts, phase 2), Single-Variable Calculus (43 concepts, phase 2), Classical Mechanics (33 concepts, phase 3), Electromagnetism (26 concepts, phase 3), Quantum Mechanics (31 concepts, phase 3), Thermodynamics &amp; Statistical Mechanics (23 concepts, phase 3), Astrophysics (47 concepts, phase 4).</desc>
   <g class="etta-map-edges">

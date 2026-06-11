@@ -15,6 +15,7 @@ pub mod commands_placement;
 pub mod contract;
 pub mod curriculum;
 pub mod db;
+pub mod export;
 pub mod gamification;
 pub mod grading;
 pub mod keychain;
@@ -43,9 +44,18 @@ pub fn run() {
         .with_writer(std::io::stderr)
         .try_init();
 
-    tauri::Builder::default()
+    let mut builder = tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
-        .plugin(tauri_plugin_fs::init())
+        .plugin(tauri_plugin_fs::init());
+
+    // Auto-updater (ship item #16). Registered on desktop; the actual update
+    // endpoint + signing pubkey live in tauri.conf.json's `plugins.updater`.
+    #[cfg(desktop)]
+    {
+        builder = builder.plugin(tauri_plugin_updater::Builder::new().build());
+    }
+
+    builder
         .setup(|app| {
             // App support directory (per-OS). The DB and backups live here.
             let data_dir = app.path().app_data_dir().expect("resolve app data dir");
@@ -91,6 +101,7 @@ pub fn run() {
             commands::cache_put,
             commands::get_mastery_history,
             commands::write_mastery_snapshot,
+            commands::export_data,
             commands_ai::list_available_models,
             commands_ai::test_connection,
             commands_ai::generate_streamed,

@@ -8,5 +8,7 @@ export { Spinner } from "./Spinner";
 export type { SpinnerProps } from "./Spinner";
 export { InlineError } from "./InlineError";
 export type { InlineErrorProps } from "./InlineError";
+export { OfflineNotice } from "./OfflineNotice";
+export type { OfflineNoticeProps } from "./OfflineNotice";
 export { ErrorToast, ToastProvider, useToast } from "./ErrorToast";
 export type { ErrorToastProps, ToastSpec } from "./ErrorToast";

@@ -144,6 +144,13 @@ export const ipc = {
   // Skip placement: seed the foundational base + mark onboarding complete so the
   // learner can pick an unlocked concept from the curriculum diagram instead.
   skipPlacement: () => call<null>("skip_placement"),
+
+  // ---- Milestone 5: data export ----
+
+  // Complete user-data export as a pretty-printed JSON string. Contains no
+  // secrets (the key stays in the keychain) and no file paths (scrubbed
+  // server-side). The caller writes this to a user-chosen file.
+  exportData: () => call<string>("export_data"),
 };
 
 // Stream an AI turn (lesson or explain). The backend emits incremental

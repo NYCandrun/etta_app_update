@@ -590,3 +590,141 @@ npm run tauri build -- --target universal-apple-darwin
 
 The library crate-type is `["lib"]` (desktop-only). If iOS/Android support is
 later added, append `"staticlib"` / `"cdylib"` for those mobile targets.
+
+---
+
+## Milestone 5 — polish, accessibility, offline & shipping
+
+### Data export (#14, #40a)
+
+Settings → **Your data** → **Export data** serializes every learner-produced row
+into one JSON document via the `export_data` command (`src-tauri/src/export.rs`),
+then opens a native save dialog defaulting to `etta-export-YYYY-MM-DD.json`.
+
+The document contains: `concepts` (full progress: mastery, ease, interval, next
+review, streaks), `quizAnswers` (graded history), `xpEvents` (the gamification
+ledger — also the lesson/quiz attempt log), `masterySnapshots` (per-domain
+learning-path history), `sessionMinutes` (tracked study time), and user-facing
+`settings`.
+
+Two hard guarantees, both covered by the inline test
+`export_has_all_sections_and_no_secrets_or_paths`:
+
+- **No secrets.** The API key lives only in the OS keychain and is never read
+  here. The `settings` table holds only the `api_key_present` boolean. Reserved
+  `__`-prefixed internal keys and any key whose name hints at a credential
+  (`api_key`, `token`, `secret`, `password`, `credential`) are dropped.
+- **No file paths (#40a, defensive).** Every exported free-text string runs
+  through a path filter; anything path-shaped becomes `[redacted path]`.
+
+**Delete API key** is an explicit button in Settings (calls `delete_api_key`,
+which clears the keychain entry and the `api_key_present` flag).
+
+### Accessibility & responsive (items #1–#13)
+
+- ARIA roles on progress UI: the daily-goal ring is `role="progressbar"` with
+  `aria-valuenow/min/max`; decorative icons are `aria-hidden`.
+- Every input has a real `<label htmlFor>` (quiz, placement, API key, settings).
+- Keyboard nav: skip link to `#main-content`, focusable `<main tabIndex={-1}>`,
+  off-canvas sidebar with a hamburger (`aria-expanded` / `aria-controls`),
+  Escape-to-close, locked concepts use `aria-disabled` + text/icon (not color).
+- Math a11y: KaTeX renders to MathML for screen readers; raw LaTeX is never used
+  as an `aria-label`; a render failure shows "Math display error".
+- `aria-live="polite"` async status (see `OfflineNotice`); color is never the
+  sole signal; WCAG AA contrast in both themes; `prefers-reduced-motion`
+  honored (no infinite/global animations).
+- Responsive: `px-4 md:px-8` padding, responsive dashboard grid, the static
+  curriculum SVG scales (`width="100%" height="auto"`, `max-width` cap).
+
+### True offline mode (#11)
+
+`useOnline()` (`src/lib/useOnline.ts`) subscribes to the browser
+`online`/`offline` events via `useSyncExternalStore`. When offline, every
+AI-dependent action button (Start/Continue learning, "I don't get it", "Ready
+for quiz", quiz/placement submit, Test connection) is **actually disabled**
+(`disabled` + `aria-disabled`) — not merely warned about — and an accessible
+`OfflineNotice` explains why. Cached lessons/questions remain reviewable. The
+critical test asserts the buttons are disabled, not just that a banner shows.
+
+### Auto-updater (#16)
+
+Configured in `tauri.conf.json` (`plugins.updater`) and registered in
+`lib.rs` (`tauri_plugin_updater`, desktop only). Before the first signed
+release you MUST generate a signing key pair and replace the placeholder:
+
+```sh
+# Generates a private key (keep secret!) and prints the public key.
+npm run tauri signer generate -- -w ~/.tauri/etta.key
+```
+
+Then:
+
+1. Put the **public** key into `tauri.conf.json` → `plugins.updater.pubkey`
+   (currently `REPLACE_WITH_TAURI_UPDATER_PUBLIC_KEY`).
+2. Host the update manifest + artifacts at the configured `endpoints`
+   (`https://releases.etta.app/{{target}}/{{arch}}/{{current_version}}`).
+3. Export the private key + password when building so artifacts are signed:
+   ```sh
+   export TAURI_SIGNING_PRIVATE_KEY="$(cat ~/.tauri/etta.key)"
+   export TAURI_SIGNING_PRIVATE_KEY_PASSWORD="<your password>"
+   ```
+
+`bundle.createUpdaterArtifacts` is `true`, so `tauri build` emits the
+`.app.tar.gz` + `.sig` the updater consumes.
+
+### Building the signed, notarized universal `.dmg` (macOS only)
+
+These steps **cannot run on the Linux dev host** — they require macOS, Xcode
+Command Line Tools, and a valid Apple Developer ID. Run on a Mac:
+
+```sh
+# 1. Toolchain
+rustup target add aarch64-apple-darwin x86_64-apple-darwin
+
+# 2. Signing identity (Developer ID Application) must be in the login keychain.
+#    Find its name with:  security find-identity -v -p codesigning
+export APPLE_SIGNING_IDENTITY="Developer ID Application: Your Name (TEAMID)"
+
+# 3. Notarization credentials (App Store Connect API key OR Apple ID):
+export APPLE_ID="you@example.com"
+export APPLE_PASSWORD="app-specific-password"   # appleid.apple.com app pwd
+export APPLE_TEAM_ID="TEAMID"
+
+# 4. Updater signing key (see above)
+export TAURI_SIGNING_PRIVATE_KEY="$(cat ~/.tauri/etta.key)"
+export TAURI_SIGNING_PRIVATE_KEY_PASSWORD="<your password>"
+
+# 5. Build, sign, and notarize the universal binary + .dmg in one shot.
+#    Tauri runs codesign, submits to notarytool, and staples on success.
+npm run tauri build -- --target universal-apple-darwin
+
+# 6. Verify the staple on the produced artifacts:
+xcrun stapler validate \
+  "src-tauri/target/universal-apple-darwin/release/bundle/dmg/Etta_0.0.0_universal.dmg"
+spctl -a -vvv -t install \
+  "src-tauri/target/universal-apple-darwin/release/bundle/macos/Etta.app"
+```
+
+The `.dmg` and `app` targets are set in `tauri.conf.json` →
+`bundle.targets`; `macOS.minimumSystemVersion` is `11.0`.
+
+### Performance targets (#16)
+
+Verify on the release universal build on representative macOS hardware:
+
+| Metric                         | Target    |
+| ------------------------------ | --------- |
+| Cold launch to interactive     | < 1.5 s   |
+| Cached lesson render           | < 100 ms  |
+| API lesson (streamed)          | < 8 s     |
+| Quiz generation                | < 4 s     |
+| SQLite query                   | < 10 ms   |
+| Idle memory                    | < 100 MB  |
+| Installed size                 | < 20 MB   |
+
+### Daily DB backup
+
+`db::backup_if_stale` runs at startup (`lib.rs` setup) and copies the SQLite
+file into the app-data directory once per day. Confirm it works by launching,
+then checking for a dated backup file alongside the live DB in the per-OS
+app-data directory (`~/Library/Application Support/com.etta.app/` on macOS).

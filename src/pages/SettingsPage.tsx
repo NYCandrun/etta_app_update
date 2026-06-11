@@ -1,8 +1,18 @@
 import { useEffect, useState } from "react";
-import { Button, Card, Spinner, useToast } from "../components/ui";
+import { save } from "@tauri-apps/plugin-dialog";
+import { writeTextFile } from "@tauri-apps/plugin-fs";
+import { Button, Card, OfflineNotice, Spinner, useToast } from "../components/ui";
 import { ipc } from "../lib/ipc";
+import { useOnline } from "../lib/useOnline";
 import { useSettingsStore } from "../stores/useSettingsStore";
 import type { ThemePreference } from "../lib/theme";
+
+// Today's date as YYYY-MM-DD for the export filename (local time).
+function todayStamp(): string {
+  const d = new Date();
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}
 
 const THEMES: ThemePreference[] = ["light", "dark", "system"];
 const GOALS = [15, 30, 45, 60] as const;
@@ -16,12 +26,14 @@ export function SettingsPage() {
   const setSettings = useSettingsStore((s) => s.setSettings);
   const setTheme = useSettingsStore((s) => s.setTheme);
   const { showError } = useToast();
+  const online = useOnline();
 
   const [apiKeyInput, setApiKeyInput] = useState("");
   const [busy, setBusy] = useState(false);
 
   const [models, setModels] = useState<string[]>([]);
   const [testState, setTestState] = useState<"idle" | "testing" | "ok" | "fail">("idle");
+  const [exportState, setExportState] = useState<"idle" | "exporting" | "done">("idle");
 
   // Load persisted settings once into the store.
   useEffect(() => {
@@ -108,6 +120,46 @@ export function SettingsPage() {
     setTestState(res.data ? "ok" : "fail");
   };
 
+  // Export all learner data to a user-chosen JSON file. The backend produces the
+  // complete document (no secrets, no file paths); we just pick a destination and
+  // write it. The default filename is etta-export-YYYY-MM-DD.json.
+  const onExport = async () => {
+    setExportState("exporting");
+    const res = await ipc.exportData();
+    if (!res.ok) {
+      setExportState("idle");
+      showError(res.error, () => void onExport());
+      return;
+    }
+    let destination: string | null = null;
+    try {
+      destination = await save({
+        defaultPath: `etta-export-${todayStamp()}.json`,
+        filters: [{ name: "JSON", extensions: ["json"] }],
+      });
+    } catch (e) {
+      setExportState("idle");
+      showError(e instanceof Error ? e.message : "Could not open the save dialog", () =>
+        void onExport(),
+      );
+      return;
+    }
+    if (!destination) {
+      // User cancelled the save dialog — not an error.
+      setExportState("idle");
+      return;
+    }
+    try {
+      await writeTextFile(destination, res.data);
+      setExportState("done");
+    } catch (e) {
+      setExportState("idle");
+      showError(e instanceof Error ? e.message : "Could not write the export file", () =>
+        void onExport(),
+      );
+    }
+  };
+
   if (!hydrated) {
     return (
       <Card>
@@ -188,20 +240,25 @@ export function SettingsPage() {
             <Button
               variant="secondary"
               onClick={() => void onTestConnection()}
-              disabled={testState === "testing" || !settings.apiKeyPresent}
+              disabled={testState === "testing" || !settings.apiKeyPresent || !online}
+              aria-disabled={!online}
+              title={!online ? "Unavailable while offline" : undefined}
             >
               {testState === "testing" ? "Testing…" : "Test connection"}
             </Button>
             <span className="text-sm text-text-muted">
-              {testState === "ok"
-                ? "Connected"
-                : testState === "fail"
-                  ? "Connection failed"
-                  : !settings.apiKeyPresent
-                    ? "Set an API key first"
-                    : ""}
+              {!online
+                ? "Offline — reconnect to test"
+                : testState === "ok"
+                  ? "Connected"
+                  : testState === "fail"
+                    ? "Connection failed"
+                    : !settings.apiKeyPresent
+                      ? "Set an API key first"
+                      : ""}
             </span>
           </div>
+          {!online && <OfflineNotice className="mt-3" />}
         </div>
       </Card>
 
@@ -237,6 +294,26 @@ export function SettingsPage() {
             </Button>
           ))}
         </fieldset>
+      </Card>
+
+      <Card>
+        <h2 className="text-base font-semibold text-text">Your data</h2>
+        <p className="mt-1 text-sm text-text-muted">
+          Export a complete copy of your progress, quiz history, and settings as
+          a JSON file. Your API key is never included.
+        </p>
+        <div className="mt-3 flex items-center gap-2">
+          <Button
+            variant="secondary"
+            onClick={() => void onExport()}
+            disabled={exportState === "exporting"}
+          >
+            {exportState === "exporting" ? "Exporting…" : "Export data"}
+          </Button>
+          <span className="text-sm text-text-muted" aria-live="polite">
+            {exportState === "done" ? "Export saved" : ""}
+          </span>
+        </div>
       </Card>
     </div>
   );

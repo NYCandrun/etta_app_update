@@ -23,7 +23,7 @@ use crate::contract::{GamificationState, LevelInfo, StreakInfo, XpEvent};
 
 /// Canonical streak state key (ONE spelling, used for read and write — #7).
 const STREAK_KEY: &str = "__streak_state";
-/// Fixed level title placeholder (Etta-themed; no "Astrolabe", no level math).
+/// Fixed level title placeholder (Etta-themed; no legacy branding, no level math).
 const LEVEL_TITLE: &str = "Learner";
 /// How many recent XP events the state carries.
 const RECENT_XP_LIMIT: i64 = 20;

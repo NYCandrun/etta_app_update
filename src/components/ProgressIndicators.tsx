@@ -30,14 +30,19 @@ export function ProgressIndicators() {
 
   return (
     <div className="flex items-center gap-4 text-sm">
-      <span className="font-medium text-text" aria-label={`${gam?.xp ?? 0} total XP`}>
+      {/* XP and streak are non-critical detail: hidden on small screens (#38),
+          where the daily-goal ring (the primary at-a-glance signal) remains. */}
+      <span
+        className="hidden font-medium text-text sm:inline"
+        aria-label={`${gam?.xp ?? 0} total XP`}
+      >
         {gam?.xp ?? 0} XP
       </span>
       <span
-        className="text-text-muted"
+        className="hidden text-text-muted sm:inline"
         aria-label={`Current streak ${gam?.streak.currentStreak ?? 0} days`}
       >
-        🔥 {gam?.streak.currentStreak ?? 0}
+        <span aria-hidden="true">🔥</span> {gam?.streak.currentStreak ?? 0}
       </span>
       <DailyGoalRing
         ratio={ratio}
@@ -63,13 +68,17 @@ function DailyGoalRing({
   const r = (size - stroke) / 2;
   const circ = 2 * Math.PI * r;
   const dash = circ * ratio;
+  const pct = goalMinutes > 0 ? Math.round((minutesToday / goalMinutes) * 100) : 0;
   return (
     <svg
       width={size}
       height={size}
       viewBox={`0 0 ${size} ${size}`}
-      role="img"
-      aria-label={`Daily goal: ${minutesToday} of ${goalMinutes} minutes`}
+      role="progressbar"
+      aria-valuenow={minutesToday}
+      aria-valuemin={0}
+      aria-valuemax={goalMinutes}
+      aria-label={`Daily goal: ${minutesToday} of ${goalMinutes} minutes (${pct}%)`}
     >
       <circle
         cx={size / 2}
