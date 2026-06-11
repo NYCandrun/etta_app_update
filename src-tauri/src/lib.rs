@@ -11,6 +11,7 @@ pub mod cache;
 pub mod commands;
 pub mod commands_ai;
 pub mod commands_m3;
+pub mod commands_placement;
 pub mod contract;
 pub mod curriculum;
 pub mod db;
@@ -103,6 +104,10 @@ pub fn run() {
             commands_m3::get_concept_states,
             commands_m3::add_study_minutes,
             commands_m3::get_daily_progress,
+            commands_placement::generate_placement_quiz,
+            commands_placement::place_learner,
+            commands_placement::skip_placement,
+            commands_placement::get_onboarding_complete,
         ])
         .run(tauri::generate_context!())
         .expect("error while running Etta");

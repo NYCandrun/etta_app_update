@@ -1,4 +1,5 @@
 import js from "@eslint/js";
+import globals from "globals";
 import tseslint from "typescript-eslint";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
@@ -8,6 +9,14 @@ export default tseslint.config(
     ignores: ["dist", "src-tauri/target", "node_modules"],
   },
   js.configs.recommended,
+  {
+    // Build-time Node scripts (the static curriculum SVG generator) run under
+    // Node, not the browser, so give them Node globals (console, process, …).
+    files: ["scripts/**/*.mjs"],
+    languageOptions: {
+      globals: globals.node,
+    },
+  },
   ...tseslint.configs.recommended,
   {
     files: ["**/*.{ts,tsx}"],

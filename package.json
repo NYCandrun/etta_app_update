@@ -5,7 +5,10 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "gen:svg": "node scripts/gen_curriculum_svg.mjs",
+    "predev": "node scripts/gen_curriculum_svg.mjs",
     "dev": "vite",
+    "prebuild": "node scripts/gen_curriculum_svg.mjs",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "tauri": "tauri",

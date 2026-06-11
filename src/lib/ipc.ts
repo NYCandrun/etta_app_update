@@ -48,6 +48,16 @@ export interface DailyProgress {
   goalMinutes: number;
 }
 
+// The placement outcome (mirrors the Rust PlacementResult): the starting
+// concept the learner was placed into and the score that produced it.
+export interface PlacementResult {
+  conceptId: string;
+  domain: string;
+  title: string;
+  correctCount: number;
+  total: number;
+}
+
 // Thin typed wrapper over Tauri's invoke. Rust commands return Result<T, String>;
 // Tauri rejects the promise on Err. We normalize both branches into IpcResult<T>
 // so every caller handles the error branch explicitly (never an empty catch).
@@ -119,6 +129,21 @@ export const ipc = {
     call<null>("add_study_minutes", { minutes }),
   // Today's tracked minutes + goal, so the ring renders a real ratio.
   getDailyProgress: () => call<DailyProgress>("get_daily_progress"),
+
+  // ---- Milestone 4: onboarding + placement ----
+
+  // Has first-run onboarding + placement been completed? Gates routing.
+  getOnboardingComplete: () => call<boolean>("get_onboarding_complete"),
+  // Generate the 5-question placement micro-quiz (server holds the canonical
+  // copy; prompts render via the shared KaTeX renderer — blocklist #0f).
+  generatePlacementQuiz: () => call<Question[]>("generate_placement_quiz"),
+  // Grade placement server-side and place the learner into a starting concept.
+  // The frontend sends only raw answers (never a correctness flag).
+  placeLearner: (answers: SubmittedAnswer[]) =>
+    call<PlacementResult>("place_learner", { answers }),
+  // Skip placement: seed the foundational base + mark onboarding complete so the
+  // learner can pick an unlocked concept from the curriculum diagram instead.
+  skipPlacement: () => call<null>("skip_placement"),
 };
 
 // Stream an AI turn (lesson or explain). The backend emits incremental
