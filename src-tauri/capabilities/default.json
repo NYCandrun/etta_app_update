@@ -17,9 +17,7 @@
         { "path": "$DOCUMENT" },
         { "path": "$DOCUMENT/**" },
         { "path": "$DESKTOP" },
-        { "path": "$DESKTOP/**" },
-        { "path": "$HOME" },
-        { "path": "$HOME/**" }
+        { "path": "$DESKTOP/**" }
       ]
     },
     "fs:allow-read-file",
