@@ -10,9 +10,12 @@ state is stored locally in SQLite. There is **no backend server, no accounts,
 and no cloud sync**. The app uses the system WebKit (not bundled Chromium), so
 the installed footprint targets < 20 MB.
 
-> **Milestone 0 — foundation only.** This milestone ships the scaffold, the
-> shared FE/BE type contract, the design system, security configuration, and
-> the CI gates. Feature screens are empty placeholders until later milestones.
+> **Milestone 1 — foundation + data layer.** Builds on the M0 scaffold (shared
+> FE/BE type contract, design system, security config, CI gates) by adding the
+> full SQLite data layer: idempotent schema, typed settings, keychain API-key
+> storage, the simplified content cache, bounded/pruned queries, input
+> validation, structured logging, and a daily DB backup. The only feature
+> screen is a bare Settings form; other screens remain placeholders.
 
 ---
 
@@ -27,9 +30,11 @@ under Tauri's `tauri://` file protocol). Defined in `src/App.tsx`:
 | `/dashboard`           | `DashboardPage`     | App launches here (`*` redirects)  |
 | `/lesson/:conceptId`   | `LessonPage`        | Reads `conceptId` param            |
 | `/quiz/:conceptId`     | `QuizPage`          | Reads `conceptId` param            |
-| `/project/:conceptId`  | `ProjectPage`       | Reads `conceptId` param            |
 | `/progress`            | `ProgressPage`      |                                    |
-| `/settings`            | `SettingsPage`      |                                    |
+| `/settings`            | `SettingsPage`      | Bare form: API key, theme, goal    |
+
+(The `projects` feature is deferred to v1.1+, so there is no `/project`
+route in slim v1.)
 
 Unknown paths redirect to `/dashboard`.
 
@@ -120,10 +125,80 @@ Animation durations are tokens (`duration-fast/base/slow`).
 - `tokio` features are scoped to `["rt-multi-thread", "time", "macros"]` — **not
   `"full"`**.
 - Includes `reqwest`, `rusqlite` (`bundled` for static SQLite), `serde`,
-  `serde_json`, `keyring`, `hmac`, `sha2`, `tracing`, `chrono`.
+  `serde_json`, `keyring`, `sha2`, `tracing`, `tracing-subscriber`, `chrono`.
+- **No `hmac` crate.** Slim v1 does not HMAC the content cache (the threat
+  model — a user tampering with their own learning content — is self-defeating;
+  see the cache section below).
 - **No document-processing crates** (no pdf-parse / mammoth / sharp / OCR).
 - The shared `xml_escape` util (`src-tauri/src/util.rs`, Appendix A.4) is the
   prompt-injection defense applied to every interpolated prompt field.
+
+## Data layer (SQLite)
+
+One connection is opened on first launch and held in Tauri app state behind a
+`Mutex` (`AppState`, `src-tauri/src/db.rs`) — never a connection per command.
+The connection runs with `PRAGMA journal_mode = WAL`, `foreign_keys = ON`, and
+`auto_vacuum = INCREMENTAL`. The schema (Appendix B, embedded from
+`src-tauri/src/schema.sql`) is applied on every startup and is **idempotent**
+(`CREATE TABLE IF NOT EXISTS` throughout; applying it twice is a no-op).
+
+Tables: `concepts` (incl. `learning_objectives`, `difficulty_tier`,
+`error_patterns`), `quiz_answers` (per-question history — new in slim v1),
+`submissions` (reserved for the deferred projects feature; uses
+`file_basename`, **not** a full path), `settings`, `content_cache`,
+`xp_events`, `mastery_snapshots`, `session_minutes`.
+
+- **Typed settings** (`src-tauri/src/settings.rs`): `daily_goal_minutes` is an
+  `i64`, `theme` is validated against `light|dark|system`, etc. — never the
+  "everything is a string" coercion bug. `set_setting` enforces a hard
+  **allowlist** of user-facing keys and rejects unknown ones.
+- **API key** (`src-tauri/src/keychain.rs`): stored **only** in the OS keychain
+  via the `keyring` crate, service id `com.etta.app`. Never written to SQLite,
+  a file, or obfuscated. The DB persists only the `api_key_present` flag.
+  `test_api_key` reads the **stored** key — it takes no key parameter that could
+  be logged.
+- **Content cache** (`src-tauri/src/cache.rs`): payloads are stored as **clean
+  JSON**; side-band `mastery_band` / `model_version` live in their own columns
+  (never appended onto the JSON string). On read, a payload that fails
+  `JSON.parse` is treated as a **miss** (logged), never as trusted content. No
+  HMAC. Hygiene: 30-day TTL purge on startup, 7-day staleness skip on read, and
+  at most the 3 most recent entries per `(concept_id, content_type)`.
+- **Bounded queries & pruning** (`src-tauri/src/mastery.rs`): every query has a
+  `LIMIT`. `xp_events` is pruned to ~1000 rows / 90 days; `mastery_snapshots`
+  reads default to a 90-day window. `get_mastery_history` is a **pure read**
+  (zero writes); snapshots are written only via the explicit
+  `write_mastery_snapshot`.
+- **Input validation** (`src-tauri/src/validate.rs`): every command checks
+  lengths, numeric ranges, and concept-id format (`^[a-z]{2,4}_[0-9]{3}$`),
+  rejecting bad input with a typed error.
+- **Logging**: structured `tracing` to stderr for key/file/db operations and
+  failures. The API key and other secrets are **never** logged; user-facing
+  errors are generic.
+- **Daily backup**: on startup, if the last backup is >24h old, the DB file is
+  copied to a timestamped file in the app support directory.
+
+### Typed settings keys (allowlist)
+
+| Key                        | Type   | Allowed values / notes              |
+| -------------------------- | ------ | ----------------------------------- |
+| `daily_goal_minutes`       | i64    | one of 15 / 30 / 45 / 60            |
+| `theme`                    | enum   | `light` \| `dark` \| `system`       |
+| `base_model`               | string | e.g. `claude-sonnet-4-6`            |
+| `reasoning_model`          | string | reserved/unused in slim v1          |
+| `new_concepts_per_session` | i64    | 1–10                                |
+| `notifications_enabled`    | bool   | `true` \| `false`                   |
+| `api_key_present`          | bool   | flag only; key lives in keychain    |
+
+Any key not on this list is rejected.
+
+## Data-at-rest security (FileVault)
+
+The SQLite database is **not** encrypted at the application layer (no SQLCipher
+in slim v1). Confidentiality of learning data at rest relies on macOS
+**FileVault** full-disk encryption. The threat model deliberately excludes a
+user tampering with their own local learning content — that is self-defeating —
+so the content cache is not integrity-checked (no HMAC). If content ever
+becomes shareable/exportable, re-introduce integrity verification at that point.
 
 ---
 

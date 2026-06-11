@@ -6,10 +6,9 @@ import {
   LessonPage,
   OnboardingPage,
   ProgressPage,
-  ProjectPage,
   QuizPage,
-  SettingsPage,
 } from "./pages/placeholders";
+import { SettingsPage } from "./pages/SettingsPage";
 
 // Use HashRouter only. History-based routing breaks under Tauri's tauri://
 // file protocol (blocklist #14); do not switch the router type.
@@ -23,7 +22,6 @@ export function App() {
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/lesson/:conceptId" element={<LessonPage />} />
             <Route path="/quiz/:conceptId" element={<QuizPage />} />
-            <Route path="/project/:conceptId" element={<ProjectPage />} />
             <Route path="/progress" element={<ProgressPage />} />
             <Route path="/settings" element={<SettingsPage />} />
           </Route>
