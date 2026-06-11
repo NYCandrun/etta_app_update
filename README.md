@@ -318,6 +318,136 @@ rendered the label via `.slice(-1)`, which only worked by luck for single-digit
 modules and broke at `_m10`/`_m12`; the util now parses the trailing number and
 falls back to the raw id for an unrecognized shape.
 
+## Learning loop & adaptive engine (milestone 3)
+
+The lesson + quiz views, the adaptive scheduling engine, and minimal
+gamification. The frontend renders and collects; the backend is the single
+source of truth for grading, scheduling, mastery, and XP.
+
+### Locked quiz schema
+
+A quiz is a JSON array of question objects in EXACTLY three types — no others
+are accepted (Appendix A.1/A.3). The AI is validated/repaired against this
+shape before storage (a stray `short_answer` is coerced to `free_response`,
+never auto-zeroed):
+
+| type              | answer-bearing field | graded by                         |
+| ----------------- | -------------------- | --------------------------------- |
+| `multiple_choice` | `options[].isCorrect`| Rust: chosen id vs canonical id   |
+| `fill_in_blank`   | `blanks[]`           | Rust: mathematical equivalence    |
+| `free_response`   | `rubric`             | model call against the rubric     |
+
+The TypeScript `Question`/`QuizOption` types mirror the Rust structs
+(`#[serde(rename_all = "camelCase")]`); the contract round-trip test guards
+against drift.
+
+### Grading flow (server-authoritative — bug 0a)
+
+1. The frontend sends only `{ questionId, answer }` per question — **never** an
+   `isCorrect` flag.
+2. `grade_quiz` loads the **canonical** questions from the content cache (the
+   same clean JSON `generate_quiz` stored) and computes correctness in Rust.
+   A forged `isCorrect` from the client is structurally impossible — the field
+   does not exist on the submission type.
+3. The final score on the completion screen is computed from a ref snapshot
+   that **includes the last answer** (bug 0e): `answersRef` accumulates each
+   answer synchronously before grading, so an N-question quiz grades N answers,
+   not N−1.
+4. `record_quiz_result` persists each graded answer to `quiz_answers`
+   (`question_type`, `user_answer`, `is_correct`, `score`, `is_transfer`,
+   `error_pattern_detected`, `latency_ms`), then advances the adaptive state in
+   one attempt.
+
+### Mastery formula (rolling window + live transfer)
+
+Composite over the last `WINDOW = 20` attempts (`mastery_calc.rs`):
+
+```
+mastery = 0.50·accuracy + 0.25·consistency + 0.25·transfer
+```
+
+- **accuracy** — mean correctness over the window.
+- **consistency** — `1 − variance/0.25` of the 0/1 correctness series.
+- **transfer** — accuracy over `is_transfer = true` questions only. This term
+  is **live**: `is_transfer` is read from the canonical questions and stored per
+  answer (v1 hardcoded it false, killing 25% of the model). With no transfer
+  attempts yet it falls back to overall accuracy so a learner is not penalized
+  before seeing a transfer item.
+
+### SM-2 parameters (Appendix E, exact)
+
+`sm2.rs` implements the corrected SM-2:
+
+| parameter            | value                                            |
+| -------------------- | ------------------------------------------------ |
+| starting ease        | 2.5                                              |
+| Easy / Hard·Fail     | +0.1 / −0.2                                       |
+| ease floor / **cap** | 1.3 / **3.5** (the cap v1 lacked)                |
+| interval cap         | 180 days                                          |
+| initial steps        | 1 day → 6 days, then × ease                       |
+| force-review         | not reviewed in 60 days → re-queued               |
+| re-entry             | mastery < 0.6 → back in the active queue          |
+| slow threshold       | per-tier: 20s at tier 1, +10s/tier (not fixed 30s)|
+
+Quality is classified from overall correctness, the running correct-streak
+(≥3 → Easy), and the slowest answer's latency against the tier threshold.
+
+### Decay model & prerequisite gating
+
+Stored mastery erodes on an exponential forgetting curve keyed to ease:
+
+```
+effective_mastery = mastery · exp(−days_since_review / (k · ease_factor)),  k = 14
+```
+
+A dependent concept unlocks only when **every** prerequisite's
+`effective_mastery ≥ 0.8` — the **decay-adjusted** value, never the raw stored
+score (bug 7.3: a long-ago "mastered" prerequisite must not unlock dependents).
+
+### Session-builder rules
+
+`session.rs` builds the daily session as a pure read (never writes — bug 0c):
+
+- **Multiple new concepts**, scaled by `new_concepts_per_session` and
+  `daily_goal_minutes` (+1 per extra 15 min over the 15-min floor); v1 capped
+  exactly one.
+- **Total size capped** at 12 so a returning learner is not buried.
+- Reviews prioritized by relationship to today's new domain, then by decay
+  (lowest effective mastery first) — not merely "most overdue".
+- The interleaving function is **actually called**, weaving new + review so the
+  queue alternates (v1 defined it but never invoked it).
+
+### XP / streak / daily-goal-ring contract
+
+- **XP** is backend-only and single-source: every grant appends to `xp_events`
+  (storing both `source` and `description`); the total is `SUM(amount)`. The
+  frontend reads the synced value from the gamification store — **never**
+  increments a local copy. Lesson and quiz XP each fire **exactly once**,
+  guarded by a persisted per-concept `source` marker (`lesson:<id>` /
+  `quiz:<id>`).
+- **No level math.** `LevelInfo` is a fixed placeholder
+  `{ level: 1, title: "Learner", xpIntoLevel: xp, xpForNextLevel: xp+1 }`,
+  `badges: []` — keeping the contract stable while making the v1 overflow bug
+  (0d) impossible by construction.
+- **Streak** lives under one canonical key (`__streak_state`); a one-day gap
+  continues it, a single missed day can be bridged by a freeze, a larger gap
+  resets to 1.
+- **Daily-goal ring** reads **real tracked minutes** from `session_minutes`
+  (bug H1) — lesson/quiz screens record wall-clock time and flush whole minutes
+  on unmount via `add_study_minutes`. The ring renders `minutesToday/goal`,
+  never a hardcoded 40%/100%.
+- The gamification snapshot is fetched **once** at launch by a single provider
+  (`GamificationProvider`), not independently from each shell component.
+
+### Shared math/RichText renderer (bugs 0f, 32, 42)
+
+All learner-facing math goes through one renderer (`lib/math.ts` +
+`components/RichText.tsx`): KaTeX with `output: "htmlAndMathml"` (real MathML
+for screen readers), sanitized by DOMPurify before any
+`dangerouslySetInnerHTML`. On a KaTeX failure it shows the literal
+`"Math display error"` — never the raw LaTeX, and never raw LaTeX as an
+aria-label.
+
 ## Data-at-rest security (FileVault)
 
 The SQLite database is **not** encrypted at the application layer (no SQLCipher

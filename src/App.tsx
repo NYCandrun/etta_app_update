@@ -1,12 +1,13 @@
 import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AppLayout } from "./components/AppLayout";
+import { GamificationProvider } from "./components/GamificationProvider";
 import { ToastProvider } from "./components/ui";
+import { LessonPage } from "./pages/LessonPage";
+import { QuizPage } from "./pages/QuizPage";
 import {
   DashboardPage,
-  LessonPage,
   OnboardingPage,
   ProgressPage,
-  QuizPage,
 } from "./pages/placeholders";
 import { SettingsPage } from "./pages/SettingsPage";
 
@@ -15,20 +16,22 @@ import { SettingsPage } from "./pages/SettingsPage";
 export function App() {
   return (
     <ToastProvider>
-      <HashRouter>
-        <Routes>
-          <Route path="/onboarding" element={<OnboardingPage />} />
-          <Route element={<AppLayout />}>
-            <Route path="/dashboard" element={<DashboardPage />} />
-            <Route path="/lesson/:conceptId" element={<LessonPage />} />
-            <Route path="/quiz/:conceptId" element={<QuizPage />} />
-            <Route path="/progress" element={<ProgressPage />} />
-            <Route path="/settings" element={<SettingsPage />} />
-          </Route>
-          {/* App launches to an empty /dashboard. */}
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
-        </Routes>
-      </HashRouter>
+      <GamificationProvider>
+        <HashRouter>
+          <Routes>
+            <Route path="/onboarding" element={<OnboardingPage />} />
+            <Route element={<AppLayout />}>
+              <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/lesson/:conceptId" element={<LessonPage />} />
+              <Route path="/quiz/:conceptId" element={<QuizPage />} />
+              <Route path="/progress" element={<ProgressPage />} />
+              <Route path="/settings" element={<SettingsPage />} />
+            </Route>
+            {/* App launches to an empty /dashboard. */}
+            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          </Routes>
+        </HashRouter>
+      </GamificationProvider>
     </ToastProvider>
   );
 }

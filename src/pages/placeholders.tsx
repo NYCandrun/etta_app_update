@@ -1,8 +1,8 @@
-import { useParams } from "react-router-dom";
 import { Card } from "../components/ui";
 
-// Empty placeholder pages for Milestone 0. Real screens land in later
-// milestones. Each renders a titled Card so the route is visibly reachable.
+// Empty placeholder pages. Lesson and Quiz are real screens (M3); Dashboard,
+// Progress, and Onboarding are wired in M4. Each renders a titled Card so the
+// route is visibly reachable.
 
 function Placeholder({ title }: { title: string }) {
   return (
@@ -21,16 +21,6 @@ export function OnboardingPage() {
 
 export function DashboardPage() {
   return <Placeholder title="Dashboard" />;
-}
-
-export function LessonPage() {
-  const { conceptId } = useParams();
-  return <Placeholder title={`Lesson — ${conceptId ?? ""}`} />;
-}
-
-export function QuizPage() {
-  const { conceptId } = useParams();
-  return <Placeholder title={`Quiz — ${conceptId ?? ""}`} />;
 }
 
 export function ProgressPage() {

@@ -5,13 +5,16 @@
 //! - Typed settings, keychain API-key storage, content cache, mastery reads.
 //! - Structured `tracing` logging; secrets are never logged.
 
+pub mod adaptive;
 pub mod ai;
 pub mod cache;
 pub mod commands;
 pub mod commands_ai;
+pub mod commands_m3;
 pub mod contract;
 pub mod curriculum;
 pub mod db;
+pub mod gamification;
 pub mod grading;
 pub mod keychain;
 pub mod mastery;
@@ -93,6 +96,13 @@ pub fn run() {
             commands_ai::generate_quiz,
             commands_ai::grade_quiz,
             commands_ai::list_concepts,
+            commands_m3::get_gamification_state,
+            commands_m3::award_lesson_xp,
+            commands_m3::record_quiz_result,
+            commands_m3::build_session,
+            commands_m3::get_concept_states,
+            commands_m3::add_study_minutes,
+            commands_m3::get_daily_progress,
         ])
         .run(tauri::generate_context!())
         .expect("error while running Etta");
