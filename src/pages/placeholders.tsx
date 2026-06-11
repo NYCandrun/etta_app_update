@@ -33,15 +33,6 @@ export function QuizPage() {
   return <Placeholder title={`Quiz — ${conceptId ?? ""}`} />;
 }
 
-export function ProjectPage() {
-  const { conceptId } = useParams();
-  return <Placeholder title={`Project — ${conceptId ?? ""}`} />;
-}
-
 export function ProgressPage() {
   return <Placeholder title="Progress" />;
-}
-
-export function SettingsPage() {
-  return <Placeholder title="Settings" />;
 }

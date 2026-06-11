@@ -34,11 +34,21 @@ rusqlite = { version = "0.40", features = ["bundled"] }
 # keyring 4.x auto-selects the platform-native store per target (Keychain on
 # macOS); no cargo features are needed. The API key lives ONLY in the OS
 # keychain (blocklist #39), never on disk.
-keyring = "4"
-hmac = "0.13"
+# keyring 3.x: self-contained `Entry::new(service, user)` API with the native
+# platform store built in (Keychain on macOS via `apple-native`). The API key
+# lives ONLY in the OS keychain (blocklist #39), never on disk. The `mock`
+# feature backs the keychain set/has/delete test in this headless Linux CI.
+keyring = { version = "3", features = ["apple-native", "linux-native", "windows-native"] }
+# No `hmac` crate: slim v1 does NOT HMAC the content cache (the threat model —
+# a user tampering with their own learning content — is self-defeating). The
+# SQLite DB under FileVault is the security boundary. See blocklist #0b.
 sha2 = "0.11"
 tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 chrono = { version = "0.4", default-features = false, features = ["clock", "std"] }
+
+[dev-dependencies]
+tempfile = "3"
 
 [features]
 # Default Tauri schema feature wiring; no macos-private-api.

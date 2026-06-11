@@ -1,24 +1,76 @@
-//! Etta backend library. Milestone 0: foundation only — the contract types,
-//! the shared xml_escape util, and the Tauri app wiring. Feature commands land
-//! in later milestones.
+//! Etta backend library. Milestone 1: foundation + data layer.
+//!
+//! - One SQLite connection in `AppState` behind a Mutex (never per-command).
+//! - Idempotent schema init, daily backup, cache purge, xp pruning on startup.
+//! - Typed settings, keychain API-key storage, content cache, mastery reads.
+//! - Structured `tracing` logging; secrets are never logged.
 
+pub mod cache;
+pub mod commands;
 pub mod contract;
+pub mod db;
+pub mod keychain;
+pub mod mastery;
 pub mod samples;
+pub mod settings;
 pub mod util;
+pub mod validate;
 
-/// Minimal IPC command so the frontend has a verified channel from day one.
-/// Returns the app name; used by later milestones' health checks.
-#[tauri::command]
-fn app_name() -> String {
-    "Etta".to_string()
-}
+use std::sync::Mutex;
+
+use tauri::Manager;
+
+use db::AppState;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+    // Structured logging to stderr. Detailed context (DB/file/key-op failures)
+    // goes here; user-facing errors stay generic. Never logs secrets.
+    let _ = tracing_subscriber::fmt()
+        .with_env_filter(
+            tracing_subscriber::EnvFilter::try_from_default_env()
+                .unwrap_or_else(|_| tracing_subscriber::EnvFilter::new("info")),
+        )
+        .with_writer(std::io::stderr)
+        .try_init();
+
     tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_fs::init())
-        .invoke_handler(tauri::generate_handler![app_name])
+        .setup(|app| {
+            // App support directory (per-OS). The DB and backups live here.
+            let data_dir = app.path().app_data_dir().expect("resolve app data dir");
+
+            let conn = db::open(&data_dir).expect("open + init database");
+
+            // Startup hygiene (best-effort; failures are logged, not fatal).
+            if let Err(e) = cache::purge_expired(&conn) {
+                tracing::error!(error = %e, "cache purge failed");
+            }
+            if let Err(e) = mastery::prune_xp_events(&conn) {
+                tracing::error!(error = %e, "xp prune failed");
+            }
+            db::backup_if_stale(&data_dir);
+
+            app.manage(AppState {
+                db: Mutex::new(conn),
+                data_dir,
+            });
+            Ok(())
+        })
+        .invoke_handler(tauri::generate_handler![
+            commands::app_name,
+            commands::get_settings,
+            commands::set_setting,
+            commands::set_api_key,
+            commands::delete_api_key,
+            commands::has_api_key,
+            commands::test_api_key,
+            commands::cache_get,
+            commands::cache_put,
+            commands::get_mastery_history,
+            commands::write_mastery_snapshot,
+        ])
         .run(tauri::generate_context!())
         .expect("error while running Etta");
 }
@@ -36,7 +88,6 @@ mod contract_roundtrip {
         let fixture = samples::fixture();
         let json = serde_json::to_string_pretty(&fixture).expect("serialize fixture");
 
-        // Write to <repo>/src/types/__generated__/contract-fixture.json.
         let manifest = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
         let out_dir = manifest
             .parent()
