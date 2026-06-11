@@ -48,12 +48,18 @@ export function LessonPage() {
   const mistakesRef = useRef<string[]>([]);
   // Whether the learner has interacted enough that leaving should warn.
   const dirtyRef = useRef(false);
+  // Monotonic token for the active stream. Switching concepts (or re-loading)
+  // bumps it; deltas/results from a superseded stream are dropped so a previous
+  // concept's late chunks never append into the current concept's lesson
+  // (async result landing after the route param changed — blocklist #28).
+  const streamGenRef = useRef(0);
 
   // Load the concept's recent error patterns into the ref, then stream the
   // lesson. The reinforcement context (mistakes) is read from the ref at the
   // moment of the call, not closed over at mount.
   const loadLesson = useCallback(() => {
     if (!conceptId) return;
+    const gen = ++streamGenRef.current;
     setLoading(true);
     setLoadError(null);
     setLesson("");
@@ -73,8 +79,12 @@ export function LessonPage() {
 
       const result = await streamGenerate(
         { conceptId, mode: "lesson", userInput },
-        (chunk) => setLesson((prev) => prev + chunk),
+        (chunk) => {
+          // Drop chunks from a superseded stream (the concept changed mid-stream).
+          if (gen === streamGenRef.current) setLesson((prev) => prev + chunk);
+        },
       );
+      if (gen !== streamGenRef.current) return; // superseded; ignore its result
       if (!result.ok) {
         setLoadError(result.error);
         showError(`Could not load the lesson: ${result.error}`, loadLesson);
@@ -102,6 +112,7 @@ export function LessonPage() {
   const handleDontGetIt = useCallback(() => {
     if (!conceptId) return;
     dirtyRef.current = true;
+    const gen = ++streamGenRef.current;
     const idx = Math.min(strategyIdx, STRATEGIES.length - 1);
     const strategy: Strategy = STRATEGIES[idx] ?? "textbook";
     setExplaining(true);
@@ -117,8 +128,11 @@ export function LessonPage() {
 
     void streamGenerate(
       { conceptId, mode: "explain", strategy, userInput },
-      (chunk) => setExplanation((prev) => prev + chunk),
+      (chunk) => {
+        if (gen === streamGenRef.current) setExplanation((prev) => prev + chunk);
+      },
     ).then((res) => {
+      if (gen !== streamGenRef.current) return; // superseded; ignore its result
       setExplaining(false);
       if (!res.ok) {
         showError(`Could not load an explanation: ${res.error}`, handleDontGetIt);
