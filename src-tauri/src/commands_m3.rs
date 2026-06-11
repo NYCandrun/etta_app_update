@@ -98,11 +98,33 @@ pub fn record_quiz_result(
         return Err("no answers to record".into());
     }
 
-    let c = conn(&state)?;
+    let mut c = conn(&state)?;
+    // One attempt = one atomic unit: every write in `record_into_conn` (answer
+    // inserts, schedule UPDATE, XP grant, streak) commits together or rolls back
+    // together. Without this, a mid-sequence failure left partial state and a
+    // client retry would double-insert answer rows, inflating the rolling window
+    // and skewing mastery.
+    let tx = c
+        .transaction()
+        .map_err(|e| format!("begin quiz-result transaction: {e}"))?;
+    let result = record_into_conn(&tx, &concept_id, &answers, &latencies_ms)?;
+    tx.commit()
+        .map_err(|e| format!("commit quiz-result transaction: {e}"))?;
+    Ok(result)
+}
 
+/// The full quiz-result write sequence against one connection. Run inside a
+/// transaction by the command so all writes are atomic: returning `Err` from any
+/// step aborts before commit and leaves no partial state.
+fn record_into_conn(
+    conn: &rusqlite::Connection,
+    concept_id: &str,
+    answers: &[GradedAnswer],
+    latencies_ms: &[Option<i64>],
+) -> Result<RecordedQuizResult, String> {
     // Canonical questions (server's own stored copy) give the authoritative
     // question_type and is_transfer flags — never trusted from the frontend.
-    let questions = load_canonical_questions(&c, &concept_id)?;
+    let questions = load_canonical_questions(conn, concept_id)?;
     let now = chrono::Utc::now().to_rfc3339();
 
     let mut correct_count = 0_i64;
@@ -117,7 +139,7 @@ pub fn record_quiz_result(
         if a.is_correct {
             correct_count += 1;
         }
-        c.execute(
+        conn.execute(
             "INSERT INTO quiz_answers(concept_id, question_id, question_type, prompt, \
                 user_answer, is_correct, score, is_transfer, error_pattern_detected, \
                 latency_ms, created_at) \
@@ -141,14 +163,14 @@ pub fn record_quiz_result(
 
     // Recompute composite mastery over the rolling window (now including the
     // answers we just persisted), per blocklist 7.1.
-    let attempts = recent_attempts(&c, &concept_id)?;
+    let attempts = recent_attempts(conn, concept_id)?;
     let mastery = mastery_calc::composite_mastery(&attempts);
 
     // ONE SM-2 update for the attempt. Quality is classified from overall
     // correctness on this quiz, the concept's running correct-streak, and the
     // slowest answer's latency against the tier-scaled threshold (#3).
     let (current_ease, current_interval, streak_correct, difficulty_tier) =
-        load_schedule_state(&c, &concept_id)?;
+        load_schedule_state(conn, concept_id)?;
     let all_correct = correct_count == answers.len() as i64;
     let new_streak = if all_correct { streak_correct + 1 } else { 0 };
     let slow_threshold = sm2::slow_threshold_for_tier(difficulty_tier);
@@ -164,8 +186,8 @@ pub fn record_quiz_result(
         None
     };
     write_schedule(
-        &c,
-        &concept_id,
+        conn,
+        concept_id,
         &update,
         mastery,
         new_streak,
@@ -175,15 +197,15 @@ pub fn record_quiz_result(
 
     // Quiz XP exactly once per concept (#5), through the single xp_events path.
     let source = format!("quiz:{concept_id}");
-    if !gamification::already_awarded(&c, &source)? {
-        gamification::award_xp(&c, gamification::QUIZ_XP, &source, "Completed a quiz")?;
+    if !gamification::already_awarded(conn, &source)? {
+        gamification::award_xp(conn, gamification::QUIZ_XP, &source, "Completed a quiz")?;
     }
 
     // Activity today advances the streak (idempotent within a day).
-    gamification::touch_streak(&c, &today_local())?;
+    gamification::touch_streak(conn, &today_local())?;
 
     Ok(RecordedQuizResult {
-        gamification: gamification::snapshot(&c)?,
+        gamification: gamification::snapshot(conn)?,
         next_review: update.next_review,
         interval_days: update.interval_days,
         ease_factor: update.ease_factor,
@@ -454,6 +476,101 @@ mod tests {
         gamification::award_xp(&conn, gamification::QUIZ_XP, source, "Completed a quiz").unwrap();
         assert!(gamification::already_awarded(&conn, source).unwrap());
         // A second guard check means no second grant.
+        assert_eq!(
+            gamification::total_xp(&conn).unwrap(),
+            gamification::QUIZ_XP
+        );
+    }
+
+    /// Atomicity: if any step fails after some answers were inserted, the whole
+    /// sequence rolls back — no partial state, so a retry cannot double-insert.
+    /// Here the 2nd answer references an unknown question, failing mid-loop after
+    /// the 1st insert; on the aborted transaction `quiz_answers` must stay empty.
+    #[test]
+    fn record_rolls_back_on_mid_sequence_failure() {
+        let mut conn = db();
+        seed_concept(&conn, "alg_001");
+        seed_quiz_cache(&conn, "alg_001");
+
+        let answers = vec![
+            GradedAnswer {
+                question_id: "q1".into(),
+                user_answer: "a".into(),
+                is_correct: true,
+                score: 1.0,
+                error_pattern_detected: None,
+            },
+            GradedAnswer {
+                question_id: "does_not_exist".into(),
+                user_answer: "z".into(),
+                is_correct: false,
+                score: 0.0,
+                error_pattern_detected: None,
+            },
+        ];
+
+        let tx = conn.transaction().unwrap();
+        let result = record_into_conn(&tx, "alg_001", &answers, &[None, None]);
+        assert!(result.is_err(), "unknown question must fail the call");
+        drop(tx); // no commit → rollback
+
+        let answer_rows: i64 = conn
+            .query_row("SELECT COUNT(*) FROM quiz_answers", [], |r| r.get(0))
+            .unwrap();
+        assert_eq!(
+            answer_rows, 0,
+            "first insert must roll back with the failure"
+        );
+        let attempt_count: i64 = conn
+            .query_row(
+                "SELECT attempt_count FROM concepts WHERE id = 'alg_001'",
+                [],
+                |r| r.get(0),
+            )
+            .unwrap();
+        assert_eq!(
+            attempt_count, 0,
+            "schedule must not advance on a failed record"
+        );
+        assert_eq!(
+            gamification::total_xp(&conn).unwrap(),
+            0,
+            "no XP on failure"
+        );
+    }
+
+    /// A clean record commits every write together: the answer is persisted,
+    /// attempt_count advances once, and quiz XP is granted exactly once.
+    #[test]
+    fn record_commits_all_writes_together() {
+        let mut conn = db();
+        seed_concept(&conn, "alg_001");
+        seed_quiz_cache(&conn, "alg_001");
+
+        let answers = vec![GradedAnswer {
+            question_id: "q1".into(),
+            user_answer: "a".into(),
+            is_correct: true,
+            score: 1.0,
+            error_pattern_detected: None,
+        }];
+
+        let tx = conn.transaction().unwrap();
+        record_into_conn(&tx, "alg_001", &answers, &[None]).unwrap();
+        tx.commit().unwrap();
+
+        let answer_rows: i64 = conn
+            .query_row("SELECT COUNT(*) FROM quiz_answers", [], |r| r.get(0))
+            .unwrap();
+        assert_eq!(answer_rows, 1);
+        let attempt_count: i64 = conn
+            .query_row(
+                "SELECT attempt_count FROM concepts WHERE id = 'alg_001'",
+                [],
+                |r| r.get(0),
+            )
+            .unwrap();
+        assert_eq!(attempt_count, 1);
         assert_eq!(
             gamification::total_xp(&conn).unwrap(),
             gamification::QUIZ_XP
