@@ -1,0 +1,124 @@
+{
+  "appSettings": {
+    "apiKeyPresent": false,
+    "baseModel": "claude-sonnet-4-6",
+    "dailyGoalMinutes": 30,
+    "newConceptsPerSession": 3,
+    "notificationsEnabled": false,
+    "reasoningModel": "claude-opus-4-8",
+    "theme": "system"
+  },
+  "concept": {
+    "difficultyTier": 1,
+    "domain": "algebra",
+    "easeFactor": 2.5,
+    "effectiveMastery": 0.38,
+    "errorPatterns": [
+      "thinks_negative_fractions_are_irrational"
+    ],
+    "id": "alg_001",
+    "intervalDays": 6,
+    "learningObjectives": [
+      "Classify real numbers"
+    ],
+    "masteryScore": 0.42,
+    "module": "Numbers and Operations",
+    "nextReview": "2026-06-17",
+    "prerequisites": [],
+    "state": "in_progress",
+    "title": "Real Number System"
+  },
+  "dailySession": {
+    "conceptsNew": [
+      "alg_002"
+    ],
+    "conceptsReview": [
+      "alg_001"
+    ],
+    "estimatedMinutes": 30,
+    "interleavedSet": [
+      "alg_001",
+      "alg_002"
+    ]
+  },
+  "gamificationState": {
+    "badges": [
+      {
+        "earnedAt": "2026-06-10T12:00:00Z",
+        "iconName": "icon-badge-first",
+        "id": "first_lesson",
+        "name": "First Lesson"
+      }
+    ],
+    "level": {
+      "level": 5,
+      "title": "Stargazer",
+      "xpForNextLevel": 200,
+      "xpIntoLevel": 34
+    },
+    "recentXpEvents": [
+      {
+        "amount": 20,
+        "createdAt": "2026-06-11T09:30:00Z",
+        "description": "Completed Real Number System",
+        "source": "lesson_complete"
+      }
+    ],
+    "streak": {
+      "currentStreak": 7,
+      "freezesAvailable": 2,
+      "lastActiveDate": "2026-06-11",
+      "longestStreak": 12
+    },
+    "xp": 1234
+  },
+  "ipcErr": {
+    "error": "something failed",
+    "ok": false
+  },
+  "ipcOk": {
+    "data": {
+      "apiKeyPresent": false,
+      "baseModel": "claude-sonnet-4-6",
+      "dailyGoalMinutes": 30,
+      "newConceptsPerSession": 3,
+      "notificationsEnabled": false,
+      "reasoningModel": "claude-opus-4-8",
+      "theme": "system"
+    },
+    "ok": true
+  },
+  "question": {
+    "difficulty": 2,
+    "explanation": "Square root of 2 is irrational.",
+    "id": "q1",
+    "isTransfer": false,
+    "options": [
+      {
+        "id": "a",
+        "isCorrect": false,
+        "text": "Rationals"
+      },
+      {
+        "id": "b",
+        "isCorrect": true,
+        "text": "Irrationals"
+      }
+    ],
+    "prompt": "Which set contains $\\sqrt{2}$?",
+    "type": "multiple_choice"
+  },
+  "quizResult": {
+    "answers": [
+      {
+        "errorPatternDetected": null,
+        "isCorrect": true,
+        "questionId": "q1",
+        "score": 1.0,
+        "userAnswer": "b"
+      }
+    ],
+    "conceptId": "alg_001",
+    "finalScore": 0.9
+  }
+}

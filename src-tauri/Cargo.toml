@@ -1,0 +1,52 @@
+[package]
+name = "etta"
+version = "0.0.0"
+description = "Etta — adaptive, gamified, offline-first learning app."
+authors = ["Etta"]
+edition = "2021"
+rust-version = "1.77"
+
+[lib]
+# Etta targets macOS desktop only, so the library is a plain rlib. (Tauri's
+# mobile targets would also need "staticlib"/"cdylib"; add them only if mobile
+# support is introduced — they force linking the full GUI graph for every
+# `cargo test`, which is unnecessary for a desktop-only build.)
+name = "etta_lib"
+crate-type = ["lib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tauri-plugin-dialog = "2"
+tauri-plugin-fs = "2"
+
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# tokio: scoped features ONLY — never "full" (Cargo hygiene requirement).
+tokio = { version = "1", features = ["rt-multi-thread", "time", "macros"] }
+
+reqwest = { version = "0.13", default-features = false, features = ["json", "rustls"] }
+# rusqlite with the bundled feature for a static SQLite build.
+rusqlite = { version = "0.40", features = ["bundled"] }
+# keyring 4.x auto-selects the platform-native store per target (Keychain on
+# macOS); no cargo features are needed. The API key lives ONLY in the OS
+# keychain (blocklist #39), never on disk.
+keyring = "4"
+hmac = "0.13"
+sha2 = "0.11"
+tracing = "0.1"
+chrono = { version = "0.4", default-features = false, features = ["clock", "std"] }
+
+[features]
+# Default Tauri schema feature wiring; no macos-private-api.
+custom-protocol = ["tauri/custom-protocol"]
+
+[profile.release]
+panic = "abort"
+codegen-units = 1
+lto = true
+opt-level = "s"
+strip = true
