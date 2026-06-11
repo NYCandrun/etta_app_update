@@ -827,6 +827,7 @@ name = "etta"
 version = "0.0.0"
 dependencies = [
  "chrono",
+ "futures-util",
  "keyring",
  "reqwest",
  "rusqlite",

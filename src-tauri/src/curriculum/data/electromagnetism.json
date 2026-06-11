@@ -1,0 +1,522 @@
+{
+  "domain": "electromagnetism",
+  "display_name": "Electromagnetism",
+  "phase": 3,
+  "description": "Electric and magnetic fields, Maxwell's equations, and waves.",
+  "prerequisites": [
+    "multivariable_calculus",
+    "differential_equations",
+    "linear_algebra"
+  ],
+  "modules": [
+    {
+      "id": "em_m01",
+      "title": "Electrostatics",
+      "order": 1,
+      "concepts": [
+        {
+          "id": "em_001",
+          "title": "Electric Charge and Coulomb's Law",
+          "prerequisites": [
+            "mvc_001"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Electric Charge and Coulomb's Law",
+            "Apply Electric Charge and Coulomb's Law to standard worked problems",
+            "Connect Electric Charge and Coulomb's Law to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "em_002",
+          "title": "The Electric Field",
+          "prerequisites": [
+            "em_001"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Electric Field",
+            "Apply The Electric Field to standard worked problems",
+            "Connect The Electric Field to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "em_003",
+          "title": "Electric Flux and Gauss's Law",
+          "prerequisites": [
+            "em_002"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Electric Flux and Gauss's Law",
+            "Apply Electric Flux and Gauss's Law to standard worked problems",
+            "Connect Electric Flux and Gauss's Law to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "em_004",
+          "title": "Electric Potential",
+          "prerequisites": [
+            "em_003"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Electric Potential",
+            "Apply Electric Potential to standard worked problems",
+            "Connect Electric Potential to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "em_005",
+          "title": "Capacitance",
+          "prerequisites": [
+            "em_004"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Capacitance",
+            "Apply Capacitance to standard worked problems",
+            "Connect Capacitance to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "em_006",
+          "title": "Dielectrics",
+          "prerequisites": [
+            "em_005"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Dielectrics",
+            "Apply Dielectrics to standard worked problems",
+            "Connect Dielectrics to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "em_007",
+          "title": "Energy in Electric Fields",
+          "prerequisites": [
+            "em_006"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Energy in Electric Fields",
+            "Apply Energy in Electric Fields to standard worked problems",
+            "Connect Energy in Electric Fields to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "em_m02",
+      "title": "Currents and Magnetism",
+      "order": 2,
+      "concepts": [
+        {
+          "id": "em_008",
+          "title": "Electric Current and Resistance",
+          "prerequisites": [
+            "em_007"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Electric Current and Resistance",
+            "Apply Electric Current and Resistance to standard worked problems",
+            "Connect Electric Current and Resistance to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "em_009",
+          "title": "DC Circuits and Kirchhoff's Laws",
+          "prerequisites": [
+            "em_008"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind DC Circuits and Kirchhoff's Laws",
+            "Apply DC Circuits and Kirchhoff's Laws to standard worked problems",
+            "Connect DC Circuits and Kirchhoff's Laws to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "em_010",
+          "title": "The Magnetic Field",
+          "prerequisites": [
+            "em_009"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Magnetic Field",
+            "Apply The Magnetic Field to standard worked problems",
+            "Connect The Magnetic Field to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "em_011",
+          "title": "Magnetic Force on Currents",
+          "prerequisites": [
+            "em_010"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Magnetic Force on Currents",
+            "Apply Magnetic Force on Currents to standard worked problems",
+            "Connect Magnetic Force on Currents to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "em_012",
+          "title": "The Biot-Savart Law",
+          "prerequisites": [
+            "em_011"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Biot-Savart Law",
+            "Apply The Biot-Savart Law to standard worked problems",
+            "Connect The Biot-Savart Law to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "em_013",
+          "title": "Ampere's Law",
+          "prerequisites": [
+            "em_012"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Ampere's Law",
+            "Apply Ampere's Law to standard worked problems",
+            "Connect Ampere's Law to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "em_m03",
+      "title": "Induction and Maxwell",
+      "order": 3,
+      "concepts": [
+        {
+          "id": "em_014",
+          "title": "Faraday's Law of Induction",
+          "prerequisites": [
+            "em_013"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Faraday's Law of Induction",
+            "Apply Faraday's Law of Induction to standard worked problems",
+            "Connect Faraday's Law of Induction to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "em_015",
+          "title": "Inductance",
+          "prerequisites": [
+            "em_014"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Inductance",
+            "Apply Inductance to standard worked problems",
+            "Connect Inductance to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "em_016",
+          "title": "RL and RC Transients",
+          "prerequisites": [
+            "em_015"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind RL and RC Transients",
+            "Apply RL and RC Transients to standard worked problems",
+            "Connect RL and RC Transients to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "em_017",
+          "title": "Maxwell's Equations",
+          "prerequisites": [
+            "em_016"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Maxwell's Equations",
+            "Apply Maxwell's Equations to standard worked problems",
+            "Connect Maxwell's Equations to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "em_018",
+          "title": "The Displacement Current",
+          "prerequisites": [
+            "em_017"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Displacement Current",
+            "Apply The Displacement Current to standard worked problems",
+            "Connect The Displacement Current to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "em_019",
+          "title": "AC Circuits",
+          "prerequisites": [
+            "em_018"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind AC Circuits",
+            "Apply AC Circuits to standard worked problems",
+            "Connect AC Circuits to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 4
+        }
+      ]
+    },
+    {
+      "id": "em_m04",
+      "title": "Waves and Radiation",
+      "order": 4,
+      "concepts": [
+        {
+          "id": "em_020",
+          "title": "Electromagnetic Waves",
+          "prerequisites": [
+            "em_019"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Electromagnetic Waves",
+            "Apply Electromagnetic Waves to standard worked problems",
+            "Connect Electromagnetic Waves to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "em_021",
+          "title": "The Poynting Vector",
+          "prerequisites": [
+            "em_020"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Poynting Vector",
+            "Apply The Poynting Vector to standard worked problems",
+            "Connect The Poynting Vector to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "em_022",
+          "title": "Polarization",
+          "prerequisites": [
+            "em_021"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Polarization",
+            "Apply Polarization to standard worked problems",
+            "Connect Polarization to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "em_023",
+          "title": "Reflection and Refraction",
+          "prerequisites": [
+            "em_022"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Reflection and Refraction",
+            "Apply Reflection and Refraction to standard worked problems",
+            "Connect Reflection and Refraction to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "em_024",
+          "title": "Waveguides",
+          "prerequisites": [
+            "em_023"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Waveguides",
+            "Apply Waveguides to standard worked problems",
+            "Connect Waveguides to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 5
+        },
+        {
+          "id": "em_025",
+          "title": "Radiation from Accelerating Charges",
+          "prerequisites": [
+            "em_024"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Radiation from Accelerating Charges",
+            "Apply Radiation from Accelerating Charges to standard worked problems",
+            "Connect Radiation from Accelerating Charges to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 5
+        },
+        {
+          "id": "em_026",
+          "title": "Electromagnetism Capstone",
+          "prerequisites": [
+            "em_025"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Electromagnetism Capstone",
+            "Apply Electromagnetism Capstone to standard worked problems",
+            "Connect Electromagnetism Capstone to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 5
+        }
+      ]
+    }
+  ]
+}

@@ -1,5 +1,26 @@
 import { invoke } from "@tauri-apps/api/core";
-import type { AppSettings } from "../types/contract";
+import type { AppSettings, GradedAnswer, Question } from "../types/contract";
+
+// A concept summary for curriculum browsing (mirrors the Rust ConceptSummary).
+export interface ConceptSummary {
+  id: string;
+  domain: string;
+  module: string;
+  title: string;
+  difficultyTier: number;
+}
+
+// One submitted answer: the raw answer only — the frontend NEVER sends a
+// correctness flag. Grading is server-authoritative.
+export interface SubmittedAnswer {
+  questionId: string;
+  answer: string;
+}
+
+export interface GradeQuizResult {
+  answers: GradedAnswer[];
+  finalScore: number;
+}
 
 // Thin typed wrapper over Tauri's invoke. Rust commands return Result<T, String>;
 // Tauri rejects the promise on Err. We normalize both branches into IpcResult<T>
@@ -25,4 +46,20 @@ export const ipc = {
   deleteApiKey: () => call<null>("delete_api_key"),
   hasApiKey: () => call<boolean>("has_api_key"),
   testApiKey: () => call<boolean>("test_api_key"),
+
+  // ---- AI + curriculum (milestone 2) ----
+
+  // Model ids for the Settings picker. Uses GET /v1/models (cached); never
+  // burns a completion request.
+  listAvailableModels: () => call<string[]>("list_available_models"),
+  // Real connectivity test: a tiny completion using the CONFIGURED model.
+  testConnection: () => call<boolean>("test_connection"),
+  // Quiz generation (cached) — returns the validated, schema-repaired questions.
+  generateQuiz: (conceptId: string) => call<Question[]>("generate_quiz", { conceptId }),
+  // Server-authoritative grading of submitted answers.
+  gradeQuiz: (conceptId: string, answers: SubmittedAnswer[]) =>
+    call<GradeQuizResult>("grade_quiz", { conceptId, answers }),
+  // Curriculum browsing.
+  listConcepts: (domain?: string) =>
+    call<ConceptSummary[]>("list_concepts", domain ? { domain } : {}),
 };

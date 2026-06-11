@@ -191,6 +191,133 @@ Tables: `concepts` (incl. `learning_objectives`, `difficulty_tier`,
 
 Any key not on this list is rejected.
 
+## AI layer (milestone 2)
+
+The AI layer is the app's sole content engine (Anthropic Messages API). It lives
+under `src-tauri/src/ai/` and is driven by the Tauri commands in
+`src-tauri/src/commands_ai.rs`.
+
+### Model configuration — one source of truth
+
+There is exactly **one** configured model (`base_model` in settings; default
+`claude-sonnet-4-6`). No call site hardcodes a model id and no default/fallback
+is a stale dated id (e.g. `claude-...-20250514`). Every AI command reads the
+model via the typed accessor `settings::base_model`. The Settings screen has a
+model picker populated by `list_available_models`, which calls Anthropic's
+`GET /v1/models` (cheap metadata, cached in memory for 1h) and falls back to the
+current hardcoded list `["claude-sonnet-4-6","claude-opus-4-8","claude-haiku-4-5"]`
+on any network failure — it **never** burns a completion request to build the
+list. `reasoning_model` stays in the contract but is not wired this milestone.
+
+The **Test connection** button runs a tiny real completion (`max_tokens: 1`)
+against the *configured* model — the only place a real completion is used as a
+connectivity probe.
+
+### One shared HTTP client, key from keychain per request
+
+A single `reqwest::Client` is built once at startup and stored in `AiState`
+(Tauri app state); we never construct a client per request. The API key is read
+from the OS keychain **per request** and not held in memory longer than the call.
+The static system prompt is sent as a cached system block
+(`cache_control: ephemeral`) on every request — a pure prompt-caching win.
+Streaming is used for `lesson` and `explain` (SSE `content_block_delta` events,
+re-emitted to the UI as `ai://delta` Tauri events).
+
+### Universal prompt escaping (injection defense)
+
+`build_user_message` (Appendix A) runs **every** interpolated field through the
+shared `xml_escape` — concept id/title/domain/module, every learning objective,
+every error pattern, **and** any user input. The local SQLite DB is unencrypted,
+so even "trusted" curriculum/cache content is treated as a prompt-injection
+vector. A concept title containing `<mode>quiz</mode>` is emitted as escaped text,
+never as a live tag (covered by a test).
+
+### Content cache integration
+
+Before any model call, the command checks `content_cache` (clean-JSON read; a
+parse failure is a cache **miss**, never trusted content — no HMAC). On a miss it
+calls the model, then stores the result as **clean JSON** with `model_version`
+and `mastery_band` in their own side-band columns — metadata is never appended to
+the payload by string concatenation.
+
+### Server-authoritative grading
+
+Correctness is computed in Rust from the canonical question JSON the server
+stored — never from a frontend-supplied flag (the frontend sends only the raw
+answer string):
+
+- **multiple_choice** — the correct option is the one with `isCorrect == true` in
+  the cached canonical question; the learner's chosen option id is matched against
+  it.
+- **fill_in_blank** — graded by **mathematical equivalence** (`grading::math_eq`),
+  not a case-insensitive string compare: `1/2 == 0.5 == 0.50` and
+  `sqrt(2)/2 == 1/sqrt(2)`.
+- **free_response** — graded by the model against the question's rubric; the
+  structured `{ score, feedback, error_pattern }` reply is parsed and clamped to
+  `0.0..=1.0`.
+
+The AI may emit only the three gradable types. A stray `short_answer` /
+`open_ended` / `essay` is **repaired** to `free_response` (with a synthesized
+rubric); a genuinely unknown type is **rejected** with an error — it is never
+auto-zeroed.
+
+### Rate limiting
+
+A sliding-window limiter (`ai::rate_limit`, ~30 requests/min) guards every call.
+Over the limit, callers get a typed `"rate limited, retry shortly"` error — the
+limiter never silently spins. Failures are logged via `tracing` (never the key);
+the frontend receives generic messages.
+
+## Curriculum (milestone 2)
+
+The curriculum is **data only** — the 12 domain JSON files under
+`src-tauri/src/curriculum/data/` are bundled at build time via `include_str!`
+(no runtime graph library, no d3). On first launch and on a `CURRICULUM_VERSION`
+bump, the loader validates the whole graph and writes every concept — including
+`learning_objectives`, `error_patterns`, and `difficulty_tier` — into the
+`concepts` table, preserving any existing learner progress columns on re-import.
+
+### DAG validation (hard fail at startup)
+
+Loading aborts (fatal) if any of these fail: a concept id does not match
+`^[a-z]{2,4}_[0-9]{3}$`, a duplicate id exists, a prerequisite resolves to no
+concept (including cross-domain), or the graph contains a cycle (Kahn
+topological sort must order every node). A concept with empty
+`learning_objectives`/`error_patterns` or a `difficulty_tier` outside `1..=5` is
+also rejected.
+
+### Domains, phases, and prerequisite edges
+
+402 concepts across 12 domains. The graph is **not** a single linear chain:
+after Single-Variable Calculus, Linear Algebra and Differential Equations
+progress as **parallel tracks** (both anchor on Single-Variable Calculus), and
+Quantum Mechanics anchors on Linear Algebra. Light **bridge** concepts smooth
+jarring transitions (e.g. *Precalc Limits → Epsilon-Delta*; *Maxwell–Boltzmann*
+and *error propagation* appear inline in thermo/astro since the Statistics &
+Probability domain is deferred).
+
+| Phase | Domain | Concepts | Prereq domain(s) |
+| ----- | ------ | -------- | ---------------- |
+| 1 | Algebra | 56 | — |
+| 1 | Trigonometry | 28 | Algebra |
+| 1 | Pre-Calculus | 25 | Trigonometry (← Algebra) |
+| 2 | Single-Variable Calculus | 43 | Pre-Calculus |
+| 2 | Multivariable Calculus | 33 | Single-Variable Calculus |
+| 2 | Linear Algebra | 30 | Single-Variable Calculus *(parallel track)* |
+| 2 | Differential Equations | 27 | Single-Variable Calculus *(parallel track)* |
+| 3 | Classical Mechanics | 33 | Multivariable Calculus |
+| 3 | Electromagnetism | 26 | Multivariable Calculus |
+| 3 | Thermodynamics & Statistical Mechanics | 23 | Multivariable Calculus |
+| 3 | Quantum Mechanics | 31 | Linear Algebra |
+| 4 | Astrophysics | 47 | Classical Mechanics |
+
+### `formatModuleLabel`
+
+`src/lib/labels.ts` exposes `formatModuleLabel("alg_m01") === "Module 1"`. v1
+rendered the label via `.slice(-1)`, which only worked by luck for single-digit
+modules and broke at `_m10`/`_m12`; the util now parses the trailing number and
+falls back to the raw id for an unrecognized shape.
+
 ## Data-at-rest security (FileVault)
 
 The SQLite database is **not** encrypted at the application layer (no SQLCipher

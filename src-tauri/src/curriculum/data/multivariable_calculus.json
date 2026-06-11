@@ -1,0 +1,650 @@
+{
+  "domain": "multivariable_calculus",
+  "display_name": "Multivariable Calculus",
+  "phase": 2,
+  "description": "Calculus of several variables: partial derivatives and multiple integrals.",
+  "prerequisites": [
+    "single_variable_calculus"
+  ],
+  "modules": [
+    {
+      "id": "mvc_m01",
+      "title": "Vectors and Geometry of Space",
+      "order": 1,
+      "concepts": [
+        {
+          "id": "mvc_001",
+          "title": "Vectors in Three Dimensions",
+          "prerequisites": [
+            "svc_001"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Vectors in Three Dimensions",
+            "Apply Vectors in Three Dimensions to standard worked problems",
+            "Connect Vectors in Three Dimensions to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "mvc_002",
+          "title": "Dot Product",
+          "prerequisites": [
+            "mvc_001"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Dot Product",
+            "Apply Dot Product to standard worked problems",
+            "Connect Dot Product to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "mvc_003",
+          "title": "Cross Product",
+          "prerequisites": [
+            "mvc_002"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Cross Product",
+            "Apply Cross Product to standard worked problems",
+            "Connect Cross Product to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "mvc_004",
+          "title": "Lines and Planes",
+          "prerequisites": [
+            "mvc_003"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Lines and Planes",
+            "Apply Lines and Planes to standard worked problems",
+            "Connect Lines and Planes to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "mvc_005",
+          "title": "Cylinders and Quadric Surfaces",
+          "prerequisites": [
+            "mvc_004"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Cylinders and Quadric Surfaces",
+            "Apply Cylinders and Quadric Surfaces to standard worked problems",
+            "Connect Cylinders and Quadric Surfaces to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "mvc_006",
+          "title": "Vector-Valued Functions",
+          "prerequisites": [
+            "mvc_005"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Vector-Valued Functions",
+            "Apply Vector-Valued Functions to standard worked problems",
+            "Connect Vector-Valued Functions to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "mvc_007",
+          "title": "Arc Length in Space",
+          "prerequisites": [
+            "mvc_006"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Arc Length in Space",
+            "Apply Arc Length in Space to standard worked problems",
+            "Connect Arc Length in Space to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "mvc_m02",
+      "title": "Partial Derivatives",
+      "order": 2,
+      "concepts": [
+        {
+          "id": "mvc_008",
+          "title": "Functions of Several Variables",
+          "prerequisites": [
+            "mvc_007"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Functions of Several Variables",
+            "Apply Functions of Several Variables to standard worked problems",
+            "Connect Functions of Several Variables to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "mvc_009",
+          "title": "Limits and Continuity in Higher Dimensions",
+          "prerequisites": [
+            "mvc_008"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Limits and Continuity in Higher Dimensions",
+            "Apply Limits and Continuity in Higher Dimensions to standard worked problems",
+            "Connect Limits and Continuity in Higher Dimensions to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "mvc_010",
+          "title": "Partial Derivatives",
+          "prerequisites": [
+            "mvc_009"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Partial Derivatives",
+            "Apply Partial Derivatives to standard worked problems",
+            "Connect Partial Derivatives to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "mvc_011",
+          "title": "The Chain Rule (Multivariable)",
+          "prerequisites": [
+            "mvc_010"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Chain Rule (Multivariable)",
+            "Apply The Chain Rule (Multivariable) to standard worked problems",
+            "Connect The Chain Rule (Multivariable) to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "mvc_012",
+          "title": "Directional Derivatives",
+          "prerequisites": [
+            "mvc_011"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Directional Derivatives",
+            "Apply Directional Derivatives to standard worked problems",
+            "Connect Directional Derivatives to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "mvc_013",
+          "title": "The Gradient",
+          "prerequisites": [
+            "mvc_012"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Gradient",
+            "Apply The Gradient to standard worked problems",
+            "Connect The Gradient to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "mvc_014",
+          "title": "Tangent Planes",
+          "prerequisites": [
+            "mvc_013"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Tangent Planes",
+            "Apply Tangent Planes to standard worked problems",
+            "Connect Tangent Planes to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "mvc_015",
+          "title": "Extrema of Multivariable Functions",
+          "prerequisites": [
+            "mvc_014"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Extrema of Multivariable Functions",
+            "Apply Extrema of Multivariable Functions to standard worked problems",
+            "Connect Extrema of Multivariable Functions to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "mvc_016",
+          "title": "Lagrange Multipliers",
+          "prerequisites": [
+            "mvc_015"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Lagrange Multipliers",
+            "Apply Lagrange Multipliers to standard worked problems",
+            "Connect Lagrange Multipliers to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "mvc_m03",
+      "title": "Multiple Integrals",
+      "order": 3,
+      "concepts": [
+        {
+          "id": "mvc_017",
+          "title": "Double Integrals",
+          "prerequisites": [
+            "mvc_016"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Double Integrals",
+            "Apply Double Integrals to standard worked problems",
+            "Connect Double Integrals to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "mvc_018",
+          "title": "Double Integrals in Polar Coordinates",
+          "prerequisites": [
+            "mvc_017"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Double Integrals in Polar Coordinates",
+            "Apply Double Integrals in Polar Coordinates to standard worked problems",
+            "Connect Double Integrals in Polar Coordinates to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "mvc_019",
+          "title": "Triple Integrals",
+          "prerequisites": [
+            "mvc_018"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Triple Integrals",
+            "Apply Triple Integrals to standard worked problems",
+            "Connect Triple Integrals to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "mvc_020",
+          "title": "Cylindrical Coordinates",
+          "prerequisites": [
+            "mvc_019"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Cylindrical Coordinates",
+            "Apply Cylindrical Coordinates to standard worked problems",
+            "Connect Cylindrical Coordinates to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "mvc_021",
+          "title": "Spherical Coordinates",
+          "prerequisites": [
+            "mvc_020"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Spherical Coordinates",
+            "Apply Spherical Coordinates to standard worked problems",
+            "Connect Spherical Coordinates to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "mvc_022",
+          "title": "Change of Variables and Jacobians",
+          "prerequisites": [
+            "mvc_021"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Change of Variables and Jacobians",
+            "Apply Change of Variables and Jacobians to standard worked problems",
+            "Connect Change of Variables and Jacobians to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "mvc_023",
+          "title": "Applications of Multiple Integrals",
+          "prerequisites": [
+            "mvc_022"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Applications of Multiple Integrals",
+            "Apply Applications of Multiple Integrals to standard worked problems",
+            "Connect Applications of Multiple Integrals to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 4
+        }
+      ]
+    },
+    {
+      "id": "mvc_m04",
+      "title": "Vector Calculus",
+      "order": 4,
+      "concepts": [
+        {
+          "id": "mvc_024",
+          "title": "Vector Fields",
+          "prerequisites": [
+            "mvc_023"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Vector Fields",
+            "Apply Vector Fields to standard worked problems",
+            "Connect Vector Fields to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "mvc_025",
+          "title": "Line Integrals",
+          "prerequisites": [
+            "mvc_024"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Line Integrals",
+            "Apply Line Integrals to standard worked problems",
+            "Connect Line Integrals to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "mvc_026",
+          "title": "The Fundamental Theorem for Line Integrals",
+          "prerequisites": [
+            "mvc_025"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Fundamental Theorem for Line Integrals",
+            "Apply The Fundamental Theorem for Line Integrals to standard worked problems",
+            "Connect The Fundamental Theorem for Line Integrals to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "mvc_027",
+          "title": "Green's Theorem",
+          "prerequisites": [
+            "mvc_026"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Green's Theorem",
+            "Apply Green's Theorem to standard worked problems",
+            "Connect Green's Theorem to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "mvc_028",
+          "title": "Curl and Divergence",
+          "prerequisites": [
+            "mvc_027"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Curl and Divergence",
+            "Apply Curl and Divergence to standard worked problems",
+            "Connect Curl and Divergence to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "mvc_029",
+          "title": "Surface Integrals",
+          "prerequisites": [
+            "mvc_028"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Surface Integrals",
+            "Apply Surface Integrals to standard worked problems",
+            "Connect Surface Integrals to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "mvc_030",
+          "title": "Stokes' Theorem",
+          "prerequisites": [
+            "mvc_029"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Stokes' Theorem",
+            "Apply Stokes' Theorem to standard worked problems",
+            "Connect Stokes' Theorem to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "mvc_031",
+          "title": "The Divergence Theorem",
+          "prerequisites": [
+            "mvc_030"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Divergence Theorem",
+            "Apply The Divergence Theorem to standard worked problems",
+            "Connect The Divergence Theorem to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "mvc_032",
+          "title": "MVC Capstone",
+          "prerequisites": [
+            "mvc_031"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind MVC Capstone",
+            "Apply MVC Capstone to standard worked problems",
+            "Connect MVC Capstone to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "mvc_033",
+          "title": "Bridge: Error Propagation in Measurements",
+          "prerequisites": [
+            "mvc_032"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Bridge: Error Propagation in Measurements",
+            "Apply Bridge: Error Propagation in Measurements to standard worked problems",
+            "Connect Bridge: Error Propagation in Measurements to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 5
+        }
+      ]
+    }
+  ]
+}

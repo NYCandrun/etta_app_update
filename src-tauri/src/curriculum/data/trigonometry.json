@@ -1,0 +1,557 @@
+{
+  "domain": "trigonometry",
+  "display_name": "Trigonometry",
+  "phase": 1,
+  "description": "Angles, triangles, the unit circle, and periodic functions.",
+  "prerequisites": [
+    "algebra"
+  ],
+  "modules": [
+    {
+      "id": "trig_m01",
+      "title": "Angles and Triangles",
+      "order": 1,
+      "concepts": [
+        {
+          "id": "trig_001",
+          "title": "Angle Measure and Degrees",
+          "prerequisites": [
+            "alg_001"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Angle Measure and Degrees",
+            "Apply Angle Measure and Degrees to standard worked problems",
+            "Connect Angle Measure and Degrees to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "trig_002",
+          "title": "Radian Measure",
+          "prerequisites": [
+            "trig_001"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Radian Measure",
+            "Apply Radian Measure to standard worked problems",
+            "Connect Radian Measure to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "trig_003",
+          "title": "Right Triangle Ratios",
+          "prerequisites": [
+            "trig_002"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Right Triangle Ratios",
+            "Apply Right Triangle Ratios to standard worked problems",
+            "Connect Right Triangle Ratios to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "trig_004",
+          "title": "The Pythagorean Theorem",
+          "prerequisites": [
+            "trig_003"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Pythagorean Theorem",
+            "Apply The Pythagorean Theorem to standard worked problems",
+            "Connect The Pythagorean Theorem to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "trig_005",
+          "title": "Special Right Triangles",
+          "prerequisites": [
+            "trig_004"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Special Right Triangles",
+            "Apply Special Right Triangles to standard worked problems",
+            "Connect Special Right Triangles to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "trig_006",
+          "title": "Solving Right Triangles",
+          "prerequisites": [
+            "trig_005"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Solving Right Triangles",
+            "Apply Solving Right Triangles to standard worked problems",
+            "Connect Solving Right Triangles to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "trig_007",
+          "title": "Angles of Elevation and Depression",
+          "prerequisites": [
+            "trig_006"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Angles of Elevation and Depression",
+            "Apply Angles of Elevation and Depression to standard worked problems",
+            "Connect Angles of Elevation and Depression to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "trig_m02",
+      "title": "The Unit Circle",
+      "order": 2,
+      "concepts": [
+        {
+          "id": "trig_008",
+          "title": "Unit Circle Definition",
+          "prerequisites": [
+            "trig_007"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Unit Circle Definition",
+            "Apply Unit Circle Definition to standard worked problems",
+            "Connect Unit Circle Definition to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "trig_009",
+          "title": "Sine and Cosine",
+          "prerequisites": [
+            "trig_008"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Sine and Cosine",
+            "Apply Sine and Cosine to standard worked problems",
+            "Connect Sine and Cosine to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "trig_010",
+          "title": "Tangent and Reciprocals",
+          "prerequisites": [
+            "trig_009"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Tangent and Reciprocals",
+            "Apply Tangent and Reciprocals to standard worked problems",
+            "Connect Tangent and Reciprocals to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "trig_011",
+          "title": "Reference Angles",
+          "prerequisites": [
+            "trig_010"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Reference Angles",
+            "Apply Reference Angles to standard worked problems",
+            "Connect Reference Angles to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "trig_012",
+          "title": "Coterminal Angles",
+          "prerequisites": [
+            "trig_011"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Coterminal Angles",
+            "Apply Coterminal Angles to standard worked problems",
+            "Connect Coterminal Angles to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "trig_013",
+          "title": "Signs Across Quadrants",
+          "prerequisites": [
+            "trig_012"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Signs Across Quadrants",
+            "Apply Signs Across Quadrants to standard worked problems",
+            "Connect Signs Across Quadrants to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "trig_014",
+          "title": "Exact Values",
+          "prerequisites": [
+            "trig_013"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Exact Values",
+            "Apply Exact Values to standard worked problems",
+            "Connect Exact Values to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "trig_m03",
+      "title": "Trigonometric Functions",
+      "order": 3,
+      "concepts": [
+        {
+          "id": "trig_015",
+          "title": "Graphing Sine and Cosine",
+          "prerequisites": [
+            "trig_014"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Graphing Sine and Cosine",
+            "Apply Graphing Sine and Cosine to standard worked problems",
+            "Connect Graphing Sine and Cosine to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "trig_016",
+          "title": "Amplitude and Period",
+          "prerequisites": [
+            "trig_015"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Amplitude and Period",
+            "Apply Amplitude and Period to standard worked problems",
+            "Connect Amplitude and Period to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "trig_017",
+          "title": "Phase Shift",
+          "prerequisites": [
+            "trig_016"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Phase Shift",
+            "Apply Phase Shift to standard worked problems",
+            "Connect Phase Shift to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "trig_018",
+          "title": "Graphing Tangent",
+          "prerequisites": [
+            "trig_017"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Graphing Tangent",
+            "Apply Graphing Tangent to standard worked problems",
+            "Connect Graphing Tangent to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "trig_019",
+          "title": "Inverse Trig Functions",
+          "prerequisites": [
+            "trig_018"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Inverse Trig Functions",
+            "Apply Inverse Trig Functions to standard worked problems",
+            "Connect Inverse Trig Functions to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "trig_020",
+          "title": "Domain and Range of Inverses",
+          "prerequisites": [
+            "trig_019"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Domain and Range of Inverses",
+            "Apply Domain and Range of Inverses to standard worked problems",
+            "Connect Domain and Range of Inverses to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "trig_021",
+          "title": "Modeling Periodic Phenomena",
+          "prerequisites": [
+            "trig_020"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Modeling Periodic Phenomena",
+            "Apply Modeling Periodic Phenomena to standard worked problems",
+            "Connect Modeling Periodic Phenomena to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 4
+        }
+      ]
+    },
+    {
+      "id": "trig_m04",
+      "title": "Identities and Equations",
+      "order": 4,
+      "concepts": [
+        {
+          "id": "trig_022",
+          "title": "Pythagorean Identities",
+          "prerequisites": [
+            "trig_021"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Pythagorean Identities",
+            "Apply Pythagorean Identities to standard worked problems",
+            "Connect Pythagorean Identities to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "trig_023",
+          "title": "Sum and Difference Formulas",
+          "prerequisites": [
+            "trig_022"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Sum and Difference Formulas",
+            "Apply Sum and Difference Formulas to standard worked problems",
+            "Connect Sum and Difference Formulas to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "trig_024",
+          "title": "Double Angle Formulas",
+          "prerequisites": [
+            "trig_023"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Double Angle Formulas",
+            "Apply Double Angle Formulas to standard worked problems",
+            "Connect Double Angle Formulas to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 5
+        },
+        {
+          "id": "trig_025",
+          "title": "Law of Sines",
+          "prerequisites": [
+            "trig_024"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Law of Sines",
+            "Apply Law of Sines to standard worked problems",
+            "Connect Law of Sines to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 5
+        },
+        {
+          "id": "trig_026",
+          "title": "Law of Cosines",
+          "prerequisites": [
+            "trig_025"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Law of Cosines",
+            "Apply Law of Cosines to standard worked problems",
+            "Connect Law of Cosines to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 5
+        },
+        {
+          "id": "trig_027",
+          "title": "Solving Trig Equations",
+          "prerequisites": [
+            "trig_026"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Solving Trig Equations",
+            "Apply Solving Trig Equations to standard worked problems",
+            "Connect Solving Trig Equations to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 5
+        },
+        {
+          "id": "trig_028",
+          "title": "Trig Capstone",
+          "prerequisites": [
+            "trig_027"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Trig Capstone",
+            "Apply Trig Capstone to standard worked problems",
+            "Connect Trig Capstone to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 5
+        }
+      ]
+    }
+  ]
+}

@@ -5,7 +5,7 @@
 //! range; `daily_goal_minutes` round-trips as the integer 30. Only allowlisted
 //! user-facing keys (Appendix B) are accepted; unknown keys are rejected.
 
-use rusqlite::{Connection, OptionalExtension};
+use rusqlite::{params, Connection, OptionalExtension};
 
 use crate::contract::AppSettings;
 
@@ -183,6 +183,51 @@ pub fn set_setting(conn: &Connection, key: &str, raw: &str) -> Result<(), String
     ensure_allowed(key)?;
     validate(key, raw)?;
     set_raw(conn, key, raw)
+}
+
+/// The configured base model for every AI call. There is exactly ONE source of
+/// truth (this accessor) — no call site hardcodes a model id (blocklist #2).
+/// Falls back to the contract default ("claude-sonnet-4-6") only when unset;
+/// the default is the current June-2026 id, never a stale dated id.
+pub fn base_model(conn: &Connection) -> Result<String, String> {
+    Ok(get_string(conn, "base_model")?.unwrap_or_else(|| default_for("base_model").into()))
+}
+
+// ---- Internal (non-user-facing) state in the settings table ----
+//
+// The curriculum loader records which CURRICULUM_VERSION has been imported so
+// it re-imports only on a version bump. This is internal bookkeeping, NOT a
+// user-facing setting, so it lives under a reserved key that is deliberately
+// not on `ALLOWED_KEYS` and is read/written through these dedicated accessors
+// (never the generic `set_setting` command surface).
+const CURRICULUM_VERSION_KEY: &str = "__curriculum_version";
+
+pub fn get_curriculum_version(conn: &Connection) -> Result<Option<i64>, String> {
+    let raw: Option<String> = conn
+        .query_row(
+            "SELECT value FROM settings WHERE key = ?1 LIMIT 1",
+            [CURRICULUM_VERSION_KEY],
+            |r| r.get::<_, String>(0),
+        )
+        .optional()
+        .map_err(|e| format!("read curriculum version: {e}"))?;
+    match raw {
+        Some(s) => s
+            .parse::<i64>()
+            .map(Some)
+            .map_err(|_| format!("curriculum version is not an integer: {s:?}")),
+        None => Ok(None),
+    }
+}
+
+pub fn set_curriculum_version(conn: &Connection, version: i64) -> Result<(), String> {
+    conn.execute(
+        "INSERT INTO settings(key, value) VALUES(?1, ?2) \
+         ON CONFLICT(key) DO UPDATE SET value = excluded.value",
+        params![CURRICULUM_VERSION_KEY, version.to_string()],
+    )
+    .map_err(|e| format!("write curriculum version: {e}"))?;
+    Ok(())
 }
 
 #[cfg(test)]

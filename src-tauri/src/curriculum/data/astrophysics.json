@@ -1,0 +1,919 @@
+{
+  "domain": "astrophysics",
+  "display_name": "Astrophysics",
+  "phase": 4,
+  "description": "Stars, galaxies, cosmology, and the physics of the universe.",
+  "prerequisites": [
+    "classical_mechanics",
+    "electromagnetism",
+    "thermodynamics",
+    "quantum_mechanics"
+  ],
+  "modules": [
+    {
+      "id": "astr_m01",
+      "title": "Observational Foundations",
+      "order": 1,
+      "concepts": [
+        {
+          "id": "astr_001",
+          "title": "Celestial Coordinates",
+          "prerequisites": [
+            "cm_001"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Celestial Coordinates",
+            "Apply Celestial Coordinates to standard worked problems",
+            "Connect Celestial Coordinates to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "astr_002",
+          "title": "The Magnitude System",
+          "prerequisites": [
+            "astr_001"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Magnitude System",
+            "Apply The Magnitude System to standard worked problems",
+            "Connect The Magnitude System to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "astr_003",
+          "title": "Parallax and Distance",
+          "prerequisites": [
+            "astr_002"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Parallax and Distance",
+            "Apply Parallax and Distance to standard worked problems",
+            "Connect Parallax and Distance to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "astr_004",
+          "title": "Telescopes and Detectors",
+          "prerequisites": [
+            "astr_003"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Telescopes and Detectors",
+            "Apply Telescopes and Detectors to standard worked problems",
+            "Connect Telescopes and Detectors to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "astr_005",
+          "title": "Spectroscopy in Astronomy",
+          "prerequisites": [
+            "astr_004"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Spectroscopy in Astronomy",
+            "Apply Spectroscopy in Astronomy to standard worked problems",
+            "Connect Spectroscopy in Astronomy to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "astr_006",
+          "title": "Bridge: Statistical Error in Observations",
+          "prerequisites": [
+            "astr_005"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Bridge: Statistical Error in Observations",
+            "Apply Bridge: Statistical Error in Observations to standard worked problems",
+            "Connect Bridge: Statistical Error in Observations to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "astr_007",
+          "title": "Blackbody Radiation and Stars",
+          "prerequisites": [
+            "astr_006"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Blackbody Radiation and Stars",
+            "Apply Blackbody Radiation and Stars to standard worked problems",
+            "Connect Blackbody Radiation and Stars to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "astr_008",
+          "title": "The Doppler Effect in Astronomy",
+          "prerequisites": [
+            "astr_007"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Doppler Effect in Astronomy",
+            "Apply The Doppler Effect in Astronomy to standard worked problems",
+            "Connect The Doppler Effect in Astronomy to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 1
+        }
+      ]
+    },
+    {
+      "id": "astr_m02",
+      "title": "Stellar Physics",
+      "order": 2,
+      "concepts": [
+        {
+          "id": "astr_009",
+          "title": "Stellar Spectra and Classification",
+          "prerequisites": [
+            "astr_008"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Stellar Spectra and Classification",
+            "Apply Stellar Spectra and Classification to standard worked problems",
+            "Connect Stellar Spectra and Classification to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "astr_010",
+          "title": "The Hertzsprung-Russell Diagram",
+          "prerequisites": [
+            "astr_009"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Hertzsprung-Russell Diagram",
+            "Apply The Hertzsprung-Russell Diagram to standard worked problems",
+            "Connect The Hertzsprung-Russell Diagram to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "astr_011",
+          "title": "Hydrostatic Equilibrium",
+          "prerequisites": [
+            "astr_010"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Hydrostatic Equilibrium",
+            "Apply Hydrostatic Equilibrium to standard worked problems",
+            "Connect Hydrostatic Equilibrium to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "astr_012",
+          "title": "Energy Transport in Stars",
+          "prerequisites": [
+            "astr_011"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Energy Transport in Stars",
+            "Apply Energy Transport in Stars to standard worked problems",
+            "Connect Energy Transport in Stars to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "astr_013",
+          "title": "Nuclear Fusion in Stars",
+          "prerequisites": [
+            "astr_012"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Nuclear Fusion in Stars",
+            "Apply Nuclear Fusion in Stars to standard worked problems",
+            "Connect Nuclear Fusion in Stars to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "astr_014",
+          "title": "Stellar Structure Equations",
+          "prerequisites": [
+            "astr_013"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Stellar Structure Equations",
+            "Apply Stellar Structure Equations to standard worked problems",
+            "Connect Stellar Structure Equations to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "astr_015",
+          "title": "Main Sequence Lifetimes",
+          "prerequisites": [
+            "astr_014"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Main Sequence Lifetimes",
+            "Apply Main Sequence Lifetimes to standard worked problems",
+            "Connect Main Sequence Lifetimes to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "astr_016",
+          "title": "Stellar Nucleosynthesis",
+          "prerequisites": [
+            "astr_015"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Stellar Nucleosynthesis",
+            "Apply Stellar Nucleosynthesis to standard worked problems",
+            "Connect Stellar Nucleosynthesis to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "astr_m03",
+      "title": "Stellar Evolution and Remnants",
+      "order": 3,
+      "concepts": [
+        {
+          "id": "astr_017",
+          "title": "Star Formation",
+          "prerequisites": [
+            "astr_016"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Star Formation",
+            "Apply Star Formation to standard worked problems",
+            "Connect Star Formation to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "astr_018",
+          "title": "Post-Main-Sequence Evolution",
+          "prerequisites": [
+            "astr_017"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Post-Main-Sequence Evolution",
+            "Apply Post-Main-Sequence Evolution to standard worked problems",
+            "Connect Post-Main-Sequence Evolution to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "astr_019",
+          "title": "White Dwarfs",
+          "prerequisites": [
+            "astr_018"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind White Dwarfs",
+            "Apply White Dwarfs to standard worked problems",
+            "Connect White Dwarfs to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "astr_020",
+          "title": "The Chandrasekhar Limit",
+          "prerequisites": [
+            "astr_019"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Chandrasekhar Limit",
+            "Apply The Chandrasekhar Limit to standard worked problems",
+            "Connect The Chandrasekhar Limit to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "astr_021",
+          "title": "Supernovae",
+          "prerequisites": [
+            "astr_020"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Supernovae",
+            "Apply Supernovae to standard worked problems",
+            "Connect Supernovae to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "astr_022",
+          "title": "Neutron Stars and Pulsars",
+          "prerequisites": [
+            "astr_021"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Neutron Stars and Pulsars",
+            "Apply Neutron Stars and Pulsars to standard worked problems",
+            "Connect Neutron Stars and Pulsars to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "astr_023",
+          "title": "Black Holes",
+          "prerequisites": [
+            "astr_022"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Black Holes",
+            "Apply Black Holes to standard worked problems",
+            "Connect Black Holes to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "astr_024",
+          "title": "Accretion Disks",
+          "prerequisites": [
+            "astr_023"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Accretion Disks",
+            "Apply Accretion Disks to standard worked problems",
+            "Connect Accretion Disks to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "astr_025",
+          "title": "Gravitational Waves",
+          "prerequisites": [
+            "astr_024"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Gravitational Waves",
+            "Apply Gravitational Waves to standard worked problems",
+            "Connect Gravitational Waves to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "astr_m04",
+      "title": "Galaxies and the Interstellar Medium",
+      "order": 4,
+      "concepts": [
+        {
+          "id": "astr_026",
+          "title": "The Interstellar Medium",
+          "prerequisites": [
+            "astr_025"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Interstellar Medium",
+            "Apply The Interstellar Medium to standard worked problems",
+            "Connect The Interstellar Medium to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "astr_027",
+          "title": "The Milky Way Structure",
+          "prerequisites": [
+            "astr_026"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Milky Way Structure",
+            "Apply The Milky Way Structure to standard worked problems",
+            "Connect The Milky Way Structure to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "astr_028",
+          "title": "Galaxy Classification",
+          "prerequisites": [
+            "astr_027"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Galaxy Classification",
+            "Apply Galaxy Classification to standard worked problems",
+            "Connect Galaxy Classification to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "astr_029",
+          "title": "Galactic Rotation and Dark Matter",
+          "prerequisites": [
+            "astr_028"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Galactic Rotation and Dark Matter",
+            "Apply Galactic Rotation and Dark Matter to standard worked problems",
+            "Connect Galactic Rotation and Dark Matter to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 5
+        },
+        {
+          "id": "astr_030",
+          "title": "Active Galactic Nuclei",
+          "prerequisites": [
+            "astr_029"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Active Galactic Nuclei",
+            "Apply Active Galactic Nuclei to standard worked problems",
+            "Connect Active Galactic Nuclei to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 5
+        },
+        {
+          "id": "astr_031",
+          "title": "Galaxy Clusters",
+          "prerequisites": [
+            "astr_030"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Galaxy Clusters",
+            "Apply Galaxy Clusters to standard worked problems",
+            "Connect Galaxy Clusters to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 5
+        },
+        {
+          "id": "astr_032",
+          "title": "Galaxy Formation and Evolution",
+          "prerequisites": [
+            "astr_031"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Galaxy Formation and Evolution",
+            "Apply Galaxy Formation and Evolution to standard worked problems",
+            "Connect Galaxy Formation and Evolution to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 5
+        }
+      ]
+    },
+    {
+      "id": "astr_m05",
+      "title": "Cosmology",
+      "order": 5,
+      "concepts": [
+        {
+          "id": "astr_033",
+          "title": "The Expanding Universe",
+          "prerequisites": [
+            "astr_032"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Expanding Universe",
+            "Apply The Expanding Universe to standard worked problems",
+            "Connect The Expanding Universe to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "astr_034",
+          "title": "Hubble's Law",
+          "prerequisites": [
+            "astr_033"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Hubble's Law",
+            "Apply Hubble's Law to standard worked problems",
+            "Connect Hubble's Law to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "astr_035",
+          "title": "The Cosmic Microwave Background",
+          "prerequisites": [
+            "astr_034"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Cosmic Microwave Background",
+            "Apply The Cosmic Microwave Background to standard worked problems",
+            "Connect The Cosmic Microwave Background to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "astr_036",
+          "title": "Big Bang Nucleosynthesis",
+          "prerequisites": [
+            "astr_035"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Big Bang Nucleosynthesis",
+            "Apply Big Bang Nucleosynthesis to standard worked problems",
+            "Connect Big Bang Nucleosynthesis to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "astr_037",
+          "title": "The Friedmann Equations",
+          "prerequisites": [
+            "astr_036"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Friedmann Equations",
+            "Apply The Friedmann Equations to standard worked problems",
+            "Connect The Friedmann Equations to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "astr_038",
+          "title": "Dark Energy and Acceleration",
+          "prerequisites": [
+            "astr_037"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Dark Energy and Acceleration",
+            "Apply Dark Energy and Acceleration to standard worked problems",
+            "Connect Dark Energy and Acceleration to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "astr_039",
+          "title": "Inflation",
+          "prerequisites": [
+            "astr_038"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Inflation",
+            "Apply Inflation to standard worked problems",
+            "Connect Inflation to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "astr_040",
+          "title": "Large-Scale Structure",
+          "prerequisites": [
+            "astr_039"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Large-Scale Structure",
+            "Apply Large-Scale Structure to standard worked problems",
+            "Connect Large-Scale Structure to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "astr_041",
+          "title": "The Fate of the Universe",
+          "prerequisites": [
+            "astr_040"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Fate of the Universe",
+            "Apply The Fate of the Universe to standard worked problems",
+            "Connect The Fate of the Universe to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "astr_042",
+          "title": "General Relativity Primer",
+          "prerequisites": [
+            "astr_041"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind General Relativity Primer",
+            "Apply General Relativity Primer to standard worked problems",
+            "Connect General Relativity Primer to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "astr_043",
+          "title": "Cosmological Parameters",
+          "prerequisites": [
+            "astr_042"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Cosmological Parameters",
+            "Apply Cosmological Parameters to standard worked problems",
+            "Connect Cosmological Parameters to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "astr_044",
+          "title": "Astrophysics Capstone",
+          "prerequisites": [
+            "astr_043"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Astrophysics Capstone",
+            "Apply Astrophysics Capstone to standard worked problems",
+            "Connect Astrophysics Capstone to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "astr_045",
+          "title": "Exoplanets and Habitability",
+          "prerequisites": [
+            "astr_044"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Exoplanets and Habitability",
+            "Apply Exoplanets and Habitability to standard worked problems",
+            "Connect Exoplanets and Habitability to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "astr_046",
+          "title": "Multimessenger Astronomy",
+          "prerequisites": [
+            "astr_045"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Multimessenger Astronomy",
+            "Apply Multimessenger Astronomy to standard worked problems",
+            "Connect Multimessenger Astronomy to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "astr_047",
+          "title": "Astrophysics Synthesis",
+          "prerequisites": [
+            "astr_046"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Astrophysics Synthesis",
+            "Apply Astrophysics Synthesis to standard worked problems",
+            "Connect Astrophysics Synthesis to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 4
+        }
+      ]
+    }
+  ]
+}

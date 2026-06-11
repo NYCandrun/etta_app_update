@@ -1,0 +1,594 @@
+{
+  "domain": "linear_algebra",
+  "display_name": "Linear Algebra",
+  "phase": 2,
+  "description": "Vector spaces, matrices, eigenvalues, and linear transformations.",
+  "prerequisites": [
+    "single_variable_calculus"
+  ],
+  "modules": [
+    {
+      "id": "lin_m01",
+      "title": "Linear Systems",
+      "order": 1,
+      "concepts": [
+        {
+          "id": "lin_001",
+          "title": "Systems of Linear Equations",
+          "prerequisites": [
+            "svc_001"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Systems of Linear Equations",
+            "Apply Systems of Linear Equations to standard worked problems",
+            "Connect Systems of Linear Equations to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "lin_002",
+          "title": "Row Reduction and Echelon Forms",
+          "prerequisites": [
+            "lin_001"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Row Reduction and Echelon Forms",
+            "Apply Row Reduction and Echelon Forms to standard worked problems",
+            "Connect Row Reduction and Echelon Forms to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "lin_003",
+          "title": "Vector Equations",
+          "prerequisites": [
+            "lin_002"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Vector Equations",
+            "Apply Vector Equations to standard worked problems",
+            "Connect Vector Equations to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "lin_004",
+          "title": "The Matrix Equation Ax=b",
+          "prerequisites": [
+            "lin_003"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Matrix Equation Ax=b",
+            "Apply The Matrix Equation Ax=b to standard worked problems",
+            "Connect The Matrix Equation Ax=b to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "lin_005",
+          "title": "Solution Sets of Linear Systems",
+          "prerequisites": [
+            "lin_004"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Solution Sets of Linear Systems",
+            "Apply Solution Sets of Linear Systems to standard worked problems",
+            "Connect Solution Sets of Linear Systems to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "lin_006",
+          "title": "Linear Independence",
+          "prerequisites": [
+            "lin_005"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Linear Independence",
+            "Apply Linear Independence to standard worked problems",
+            "Connect Linear Independence to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "lin_007",
+          "title": "Linear Transformations Intro",
+          "prerequisites": [
+            "lin_006"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Linear Transformations Intro",
+            "Apply Linear Transformations Intro to standard worked problems",
+            "Connect Linear Transformations Intro to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "lin_m02",
+      "title": "Matrix Algebra",
+      "order": 2,
+      "concepts": [
+        {
+          "id": "lin_008",
+          "title": "Matrix Operations",
+          "prerequisites": [
+            "lin_007"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Matrix Operations",
+            "Apply Matrix Operations to standard worked problems",
+            "Connect Matrix Operations to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "lin_009",
+          "title": "The Inverse of a Matrix",
+          "prerequisites": [
+            "lin_008"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Inverse of a Matrix",
+            "Apply The Inverse of a Matrix to standard worked problems",
+            "Connect The Inverse of a Matrix to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "lin_010",
+          "title": "Characterizations of Invertible Matrices",
+          "prerequisites": [
+            "lin_009"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Characterizations of Invertible Matrices",
+            "Apply Characterizations of Invertible Matrices to standard worked problems",
+            "Connect Characterizations of Invertible Matrices to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "lin_011",
+          "title": "Partitioned Matrices",
+          "prerequisites": [
+            "lin_010"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Partitioned Matrices",
+            "Apply Partitioned Matrices to standard worked problems",
+            "Connect Partitioned Matrices to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "lin_012",
+          "title": "Matrix Factorizations (LU)",
+          "prerequisites": [
+            "lin_011"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Matrix Factorizations (LU)",
+            "Apply Matrix Factorizations (LU) to standard worked problems",
+            "Connect Matrix Factorizations (LU) to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "lin_013",
+          "title": "Subspaces of R^n",
+          "prerequisites": [
+            "lin_012"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Subspaces of R^n",
+            "Apply Subspaces of R^n to standard worked problems",
+            "Connect Subspaces of R^n to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "lin_014",
+          "title": "Dimension and Rank",
+          "prerequisites": [
+            "lin_013"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Dimension and Rank",
+            "Apply Dimension and Rank to standard worked problems",
+            "Connect Dimension and Rank to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "lin_m03",
+      "title": "Determinants and Spaces",
+      "order": 3,
+      "concepts": [
+        {
+          "id": "lin_015",
+          "title": "Introduction to Determinants",
+          "prerequisites": [
+            "lin_014"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Introduction to Determinants",
+            "Apply Introduction to Determinants to standard worked problems",
+            "Connect Introduction to Determinants to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "lin_016",
+          "title": "Properties of Determinants",
+          "prerequisites": [
+            "lin_015"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Properties of Determinants",
+            "Apply Properties of Determinants to standard worked problems",
+            "Connect Properties of Determinants to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "lin_017",
+          "title": "Cramer's Rule",
+          "prerequisites": [
+            "lin_016"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Cramer's Rule",
+            "Apply Cramer's Rule to standard worked problems",
+            "Connect Cramer's Rule to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "lin_018",
+          "title": "Vector Spaces and Subspaces",
+          "prerequisites": [
+            "lin_017"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Vector Spaces and Subspaces",
+            "Apply Vector Spaces and Subspaces to standard worked problems",
+            "Connect Vector Spaces and Subspaces to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "lin_019",
+          "title": "Null Spaces and Column Spaces",
+          "prerequisites": [
+            "lin_018"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Null Spaces and Column Spaces",
+            "Apply Null Spaces and Column Spaces to standard worked problems",
+            "Connect Null Spaces and Column Spaces to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "lin_020",
+          "title": "Basis and Coordinate Systems",
+          "prerequisites": [
+            "lin_019"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Basis and Coordinate Systems",
+            "Apply Basis and Coordinate Systems to standard worked problems",
+            "Connect Basis and Coordinate Systems to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "lin_021",
+          "title": "Change of Basis",
+          "prerequisites": [
+            "lin_020"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Change of Basis",
+            "Apply Change of Basis to standard worked problems",
+            "Connect Change of Basis to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 4
+        }
+      ]
+    },
+    {
+      "id": "lin_m04",
+      "title": "Eigenvalues and Applications",
+      "order": 4,
+      "concepts": [
+        {
+          "id": "lin_022",
+          "title": "Eigenvalues and Eigenvectors",
+          "prerequisites": [
+            "lin_021"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Eigenvalues and Eigenvectors",
+            "Apply Eigenvalues and Eigenvectors to standard worked problems",
+            "Connect Eigenvalues and Eigenvectors to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "lin_023",
+          "title": "The Characteristic Equation",
+          "prerequisites": [
+            "lin_022"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Characteristic Equation",
+            "Apply The Characteristic Equation to standard worked problems",
+            "Connect The Characteristic Equation to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "lin_024",
+          "title": "Diagonalization",
+          "prerequisites": [
+            "lin_023"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Diagonalization",
+            "Apply Diagonalization to standard worked problems",
+            "Connect Diagonalization to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "lin_025",
+          "title": "Inner Product and Orthogonality",
+          "prerequisites": [
+            "lin_024"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Inner Product and Orthogonality",
+            "Apply Inner Product and Orthogonality to standard worked problems",
+            "Connect Inner Product and Orthogonality to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "lin_026",
+          "title": "Orthogonal Projections",
+          "prerequisites": [
+            "lin_025"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Orthogonal Projections",
+            "Apply Orthogonal Projections to standard worked problems",
+            "Connect Orthogonal Projections to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "lin_027",
+          "title": "Gram-Schmidt Process",
+          "prerequisites": [
+            "lin_026"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Gram-Schmidt Process",
+            "Apply Gram-Schmidt Process to standard worked problems",
+            "Connect Gram-Schmidt Process to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "lin_028",
+          "title": "Symmetric Matrices and SVD",
+          "prerequisites": [
+            "lin_027"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Symmetric Matrices and SVD",
+            "Apply Symmetric Matrices and SVD to standard worked problems",
+            "Connect Symmetric Matrices and SVD to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "lin_029",
+          "title": "Linear Algebra Capstone",
+          "prerequisites": [
+            "lin_028"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Linear Algebra Capstone",
+            "Apply Linear Algebra Capstone to standard worked problems",
+            "Connect Linear Algebra Capstone to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "lin_030",
+          "title": "Bridge: Vectors as Data Representations",
+          "prerequisites": [
+            "lin_029"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Bridge: Vectors as Data Representations",
+            "Apply Bridge: Vectors as Data Representations to standard worked problems",
+            "Connect Bridge: Vectors as Data Representations to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 5
+        }
+      ]
+    }
+  ]
+}

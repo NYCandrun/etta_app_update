@@ -5,10 +5,14 @@
 //! - Typed settings, keychain API-key storage, content cache, mastery reads.
 //! - Structured `tracing` logging; secrets are never logged.
 
+pub mod ai;
 pub mod cache;
 pub mod commands;
+pub mod commands_ai;
 pub mod contract;
+pub mod curriculum;
 pub mod db;
+pub mod grading;
 pub mod keychain;
 pub mod mastery;
 pub mod samples;
@@ -20,6 +24,7 @@ use std::sync::Mutex;
 
 use tauri::Manager;
 
+use ai::AiState;
 use db::AppState;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -52,10 +57,22 @@ pub fn run() {
             }
             db::backup_if_stale(&data_dir);
 
+            // Load the bundled curriculum into the `concepts` table (first launch
+            // and on a version bump). Validation (DAG, ids, required fields) is a
+            // HARD FAIL — a broken curriculum must not ship silently.
+            if let Err(e) = curriculum::load_into_db(&conn) {
+                panic!("curriculum load failed: {e}");
+            }
+
+            // The single shared HTTP client + rate limiter + model cache, built
+            // once and managed for the app lifetime (never one client per call).
+            let ai_state = AiState::new().expect("build AI state");
+
             app.manage(AppState {
                 db: Mutex::new(conn),
                 data_dir,
             });
+            app.manage(ai_state);
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
@@ -70,6 +87,12 @@ pub fn run() {
             commands::cache_put,
             commands::get_mastery_history,
             commands::write_mastery_snapshot,
+            commands_ai::list_available_models,
+            commands_ai::test_connection,
+            commands_ai::generate_streamed,
+            commands_ai::generate_quiz,
+            commands_ai::grade_quiz,
+            commands_ai::list_concepts,
         ])
         .run(tauri::generate_context!())
         .expect("error while running Etta");

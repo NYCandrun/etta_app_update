@@ -1,0 +1,539 @@
+{
+  "domain": "differential_equations",
+  "display_name": "Differential Equations",
+  "phase": 2,
+  "description": "Ordinary differential equations and their solution methods.",
+  "prerequisites": [
+    "single_variable_calculus"
+  ],
+  "modules": [
+    {
+      "id": "de_m01",
+      "title": "First-Order ODEs",
+      "order": 1,
+      "concepts": [
+        {
+          "id": "de_001",
+          "title": "Introduction to Differential Equations",
+          "prerequisites": [
+            "svc_001"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Introduction to Differential Equations",
+            "Apply Introduction to Differential Equations to standard worked problems",
+            "Connect Introduction to Differential Equations to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "de_002",
+          "title": "Separable Equations",
+          "prerequisites": [
+            "de_001"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Separable Equations",
+            "Apply Separable Equations to standard worked problems",
+            "Connect Separable Equations to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "de_003",
+          "title": "Linear First-Order Equations",
+          "prerequisites": [
+            "de_002"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Linear First-Order Equations",
+            "Apply Linear First-Order Equations to standard worked problems",
+            "Connect Linear First-Order Equations to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "de_004",
+          "title": "Exact Equations",
+          "prerequisites": [
+            "de_003"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Exact Equations",
+            "Apply Exact Equations to standard worked problems",
+            "Connect Exact Equations to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "de_005",
+          "title": "Integrating Factors",
+          "prerequisites": [
+            "de_004"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Integrating Factors",
+            "Apply Integrating Factors to standard worked problems",
+            "Connect Integrating Factors to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "de_006",
+          "title": "Autonomous Equations and Stability",
+          "prerequisites": [
+            "de_005"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Autonomous Equations and Stability",
+            "Apply Autonomous Equations and Stability to standard worked problems",
+            "Connect Autonomous Equations and Stability to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "de_007",
+          "title": "Euler's Method",
+          "prerequisites": [
+            "de_006"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Euler's Method",
+            "Apply Euler's Method to standard worked problems",
+            "Connect Euler's Method to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "de_m02",
+      "title": "Higher-Order Linear ODEs",
+      "order": 2,
+      "concepts": [
+        {
+          "id": "de_008",
+          "title": "Second-Order Linear Equations",
+          "prerequisites": [
+            "de_007"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Second-Order Linear Equations",
+            "Apply Second-Order Linear Equations to standard worked problems",
+            "Connect Second-Order Linear Equations to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "de_009",
+          "title": "Homogeneous Equations with Constant Coefficients",
+          "prerequisites": [
+            "de_008"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Homogeneous Equations with Constant Coefficients",
+            "Apply Homogeneous Equations with Constant Coefficients to standard worked problems",
+            "Connect Homogeneous Equations with Constant Coefficients to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "de_010",
+          "title": "Method of Undetermined Coefficients",
+          "prerequisites": [
+            "de_009"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Method of Undetermined Coefficients",
+            "Apply Method of Undetermined Coefficients to standard worked problems",
+            "Connect Method of Undetermined Coefficients to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "de_011",
+          "title": "Variation of Parameters",
+          "prerequisites": [
+            "de_010"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Variation of Parameters",
+            "Apply Variation of Parameters to standard worked problems",
+            "Connect Variation of Parameters to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "de_012",
+          "title": "Mechanical and Electrical Vibrations",
+          "prerequisites": [
+            "de_011"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Mechanical and Electrical Vibrations",
+            "Apply Mechanical and Electrical Vibrations to standard worked problems",
+            "Connect Mechanical and Electrical Vibrations to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "de_013",
+          "title": "Resonance Phenomena",
+          "prerequisites": [
+            "de_012"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Resonance Phenomena",
+            "Apply Resonance Phenomena to standard worked problems",
+            "Connect Resonance Phenomena to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "de_m03",
+      "title": "Transforms and Systems",
+      "order": 3,
+      "concepts": [
+        {
+          "id": "de_014",
+          "title": "The Laplace Transform",
+          "prerequisites": [
+            "de_013"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Laplace Transform",
+            "Apply The Laplace Transform to standard worked problems",
+            "Connect The Laplace Transform to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "de_015",
+          "title": "Inverse Laplace Transforms",
+          "prerequisites": [
+            "de_014"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Inverse Laplace Transforms",
+            "Apply Inverse Laplace Transforms to standard worked problems",
+            "Connect Inverse Laplace Transforms to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "de_016",
+          "title": "Solving IVPs with Laplace",
+          "prerequisites": [
+            "de_015"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Solving IVPs with Laplace",
+            "Apply Solving IVPs with Laplace to standard worked problems",
+            "Connect Solving IVPs with Laplace to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "de_017",
+          "title": "Step and Impulse Functions",
+          "prerequisites": [
+            "de_016"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Step and Impulse Functions",
+            "Apply Step and Impulse Functions to standard worked problems",
+            "Connect Step and Impulse Functions to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "de_018",
+          "title": "Systems of First-Order Equations",
+          "prerequisites": [
+            "de_017"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Systems of First-Order Equations",
+            "Apply Systems of First-Order Equations to standard worked problems",
+            "Connect Systems of First-Order Equations to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "de_019",
+          "title": "Phase Plane Analysis",
+          "prerequisites": [
+            "de_018"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Phase Plane Analysis",
+            "Apply Phase Plane Analysis to standard worked problems",
+            "Connect Phase Plane Analysis to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 4
+        }
+      ]
+    },
+    {
+      "id": "de_m04",
+      "title": "Series and Advanced",
+      "order": 4,
+      "concepts": [
+        {
+          "id": "de_020",
+          "title": "Series Solutions of ODEs",
+          "prerequisites": [
+            "de_019"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Series Solutions of ODEs",
+            "Apply Series Solutions of ODEs to standard worked problems",
+            "Connect Series Solutions of ODEs to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "de_021",
+          "title": "Regular Singular Points",
+          "prerequisites": [
+            "de_020"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Regular Singular Points",
+            "Apply Regular Singular Points to standard worked problems",
+            "Connect Regular Singular Points to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "de_022",
+          "title": "Fourier Series",
+          "prerequisites": [
+            "de_021"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Fourier Series",
+            "Apply Fourier Series to standard worked problems",
+            "Connect Fourier Series to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "de_023",
+          "title": "Partial Differential Equations Intro",
+          "prerequisites": [
+            "de_022"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Partial Differential Equations Intro",
+            "Apply Partial Differential Equations Intro to standard worked problems",
+            "Connect Partial Differential Equations Intro to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "de_024",
+          "title": "The Heat Equation",
+          "prerequisites": [
+            "de_023"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Heat Equation",
+            "Apply The Heat Equation to standard worked problems",
+            "Connect The Heat Equation to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "de_025",
+          "title": "Boundary Value Problems",
+          "prerequisites": [
+            "de_024"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Boundary Value Problems",
+            "Apply Boundary Value Problems to standard worked problems",
+            "Connect Boundary Value Problems to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "de_026",
+          "title": "Differential Equations Capstone",
+          "prerequisites": [
+            "de_025"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Differential Equations Capstone",
+            "Apply Differential Equations Capstone to standard worked problems",
+            "Connect Differential Equations Capstone to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "de_027",
+          "title": "Bridge: Stochastic Differential Equations Preview",
+          "prerequisites": [
+            "de_026"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Bridge: Stochastic Differential Equations Preview",
+            "Apply Bridge: Stochastic Differential Equations Preview to standard worked problems",
+            "Connect Bridge: Stochastic Differential Equations Preview to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 5
+        }
+      ]
+    }
+  ]
+}
