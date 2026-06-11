@@ -230,6 +230,56 @@ pub fn set_curriculum_version(conn: &Connection, version: i64) -> Result<(), Str
     Ok(())
 }
 
+/// Generic reserved-key read/write (the `__`-prefixed internal keys are NOT on
+/// `ALLOWED_KEYS` and never reach the generic `set_setting` command surface).
+fn get_reserved(conn: &Connection, key: &str) -> Result<Option<String>, String> {
+    conn.query_row(
+        "SELECT value FROM settings WHERE key = ?1 LIMIT 1",
+        [key],
+        |r| r.get::<_, String>(0),
+    )
+    .optional()
+    .map_err(|e| format!("read reserved {key}: {e}"))
+}
+
+fn set_reserved(conn: &Connection, key: &str, value: &str) -> Result<(), String> {
+    conn.execute(
+        "INSERT INTO settings(key, value) VALUES(?1, ?2) \
+         ON CONFLICT(key) DO UPDATE SET value = excluded.value",
+        params![key, value],
+    )
+    .map_err(|e| format!("write reserved {key}: {e}"))?;
+    Ok(())
+}
+
+// Onboarding completion is internal app state (gates first-run routing), not a
+// user-facing preference — it lives under a reserved key.
+const ONBOARDING_COMPLETE_KEY: &str = "__onboarding_complete";
+
+pub fn get_onboarding_complete(conn: &Connection) -> Result<bool, String> {
+    Ok(get_reserved(conn, ONBOARDING_COMPLETE_KEY)?.as_deref() == Some("true"))
+}
+
+pub fn set_onboarding_complete(conn: &Connection, done: bool) -> Result<(), String> {
+    set_reserved(
+        conn,
+        ONBOARDING_COMPLETE_KEY,
+        if done { "true" } else { "false" },
+    )
+}
+
+// The canonical placement-quiz JSON is held server-side between generate and
+// grade so the frontend never supplies correctness (server-authoritative).
+const PLACEMENT_QUIZ_KEY: &str = "__placement_quiz";
+
+pub fn get_placement_quiz(conn: &Connection) -> Result<Option<String>, String> {
+    get_reserved(conn, PLACEMENT_QUIZ_KEY)
+}
+
+pub fn set_placement_quiz(conn: &Connection, json: &str) -> Result<(), String> {
+    set_reserved(conn, PLACEMENT_QUIZ_KEY, json)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

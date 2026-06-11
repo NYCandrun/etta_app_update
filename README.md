@@ -26,7 +26,8 @@ under Tauri's `tauri://` file protocol). Defined in `src/App.tsx`:
 
 | Path                   | Page                | Notes                              |
 | ---------------------- | ------------------- | ---------------------------------- |
-| `/onboarding`          | `OnboardingPage`    | Standalone (no app chrome)         |
+| `/onboarding`          | `OnboardingPage`    | Standalone (no app chrome); ungated |
+| `/placement`           | `PlacementPage`     | 5-question micro-quiz; ungated      |
 | `/dashboard`           | `DashboardPage`     | App launches here (`*` redirects)  |
 | `/lesson/:conceptId`   | `LessonPage`        | Reads `conceptId` param            |
 | `/quiz/:conceptId`     | `QuizPage`          | Reads `conceptId` param            |
@@ -37,6 +38,14 @@ under Tauri's `tauri://` file protocol). Defined in `src/App.tsx`:
 route in slim v1.)
 
 Unknown paths redirect to `/dashboard`.
+
+**First-run gating** (`src/components/OnboardingGate.tsx`): on launch the gate
+calls `get_onboarding_complete`; until onboarding **and** placement have finished
+(the reserved `__onboarding_complete` flag), every non-onboarding route redirects
+to `/onboarding`. The gate lives inside the router (it reads the current path) and
+deliberately leaves `/onboarding` and `/placement` ungated so the first-run flow
+can run. The flag is set server-side by `place_learner` / `skip_placement`, never
+by the frontend.
 
 ## Stores (Zustand)
 
@@ -447,6 +456,87 @@ for screen readers), sanitized by DOMPurify before any
 `dangerouslySetInnerHTML`. On a KaTeX failure it shows the literal
 `"Math display error"` — never the raw LaTeX, and never raw LaTeX as an
 aria-label.
+
+## Onboarding, placement & dashboard (milestone 4)
+
+### First-run flow
+
+`Onboarding → 5-question placement micro-quiz → placed → dashboard → start
+session → lesson/quiz`. The `OnboardingPage` collects a (purely informational)
+learning goal, the **daily-time goal** (15/30/45/60 min, persisted as the typed
+`daily_goal_minutes` integer that drives the session builder), the Anthropic API
+key (saved to the OS keychain with inline, accessible format validation — never a
+native `alert()`), and the theme. It does **not** mark onboarding complete; that
+only happens once placement succeeds.
+
+### Placement algorithm
+
+The placement micro-quiz is **5 questions, not a full diagnostic**. The backend
+(`commands_placement.rs`) samples five early-phase concepts — three algebra
+(tiers 1→3), one light precalculus, one light trig — and reuses the **same** quiz
+prompt + locked schema as `generate_quiz`. Each concept yields one question,
+re-id'd `q1..q5`. The canonical question JSON (with each item's source domain) is
+stored **server-side** under the reserved `__placement_quiz` settings key; the
+returned questions carry no correctness signal the frontend could forge.
+
+Grading is **server-authoritative**: the frontend submits only
+`{questionId, answer}` (never `isCorrect`). Objective questions are graded
+deterministically; any free-response is graded by the model against its rubric
+(same path as `grade_quiz`). The correct-count maps to a starting concept:
+
+| Correct out of 5 | Placement target            |
+| ---------------- | --------------------------- |
+| `< 2`            | foundational algebra (`alg_001`) |
+| `2`–`3`          | intermediate algebra (`alg_017`) |
+| `>= 4`           | precalculus (`prec_001`)    |
+
+The chosen target's **transitive prerequisites** are seeded to a mastered state
+(so its gate opens), and a modest starting `mastery_score` is seeded
+(`0.0 / 0.3 / 0.5` by level) — never high enough to skip the concept, just enough
+to start the learner warm. The target keeps `attempt_count = 0` so it still
+presents as fresh work. The adaptive engine corrects any mis-placement within a
+few quizzes, which is why 5 questions is deliberately enough. `place_learner`
+then sets `__onboarding_complete` and clears the one-shot placement quiz. Every
+prompt renders through the shared KaTeX/DOMPurify `RichText` surface (never literal
+`$...$` text — carry-forward bug 0f; covered by `PlacementPage.test.tsx`).
+
+**Skip path:** "Skip — let me choose where to start" calls `skip_placement`,
+which seeds only the foundational base (cold start, mastery 0.0) and marks
+onboarding complete, then drops the learner onto the static curriculum diagram to
+tap any **unlocked** concept.
+
+### Static curriculum diagram (build-time SVG, #49)
+
+The curriculum map is a **single static SVG generated at build time** from the
+12 domain JSONs — there is **no d3, no runtime graph layout, and no pan/zoom**.
+`scripts/gen_curriculum_svg.mjs` lays phases out as columns, domains as cards, and
+concepts as a node grid, draws aggregated domain-level prerequisite edges, and
+emits two assets into `src/assets/`:
+
+- `curriculum-map.svg` — the fixed diagram (with `<title>`/`<desc>` alt text
+  describing all 12 phases/domains; decorative beyond that).
+- `curriculum-map-positions.json` — `{ width, height, positions: { conceptId:
+  {cx, cy} } }`.
+
+The generator runs automatically via the `predev`/`prebuild` npm hooks (or
+`npm run gen:svg`); the generated assets are **committed** so `tsc`, Vitest, and
+import resolution never depend on generation order. `CurriculumDiagram.tsx`
+injects the SVG and overlays a thin, React-driven status-dot layer positioned
+from the JSON — only the dot **colors** are data-driven (read from
+`useCurriculumStore`); the diagram geometry never changes at runtime.
+
+### Concept list is the navigation surface
+
+Learners do **not** start lessons from the diagram's nodes. The dashboard's
+**Browse concepts** list (`ConceptList.tsx`) is the real navigation surface:
+grouped by domain (in phase order), searchable, and keyboard-navigable. Each row
+shows status as an **icon + text** (`Completed` / `In progress` / `Available` /
+`Locked`), never color alone (#33); locked rows carry `aria-disabled` and expose
+no action, while unlocked/in-progress/completed rows expose a **Start** button.
+The dashboard's "Today's session" card is the M3 session builder (new + due
+reviews, interleaved, with an estimate); its **Start Learning** CTA navigates
+**exactly once** (H4 — it only navigates, with no second `onStart()` side-effect).
+The daily-goal ring reflects **real tracked study minutes** from the DB (H1).
 
 ## Data-at-rest security (FileVault)
 
