@@ -201,8 +201,11 @@ function render(domains) {
   const titleText = "Etta curriculum map";
   const descText = `Etta curriculum across ${cards.length} domains in ${phases.length} phases. ${phaseList}. Domains: ${altParts.join(", ")}.`;
 
+  // Responsive sizing (#38): the SVG fills its container width but never grows
+  // past its natural pixel size, and its height tracks the aspect ratio. The
+  // viewBox is preserved so the React status-dot overlay aligns exactly.
   return `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" role="img" aria-labelledby="etta-map-title etta-map-desc" preserveAspectRatio="xMidYMid meet">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="100%" height="auto" style="max-width:${width}px;height:auto;display:block" role="img" aria-labelledby="etta-map-title etta-map-desc" preserveAspectRatio="xMidYMid meet">
   <title id="etta-map-title">${escapeXml(titleText)}</title>
   <desc id="etta-map-desc">${escapeXml(descText)}</desc>
   <g class="etta-map-edges">

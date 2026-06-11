@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Button, Card, InlineError, Skeleton, useToast } from "../components/ui";
+import { Button, Card, InlineError, OfflineNotice, Skeleton, useToast } from "../components/ui";
 import { RichText } from "../components/RichText";
 import { ipc, streamGenerate } from "../lib/ipc";
+import { useOnline } from "../lib/useOnline";
 import { useStudyTimer } from "../lib/useStudyTimer";
 import { useGamificationStore } from "../stores/useGamificationStore";
 import type { Concept } from "../types/contract";
@@ -27,6 +28,7 @@ export function LessonPage() {
   const navigate = useNavigate();
   const { showError } = useToast();
   const setGamification = useGamificationStore((s) => s.setState);
+  const online = useOnline();
   useStudyTimer();
 
   const [lesson, setLesson] = useState("");
@@ -211,11 +213,20 @@ export function LessonPage() {
         </Card>
       )}
 
+      {!online && (
+        <OfflineNotice
+          className="mt-4"
+          detail="You're offline, so new explanations are paused. The quiz needs a connection too. Reconnect to continue."
+        />
+      )}
+
       <div className="mt-4 flex flex-wrap items-center gap-3">
         <Button
           variant="secondary"
           onClick={handleDontGetIt}
-          disabled={explaining || loading}
+          disabled={explaining || loading || !online}
+          aria-disabled={!online}
+          title={!online ? "Unavailable while offline" : undefined}
         >
           {explaining
             ? "Thinking…"
@@ -223,7 +234,12 @@ export function LessonPage() {
               ? "I still don't get it"
               : "I don't get it"}
         </Button>
-        <Button onClick={handleReadyForQuiz} disabled={loading}>
+        <Button
+          onClick={handleReadyForQuiz}
+          disabled={loading || !online}
+          aria-disabled={!online}
+          title={!online ? "The quiz needs a connection" : undefined}
+        >
           Ready for quiz
         </Button>
       </div>

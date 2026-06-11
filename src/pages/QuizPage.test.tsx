@@ -134,3 +134,31 @@ describe("QuizPage final score (bug 0e)", () => {
     expect(persisted).toHaveLength(QUESTIONS.length);
   });
 });
+
+// Critical M5 test (#11): offline mode must DISABLE the AI-dependent action,
+// not merely show a banner. With navigator offline, the grade button is
+// disabled and grading is never invoked even after typing a valid answer.
+describe("QuizPage offline mode (#11)", () => {
+  it("disables the grade action and never calls the grader while offline", async () => {
+    const original = Object.getOwnPropertyDescriptor(navigator, "onLine");
+    Object.defineProperty(navigator, "onLine", { configurable: true, value: false });
+    window.dispatchEvent(new Event("offline"));
+    try {
+      renderQuiz();
+      await screen.findByText("1+1=?");
+
+      const input = await screen.findByLabelText("Your answer");
+      fireEvent.change(input, { target: { value: "2" } });
+
+      const button = screen.getByRole("button", { name: /check answer/i });
+      expect(button).toBeDisabled();
+
+      // Clicking a disabled button must not reach the server-side grader.
+      fireEvent.click(button);
+      expect(gradeQuiz).not.toHaveBeenCalled();
+    } finally {
+      if (original) Object.defineProperty(navigator, "onLine", original);
+      window.dispatchEvent(new Event("online"));
+    }
+  });
+});

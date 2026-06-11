@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Card, InlineError, Skeleton, useToast } from "../components/ui";
+import { Button, Card, InlineError, OfflineNotice, Skeleton, useToast } from "../components/ui";
 import { RichText } from "../components/RichText";
 import { CurriculumDiagram } from "../components/CurriculumDiagram";
 import { ipc } from "../lib/ipc";
+import { useOnline } from "../lib/useOnline";
 import type { PlacementResult, SubmittedAnswer } from "../lib/ipc";
 import { LABELS } from "../lib/labels";
 import { useCurriculumStore } from "../stores/useCurriculumStore";
@@ -27,6 +28,7 @@ type Phase = "loading" | "answering" | "placing" | "result" | "skipped";
 export function PlacementPage() {
   const navigate = useNavigate();
   const { showError } = useToast();
+  const online = useOnline();
   const setConcepts = useCurriculumStore((s) => s.setConcepts);
 
   const [phase, setPhase] = useState<Phase>("loading");
@@ -200,8 +202,20 @@ export function PlacementPage() {
 
         <PlacementInput question={current} value={answer} onChange={setAnswer} />
 
+        {!online && (
+          <OfflineNotice
+            className="mt-4"
+            detail="You're offline. The placement check needs a connection. You can skip and choose where to start, then begin once you're back online."
+          />
+        )}
+
         <div className="mt-5 flex justify-end">
-          <Button onClick={handleNext} disabled={answer.trim() === ""}>
+          <Button
+            onClick={handleNext}
+            disabled={answer.trim() === "" || !online}
+            aria-disabled={!online}
+            title={!online ? "The placement check needs a connection" : undefined}
+          >
             {isLast ? "Finish placement" : "Next"}
           </Button>
         </div>
@@ -245,26 +259,38 @@ function PlacementInput({
   }
 
   if (question.type === "fill_in_blank") {
+    const inputId = `placement-answer-${question.id}`;
     return (
-      <input
-        type="text"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        aria-label="Your answer"
-        className="w-full rounded-lg border border-surface-border bg-surface px-3 py-2 text-text"
-        placeholder="Type your answer"
-      />
+      <div className="flex flex-col gap-2">
+        <label htmlFor={inputId} className="text-sm font-medium text-text">
+          Your answer
+        </label>
+        <input
+          id={inputId}
+          type="text"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="w-full rounded-lg border border-surface-border bg-surface px-3 py-2 text-text"
+          placeholder="Type your answer"
+        />
+      </div>
     );
   }
 
+  const textareaId = `placement-answer-${question.id}`;
   return (
-    <textarea
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      aria-label="Your answer"
-      rows={6}
-      className="w-full rounded-lg border border-surface-border bg-surface px-3 py-2 text-text"
-      placeholder="Write your answer"
-    />
+    <div className="flex flex-col gap-2">
+      <label htmlFor={textareaId} className="text-sm font-medium text-text">
+        Your answer
+      </label>
+      <textarea
+        id={textareaId}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        rows={6}
+        className="w-full rounded-lg border border-surface-border bg-surface px-3 py-2 text-text"
+        placeholder="Write your answer"
+      />
+    </div>
   );
 }

@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Button, Card, InlineError, Skeleton, useToast } from "../components/ui";
+import { Button, Card, InlineError, OfflineNotice, Skeleton, useToast } from "../components/ui";
 import { RichText } from "../components/RichText";
 import { ipc } from "../lib/ipc";
 import type { SubmittedAnswer } from "../lib/ipc";
+import { useOnline } from "../lib/useOnline";
 import { useStudyTimer } from "../lib/useStudyTimer";
 import { LABELS } from "../lib/labels";
 import { useGamificationStore } from "../stores/useGamificationStore";
@@ -20,6 +21,7 @@ export function QuizPage() {
   const navigate = useNavigate();
   const { showError } = useToast();
   const setGamification = useGamificationStore((s) => s.setState);
+  const online = useOnline();
   useStudyTimer();
 
   const [phase, setPhase] = useState<Phase>("loading");
@@ -159,6 +161,12 @@ export function QuizPage() {
     return (
       <div className={COLUMN}>
         <Card>
+          {!online && (
+            <OfflineNotice
+              className="mb-3"
+              detail="This quiz isn't cached and needs a connection to generate. Reconnect and retry."
+            />
+          )}
           <InlineError message={loadError} onRetry={loadQuiz} />
         </Card>
       </div>
@@ -218,8 +226,20 @@ export function QuizPage() {
 
         <QuestionInput question={current} value={answer} onChange={setAnswer} />
 
+        {!online && (
+          <OfflineNotice
+            className="mt-4"
+            detail="You're offline. Grading needs a connection, so submitting is paused. Reconnect to continue."
+          />
+        )}
+
         <div className="mt-5 flex justify-end">
-          <Button onClick={handleCheckAnswer} disabled={submitting || answer.trim() === ""}>
+          <Button
+            onClick={handleCheckAnswer}
+            disabled={submitting || answer.trim() === "" || !online}
+            aria-disabled={!online}
+            title={!online ? "Grading needs a connection" : undefined}
+          >
             {submitting ? "Grading…" : LABELS.checkAnswer}
           </Button>
         </div>
@@ -262,28 +282,40 @@ function QuestionInput({
   }
 
   if (question.type === "fill_in_blank") {
+    const inputId = `answer-${question.id}`;
     return (
-      <input
-        type="text"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        aria-label="Your answer"
-        className="w-full rounded-lg border border-surface-border bg-surface px-3 py-2 text-text"
-        placeholder="Type your answer"
-      />
+      <div className="flex flex-col gap-2">
+        <label htmlFor={inputId} className="text-sm font-medium text-text">
+          Your answer
+        </label>
+        <input
+          id={inputId}
+          type="text"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="w-full rounded-lg border border-surface-border bg-surface px-3 py-2 text-text"
+          placeholder="Type your answer"
+        />
+      </div>
     );
   }
 
   // free_response
+  const textareaId = `answer-${question.id}`;
   return (
-    <textarea
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      aria-label="Your answer"
-      rows={6}
-      className="w-full rounded-lg border border-surface-border bg-surface px-3 py-2 text-text"
-      placeholder="Write your answer"
-    />
+    <div className="flex flex-col gap-2">
+      <label htmlFor={textareaId} className="text-sm font-medium text-text">
+        Your answer
+      </label>
+      <textarea
+        id={textareaId}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        rows={6}
+        className="w-full rounded-lg border border-surface-border bg-surface px-3 py-2 text-text"
+        placeholder="Write your answer"
+      />
+    </div>
   );
 }
 
