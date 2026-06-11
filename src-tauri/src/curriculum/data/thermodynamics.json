@@ -1,0 +1,467 @@
+{
+  "domain": "thermodynamics",
+  "display_name": "Thermodynamics & Statistical Mechanics",
+  "phase": 3,
+  "description": "Heat, entropy, and the statistical basis of thermodynamics.",
+  "prerequisites": [
+    "multivariable_calculus",
+    "differential_equations",
+    "linear_algebra"
+  ],
+  "modules": [
+    {
+      "id": "thm_m01",
+      "title": "Classical Thermodynamics",
+      "order": 1,
+      "concepts": [
+        {
+          "id": "thm_001",
+          "title": "Temperature and the Zeroth Law",
+          "prerequisites": [
+            "mvc_001"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Temperature and the Zeroth Law",
+            "Apply Temperature and the Zeroth Law to standard worked problems",
+            "Connect Temperature and the Zeroth Law to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "thm_002",
+          "title": "Heat and the First Law",
+          "prerequisites": [
+            "thm_001"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Heat and the First Law",
+            "Apply Heat and the First Law to standard worked problems",
+            "Connect Heat and the First Law to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "thm_003",
+          "title": "Work in Thermodynamic Processes",
+          "prerequisites": [
+            "thm_002"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Work in Thermodynamic Processes",
+            "Apply Work in Thermodynamic Processes to standard worked problems",
+            "Connect Work in Thermodynamic Processes to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "thm_004",
+          "title": "Ideal Gas Law",
+          "prerequisites": [
+            "thm_003"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Ideal Gas Law",
+            "Apply Ideal Gas Law to standard worked problems",
+            "Connect Ideal Gas Law to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "thm_005",
+          "title": "Heat Capacity",
+          "prerequisites": [
+            "thm_004"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Heat Capacity",
+            "Apply Heat Capacity to standard worked problems",
+            "Connect Heat Capacity to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "thm_006",
+          "title": "Thermodynamic Processes",
+          "prerequisites": [
+            "thm_005"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Thermodynamic Processes",
+            "Apply Thermodynamic Processes to standard worked problems",
+            "Connect Thermodynamic Processes to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "thm_m02",
+      "title": "Entropy and the Second Law",
+      "order": 2,
+      "concepts": [
+        {
+          "id": "thm_007",
+          "title": "The Second Law",
+          "prerequisites": [
+            "thm_006"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Second Law",
+            "Apply The Second Law to standard worked problems",
+            "Connect The Second Law to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "thm_008",
+          "title": "Entropy",
+          "prerequisites": [
+            "thm_007"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Entropy",
+            "Apply Entropy to standard worked problems",
+            "Connect Entropy to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "thm_009",
+          "title": "The Carnot Cycle",
+          "prerequisites": [
+            "thm_008"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Carnot Cycle",
+            "Apply The Carnot Cycle to standard worked problems",
+            "Connect The Carnot Cycle to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "thm_010",
+          "title": "Refrigerators and Heat Pumps",
+          "prerequisites": [
+            "thm_009"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Refrigerators and Heat Pumps",
+            "Apply Refrigerators and Heat Pumps to standard worked problems",
+            "Connect Refrigerators and Heat Pumps to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "thm_011",
+          "title": "Thermodynamic Potentials",
+          "prerequisites": [
+            "thm_010"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Thermodynamic Potentials",
+            "Apply Thermodynamic Potentials to standard worked problems",
+            "Connect Thermodynamic Potentials to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "thm_012",
+          "title": "Maxwell Relations",
+          "prerequisites": [
+            "thm_011"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Maxwell Relations",
+            "Apply Maxwell Relations to standard worked problems",
+            "Connect Maxwell Relations to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "thm_m03",
+      "title": "Statistical Mechanics",
+      "order": 3,
+      "concepts": [
+        {
+          "id": "thm_013",
+          "title": "Microstates and Macrostates",
+          "prerequisites": [
+            "thm_012"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Microstates and Macrostates",
+            "Apply Microstates and Macrostates to standard worked problems",
+            "Connect Microstates and Macrostates to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "thm_014",
+          "title": "The Boltzmann Distribution",
+          "prerequisites": [
+            "thm_013"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Boltzmann Distribution",
+            "Apply The Boltzmann Distribution to standard worked problems",
+            "Connect The Boltzmann Distribution to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "thm_015",
+          "title": "Bridge: Maxwell-Boltzmann Speed Distribution",
+          "prerequisites": [
+            "thm_014"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Bridge: Maxwell-Boltzmann Speed Distribution",
+            "Apply Bridge: Maxwell-Boltzmann Speed Distribution to standard worked problems",
+            "Connect Bridge: Maxwell-Boltzmann Speed Distribution to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "thm_016",
+          "title": "The Partition Function",
+          "prerequisites": [
+            "thm_015"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Partition Function",
+            "Apply The Partition Function to standard worked problems",
+            "Connect The Partition Function to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "thm_017",
+          "title": "Equipartition Theorem",
+          "prerequisites": [
+            "thm_016"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Equipartition Theorem",
+            "Apply Equipartition Theorem to standard worked problems",
+            "Connect Equipartition Theorem to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "thm_018",
+          "title": "Quantum Statistics Preview",
+          "prerequisites": [
+            "thm_017"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Quantum Statistics Preview",
+            "Apply Quantum Statistics Preview to standard worked problems",
+            "Connect Quantum Statistics Preview to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 4
+        }
+      ]
+    },
+    {
+      "id": "thm_m04",
+      "title": "Applications",
+      "order": 4,
+      "concepts": [
+        {
+          "id": "thm_019",
+          "title": "Phase Transitions",
+          "prerequisites": [
+            "thm_018"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Phase Transitions",
+            "Apply Phase Transitions to standard worked problems",
+            "Connect Phase Transitions to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 5
+        },
+        {
+          "id": "thm_020",
+          "title": "Real Gases and van der Waals",
+          "prerequisites": [
+            "thm_019"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Real Gases and van der Waals",
+            "Apply Real Gases and van der Waals to standard worked problems",
+            "Connect Real Gases and van der Waals to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 5
+        },
+        {
+          "id": "thm_021",
+          "title": "Bridge: Fluctuations and Error Analysis",
+          "prerequisites": [
+            "thm_020"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Bridge: Fluctuations and Error Analysis",
+            "Apply Bridge: Fluctuations and Error Analysis to standard worked problems",
+            "Connect Bridge: Fluctuations and Error Analysis to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 5
+        },
+        {
+          "id": "thm_022",
+          "title": "Thermodynamics Capstone",
+          "prerequisites": [
+            "thm_021"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Thermodynamics Capstone",
+            "Apply Thermodynamics Capstone to standard worked problems",
+            "Connect Thermodynamics Capstone to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 5
+        },
+        {
+          "id": "thm_023",
+          "title": "Blackbody Radiation Preview",
+          "prerequisites": [
+            "thm_022"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Blackbody Radiation Preview",
+            "Apply Blackbody Radiation Preview to standard worked problems",
+            "Connect Blackbody Radiation Preview to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 5
+        }
+      ]
+    }
+  ]
+}

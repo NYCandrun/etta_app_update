@@ -1,0 +1,496 @@
+{
+  "domain": "precalculus",
+  "display_name": "Pre-Calculus",
+  "phase": 1,
+  "description": "Bridge from algebra and trig to calculus: limits and analysis.",
+  "prerequisites": [
+    "algebra",
+    "trigonometry"
+  ],
+  "modules": [
+    {
+      "id": "prec_m01",
+      "title": "Functions Deep Dive",
+      "order": 1,
+      "concepts": [
+        {
+          "id": "prec_001",
+          "title": "Function Transformations",
+          "prerequisites": [
+            "trig_001"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Function Transformations",
+            "Apply Function Transformations to standard worked problems",
+            "Connect Function Transformations to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "prec_002",
+          "title": "Piecewise Functions",
+          "prerequisites": [
+            "prec_001"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Piecewise Functions",
+            "Apply Piecewise Functions to standard worked problems",
+            "Connect Piecewise Functions to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "prec_003",
+          "title": "Even and Odd Functions",
+          "prerequisites": [
+            "prec_002"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Even and Odd Functions",
+            "Apply Even and Odd Functions to standard worked problems",
+            "Connect Even and Odd Functions to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "prec_004",
+          "title": "Polynomial Functions",
+          "prerequisites": [
+            "prec_003"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Polynomial Functions",
+            "Apply Polynomial Functions to standard worked problems",
+            "Connect Polynomial Functions to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "prec_005",
+          "title": "Rational Functions and Asymptotes",
+          "prerequisites": [
+            "prec_004"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Rational Functions and Asymptotes",
+            "Apply Rational Functions and Asymptotes to standard worked problems",
+            "Connect Rational Functions and Asymptotes to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "prec_006",
+          "title": "Exponential Functions",
+          "prerequisites": [
+            "prec_005"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Exponential Functions",
+            "Apply Exponential Functions to standard worked problems",
+            "Connect Exponential Functions to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "prec_007",
+          "title": "Logarithmic Functions",
+          "prerequisites": [
+            "prec_006"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Logarithmic Functions",
+            "Apply Logarithmic Functions to standard worked problems",
+            "Connect Logarithmic Functions to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "prec_m02",
+      "title": "Analytic Geometry",
+      "order": 2,
+      "concepts": [
+        {
+          "id": "prec_008",
+          "title": "Conic Sections Overview",
+          "prerequisites": [
+            "prec_007"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Conic Sections Overview",
+            "Apply Conic Sections Overview to standard worked problems",
+            "Connect Conic Sections Overview to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "prec_009",
+          "title": "Circles and Ellipses",
+          "prerequisites": [
+            "prec_008"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Circles and Ellipses",
+            "Apply Circles and Ellipses to standard worked problems",
+            "Connect Circles and Ellipses to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "prec_010",
+          "title": "Parabolas and Hyperbolas",
+          "prerequisites": [
+            "prec_009"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Parabolas and Hyperbolas",
+            "Apply Parabolas and Hyperbolas to standard worked problems",
+            "Connect Parabolas and Hyperbolas to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "prec_011",
+          "title": "Parametric Equations",
+          "prerequisites": [
+            "prec_010"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Parametric Equations",
+            "Apply Parametric Equations to standard worked problems",
+            "Connect Parametric Equations to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "prec_012",
+          "title": "Polar Coordinates",
+          "prerequisites": [
+            "prec_011"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Polar Coordinates",
+            "Apply Polar Coordinates to standard worked problems",
+            "Connect Polar Coordinates to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "prec_013",
+          "title": "Vectors in the Plane",
+          "prerequisites": [
+            "prec_012"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Vectors in the Plane",
+            "Apply Vectors in the Plane to standard worked problems",
+            "Connect Vectors in the Plane to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 4
+        }
+      ]
+    },
+    {
+      "id": "prec_m03",
+      "title": "Toward Calculus",
+      "order": 3,
+      "concepts": [
+        {
+          "id": "prec_014",
+          "title": "Sequences and Limits Intuition",
+          "prerequisites": [
+            "prec_013"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Sequences and Limits Intuition",
+            "Apply Sequences and Limits Intuition to standard worked problems",
+            "Connect Sequences and Limits Intuition to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "prec_015",
+          "title": "Limit of a Function (Informal)",
+          "prerequisites": [
+            "prec_014"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Limit of a Function (Informal)",
+            "Apply Limit of a Function (Informal) to standard worked problems",
+            "Connect Limit of a Function (Informal) to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "prec_016",
+          "title": "One-Sided Limits",
+          "prerequisites": [
+            "prec_015"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind One-Sided Limits",
+            "Apply One-Sided Limits to standard worked problems",
+            "Connect One-Sided Limits to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "prec_017",
+          "title": "Continuity Intuition",
+          "prerequisites": [
+            "prec_016"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Continuity Intuition",
+            "Apply Continuity Intuition to standard worked problems",
+            "Connect Continuity Intuition to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "prec_018",
+          "title": "Rates of Change",
+          "prerequisites": [
+            "prec_017"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Rates of Change",
+            "Apply Rates of Change to standard worked problems",
+            "Connect Rates of Change to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "prec_019",
+          "title": "Bridge: Precalc Limits to Epsilon-Delta",
+          "prerequisites": [
+            "prec_018"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Bridge: Precalc Limits to Epsilon-Delta",
+            "Apply Bridge: Precalc Limits to Epsilon-Delta to standard worked problems",
+            "Connect Bridge: Precalc Limits to Epsilon-Delta to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "prec_020",
+          "title": "Tangent Line Problem",
+          "prerequisites": [
+            "prec_019"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Tangent Line Problem",
+            "Apply Tangent Line Problem to standard worked problems",
+            "Connect Tangent Line Problem to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "prec_021",
+          "title": "Area Problem Preview",
+          "prerequisites": [
+            "prec_020"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Area Problem Preview",
+            "Apply Area Problem Preview to standard worked problems",
+            "Connect Area Problem Preview to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "prec_022",
+          "title": "Infinite Series Preview",
+          "prerequisites": [
+            "prec_021"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Infinite Series Preview",
+            "Apply Infinite Series Preview to standard worked problems",
+            "Connect Infinite Series Preview to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "prec_023",
+          "title": "Precalculus Capstone",
+          "prerequisites": [
+            "prec_022"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Precalculus Capstone",
+            "Apply Precalculus Capstone to standard worked problems",
+            "Connect Precalculus Capstone to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "prec_024",
+          "title": "Binomial and Combinatorics Preview",
+          "prerequisites": [
+            "prec_023"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Binomial and Combinatorics Preview",
+            "Apply Binomial and Combinatorics Preview to standard worked problems",
+            "Connect Binomial and Combinatorics Preview to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "prec_025",
+          "title": "Mathematical Modeling Review",
+          "prerequisites": [
+            "prec_024"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Mathematical Modeling Review",
+            "Apply Mathematical Modeling Review to standard worked problems",
+            "Connect Mathematical Modeling Review to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 4
+        }
+      ]
+    }
+  ]
+}

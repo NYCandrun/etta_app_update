@@ -1,0 +1,1092 @@
+{
+  "domain": "algebra",
+  "display_name": "Algebra",
+  "phase": 1,
+  "description": "Foundations of algebra: numbers, expressions, equations, functions.",
+  "prerequisites": [],
+  "modules": [
+    {
+      "id": "alg_m01",
+      "title": "Numbers and Operations",
+      "order": 1,
+      "concepts": [
+        {
+          "id": "alg_001",
+          "title": "Real Number System",
+          "prerequisites": [],
+          "learning_objectives": [
+            "State the precise definition behind Real Number System",
+            "Apply Real Number System to standard worked problems",
+            "Connect Real Number System to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "alg_002",
+          "title": "Integer Operations",
+          "prerequisites": [
+            "alg_001"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Integer Operations",
+            "Apply Integer Operations to standard worked problems",
+            "Connect Integer Operations to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "alg_003",
+          "title": "Fractions and Decimals",
+          "prerequisites": [
+            "alg_002"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Fractions and Decimals",
+            "Apply Fractions and Decimals to standard worked problems",
+            "Connect Fractions and Decimals to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "alg_004",
+          "title": "Exponents and Powers",
+          "prerequisites": [
+            "alg_003"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Exponents and Powers",
+            "Apply Exponents and Powers to standard worked problems",
+            "Connect Exponents and Powers to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "alg_005",
+          "title": "Order of Operations",
+          "prerequisites": [
+            "alg_004"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Order of Operations",
+            "Apply Order of Operations to standard worked problems",
+            "Connect Order of Operations to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "alg_006",
+          "title": "Absolute Value",
+          "prerequisites": [
+            "alg_005"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Absolute Value",
+            "Apply Absolute Value to standard worked problems",
+            "Connect Absolute Value to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "alg_007",
+          "title": "Number Properties",
+          "prerequisites": [
+            "alg_006"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Number Properties",
+            "Apply Number Properties to standard worked problems",
+            "Connect Number Properties to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "alg_008",
+          "title": "Scientific Notation",
+          "prerequisites": [
+            "alg_007"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Scientific Notation",
+            "Apply Scientific Notation to standard worked problems",
+            "Connect Scientific Notation to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 1
+        }
+      ]
+    },
+    {
+      "id": "alg_m02",
+      "title": "Expressions",
+      "order": 2,
+      "concepts": [
+        {
+          "id": "alg_009",
+          "title": "Variables and Terms",
+          "prerequisites": [
+            "alg_008"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Variables and Terms",
+            "Apply Variables and Terms to standard worked problems",
+            "Connect Variables and Terms to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "alg_010",
+          "title": "Combining Like Terms",
+          "prerequisites": [
+            "alg_009"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Combining Like Terms",
+            "Apply Combining Like Terms to standard worked problems",
+            "Connect Combining Like Terms to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "alg_011",
+          "title": "Distributive Property",
+          "prerequisites": [
+            "alg_010"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Distributive Property",
+            "Apply Distributive Property to standard worked problems",
+            "Connect Distributive Property to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "alg_012",
+          "title": "Evaluating Expressions",
+          "prerequisites": [
+            "alg_011"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Evaluating Expressions",
+            "Apply Evaluating Expressions to standard worked problems",
+            "Connect Evaluating Expressions to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "alg_013",
+          "title": "Polynomial Basics",
+          "prerequisites": [
+            "alg_012"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Polynomial Basics",
+            "Apply Polynomial Basics to standard worked problems",
+            "Connect Polynomial Basics to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "alg_014",
+          "title": "Factoring Common Terms",
+          "prerequisites": [
+            "alg_013"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Factoring Common Terms",
+            "Apply Factoring Common Terms to standard worked problems",
+            "Connect Factoring Common Terms to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "alg_015",
+          "title": "Factoring Trinomials",
+          "prerequisites": [
+            "alg_014"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Factoring Trinomials",
+            "Apply Factoring Trinomials to standard worked problems",
+            "Connect Factoring Trinomials to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "alg_016",
+          "title": "Special Products",
+          "prerequisites": [
+            "alg_015"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Special Products",
+            "Apply Special Products to standard worked problems",
+            "Connect Special Products to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "alg_m03",
+      "title": "Linear Equations",
+      "order": 3,
+      "concepts": [
+        {
+          "id": "alg_017",
+          "title": "One-Step Equations",
+          "prerequisites": [
+            "alg_016"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind One-Step Equations",
+            "Apply One-Step Equations to standard worked problems",
+            "Connect One-Step Equations to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "alg_018",
+          "title": "Two-Step Equations",
+          "prerequisites": [
+            "alg_017"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Two-Step Equations",
+            "Apply Two-Step Equations to standard worked problems",
+            "Connect Two-Step Equations to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "alg_019",
+          "title": "Multi-Step Equations",
+          "prerequisites": [
+            "alg_018"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Multi-Step Equations",
+            "Apply Multi-Step Equations to standard worked problems",
+            "Connect Multi-Step Equations to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "alg_020",
+          "title": "Equations with Variables Both Sides",
+          "prerequisites": [
+            "alg_019"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Equations with Variables Both Sides",
+            "Apply Equations with Variables Both Sides to standard worked problems",
+            "Connect Equations with Variables Both Sides to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "alg_021",
+          "title": "Literal Equations",
+          "prerequisites": [
+            "alg_020"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Literal Equations",
+            "Apply Literal Equations to standard worked problems",
+            "Connect Literal Equations to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "alg_022",
+          "title": "Linear Inequalities",
+          "prerequisites": [
+            "alg_021"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Linear Inequalities",
+            "Apply Linear Inequalities to standard worked problems",
+            "Connect Linear Inequalities to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "alg_023",
+          "title": "Compound Inequalities",
+          "prerequisites": [
+            "alg_022"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Compound Inequalities",
+            "Apply Compound Inequalities to standard worked problems",
+            "Connect Compound Inequalities to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "alg_024",
+          "title": "Absolute Value Equations",
+          "prerequisites": [
+            "alg_023"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Absolute Value Equations",
+            "Apply Absolute Value Equations to standard worked problems",
+            "Connect Absolute Value Equations to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "alg_m04",
+      "title": "Functions and Graphs",
+      "order": 4,
+      "concepts": [
+        {
+          "id": "alg_025",
+          "title": "Coordinate Plane",
+          "prerequisites": [
+            "alg_024"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Coordinate Plane",
+            "Apply Coordinate Plane to standard worked problems",
+            "Connect Coordinate Plane to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "alg_026",
+          "title": "Slope of a Line",
+          "prerequisites": [
+            "alg_025"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Slope of a Line",
+            "Apply Slope of a Line to standard worked problems",
+            "Connect Slope of a Line to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "alg_027",
+          "title": "Slope-Intercept Form",
+          "prerequisites": [
+            "alg_026"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Slope-Intercept Form",
+            "Apply Slope-Intercept Form to standard worked problems",
+            "Connect Slope-Intercept Form to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "alg_028",
+          "title": "Point-Slope Form",
+          "prerequisites": [
+            "alg_027"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Point-Slope Form",
+            "Apply Point-Slope Form to standard worked problems",
+            "Connect Point-Slope Form to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "alg_029",
+          "title": "Graphing Linear Functions",
+          "prerequisites": [
+            "alg_028"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Graphing Linear Functions",
+            "Apply Graphing Linear Functions to standard worked problems",
+            "Connect Graphing Linear Functions to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "alg_030",
+          "title": "Function Notation",
+          "prerequisites": [
+            "alg_029"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Function Notation",
+            "Apply Function Notation to standard worked problems",
+            "Connect Function Notation to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "alg_031",
+          "title": "Domain and Range",
+          "prerequisites": [
+            "alg_030"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Domain and Range",
+            "Apply Domain and Range to standard worked problems",
+            "Connect Domain and Range to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "alg_032",
+          "title": "Systems of Linear Equations",
+          "prerequisites": [
+            "alg_031"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Systems of Linear Equations",
+            "Apply Systems of Linear Equations to standard worked problems",
+            "Connect Systems of Linear Equations to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "alg_m05",
+      "title": "Quadratics and Beyond",
+      "order": 5,
+      "concepts": [
+        {
+          "id": "alg_033",
+          "title": "Quadratic Expressions",
+          "prerequisites": [
+            "alg_032"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Quadratic Expressions",
+            "Apply Quadratic Expressions to standard worked problems",
+            "Connect Quadratic Expressions to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "alg_034",
+          "title": "Solving by Factoring",
+          "prerequisites": [
+            "alg_033"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Solving by Factoring",
+            "Apply Solving by Factoring to standard worked problems",
+            "Connect Solving by Factoring to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "alg_035",
+          "title": "Completing the Square",
+          "prerequisites": [
+            "alg_034"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Completing the Square",
+            "Apply Completing the Square to standard worked problems",
+            "Connect Completing the Square to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "alg_036",
+          "title": "Quadratic Formula",
+          "prerequisites": [
+            "alg_035"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Quadratic Formula",
+            "Apply Quadratic Formula to standard worked problems",
+            "Connect Quadratic Formula to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "alg_037",
+          "title": "The Discriminant",
+          "prerequisites": [
+            "alg_036"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Discriminant",
+            "Apply The Discriminant to standard worked problems",
+            "Connect The Discriminant to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "alg_038",
+          "title": "Graphing Parabolas",
+          "prerequisites": [
+            "alg_037"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Graphing Parabolas",
+            "Apply Graphing Parabolas to standard worked problems",
+            "Connect Graphing Parabolas to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "alg_039",
+          "title": "Exponential Expressions",
+          "prerequisites": [
+            "alg_038"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Exponential Expressions",
+            "Apply Exponential Expressions to standard worked problems",
+            "Connect Exponential Expressions to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "alg_040",
+          "title": "Rational Expressions",
+          "prerequisites": [
+            "alg_039"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Rational Expressions",
+            "Apply Rational Expressions to standard worked problems",
+            "Connect Rational Expressions to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 4
+        }
+      ]
+    },
+    {
+      "id": "alg_m06",
+      "title": "Advanced Algebra",
+      "order": 6,
+      "concepts": [
+        {
+          "id": "alg_041",
+          "title": "Radical Expressions",
+          "prerequisites": [
+            "alg_040"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Radical Expressions",
+            "Apply Radical Expressions to standard worked problems",
+            "Connect Radical Expressions to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "alg_042",
+          "title": "Rational Exponents",
+          "prerequisites": [
+            "alg_041"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Rational Exponents",
+            "Apply Rational Exponents to standard worked problems",
+            "Connect Rational Exponents to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "alg_043",
+          "title": "Logarithm Basics",
+          "prerequisites": [
+            "alg_042"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Logarithm Basics",
+            "Apply Logarithm Basics to standard worked problems",
+            "Connect Logarithm Basics to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "alg_044",
+          "title": "Properties of Logarithms",
+          "prerequisites": [
+            "alg_043"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Properties of Logarithms",
+            "Apply Properties of Logarithms to standard worked problems",
+            "Connect Properties of Logarithms to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "alg_045",
+          "title": "Sequences",
+          "prerequisites": [
+            "alg_044"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Sequences",
+            "Apply Sequences to standard worked problems",
+            "Connect Sequences to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "alg_046",
+          "title": "Series and Summation",
+          "prerequisites": [
+            "alg_045"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Series and Summation",
+            "Apply Series and Summation to standard worked problems",
+            "Connect Series and Summation to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 5
+        },
+        {
+          "id": "alg_047",
+          "title": "Function Composition",
+          "prerequisites": [
+            "alg_046"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Function Composition",
+            "Apply Function Composition to standard worked problems",
+            "Connect Function Composition to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 5
+        },
+        {
+          "id": "alg_048",
+          "title": "Inverse Functions",
+          "prerequisites": [
+            "alg_047"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Inverse Functions",
+            "Apply Inverse Functions to standard worked problems",
+            "Connect Inverse Functions to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 5
+        }
+      ]
+    },
+    {
+      "id": "alg_m07",
+      "title": "Synthesis",
+      "order": 7,
+      "concepts": [
+        {
+          "id": "alg_049",
+          "title": "Word Problems and Modeling",
+          "prerequisites": [
+            "alg_048"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Word Problems and Modeling",
+            "Apply Word Problems and Modeling to standard worked problems",
+            "Connect Word Problems and Modeling to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 5
+        },
+        {
+          "id": "alg_050",
+          "title": "Systems with Three Variables",
+          "prerequisites": [
+            "alg_049"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Systems with Three Variables",
+            "Apply Systems with Three Variables to standard worked problems",
+            "Connect Systems with Three Variables to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 5
+        },
+        {
+          "id": "alg_051",
+          "title": "Matrices Introduction",
+          "prerequisites": [
+            "alg_050"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Matrices Introduction",
+            "Apply Matrices Introduction to standard worked problems",
+            "Connect Matrices Introduction to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 5
+        },
+        {
+          "id": "alg_052",
+          "title": "Determinants Introduction",
+          "prerequisites": [
+            "alg_051"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Determinants Introduction",
+            "Apply Determinants Introduction to standard worked problems",
+            "Connect Determinants Introduction to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 5
+        },
+        {
+          "id": "alg_053",
+          "title": "Binomial Theorem",
+          "prerequisites": [
+            "alg_052"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Binomial Theorem",
+            "Apply Binomial Theorem to standard worked problems",
+            "Connect Binomial Theorem to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 5
+        },
+        {
+          "id": "alg_054",
+          "title": "Mathematical Induction",
+          "prerequisites": [
+            "alg_053"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Mathematical Induction",
+            "Apply Mathematical Induction to standard worked problems",
+            "Connect Mathematical Induction to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 5
+        },
+        {
+          "id": "alg_055",
+          "title": "Complex Numbers Introduction",
+          "prerequisites": [
+            "alg_054"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Complex Numbers Introduction",
+            "Apply Complex Numbers Introduction to standard worked problems",
+            "Connect Complex Numbers Introduction to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 5
+        },
+        {
+          "id": "alg_056",
+          "title": "Algebra Capstone",
+          "prerequisites": [
+            "alg_055"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Algebra Capstone",
+            "Apply Algebra Capstone to standard worked problems",
+            "Connect Algebra Capstone to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 5
+        }
+      ]
+    }
+  ]
+}

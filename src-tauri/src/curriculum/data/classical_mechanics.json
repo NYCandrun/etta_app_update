@@ -1,0 +1,652 @@
+{
+  "domain": "classical_mechanics",
+  "display_name": "Classical Mechanics",
+  "phase": 3,
+  "description": "Newtonian, Lagrangian, and Hamiltonian mechanics.",
+  "prerequisites": [
+    "multivariable_calculus",
+    "differential_equations",
+    "linear_algebra"
+  ],
+  "modules": [
+    {
+      "id": "cm_m01",
+      "title": "Kinematics and Newton's Laws",
+      "order": 1,
+      "concepts": [
+        {
+          "id": "cm_001",
+          "title": "Position, Velocity, Acceleration",
+          "prerequisites": [
+            "mvc_001"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Position, Velocity, Acceleration",
+            "Apply Position, Velocity, Acceleration to standard worked problems",
+            "Connect Position, Velocity, Acceleration to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "cm_002",
+          "title": "Newton's Laws of Motion",
+          "prerequisites": [
+            "cm_001"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Newton's Laws of Motion",
+            "Apply Newton's Laws of Motion to standard worked problems",
+            "Connect Newton's Laws of Motion to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "cm_003",
+          "title": "Free-Body Diagrams",
+          "prerequisites": [
+            "cm_002"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Free-Body Diagrams",
+            "Apply Free-Body Diagrams to standard worked problems",
+            "Connect Free-Body Diagrams to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "cm_004",
+          "title": "Friction and Drag",
+          "prerequisites": [
+            "cm_003"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Friction and Drag",
+            "Apply Friction and Drag to standard worked problems",
+            "Connect Friction and Drag to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "cm_005",
+          "title": "Projectile Motion",
+          "prerequisites": [
+            "cm_004"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Projectile Motion",
+            "Apply Projectile Motion to standard worked problems",
+            "Connect Projectile Motion to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "cm_006",
+          "title": "Uniform Circular Motion",
+          "prerequisites": [
+            "cm_005"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Uniform Circular Motion",
+            "Apply Uniform Circular Motion to standard worked problems",
+            "Connect Uniform Circular Motion to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "cm_007",
+          "title": "Reference Frames",
+          "prerequisites": [
+            "cm_006"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Reference Frames",
+            "Apply Reference Frames to standard worked problems",
+            "Connect Reference Frames to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "cm_m02",
+      "title": "Energy and Momentum",
+      "order": 2,
+      "concepts": [
+        {
+          "id": "cm_008",
+          "title": "Work and Kinetic Energy",
+          "prerequisites": [
+            "cm_007"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Work and Kinetic Energy",
+            "Apply Work and Kinetic Energy to standard worked problems",
+            "Connect Work and Kinetic Energy to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "cm_009",
+          "title": "Potential Energy and Conservation",
+          "prerequisites": [
+            "cm_008"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Potential Energy and Conservation",
+            "Apply Potential Energy and Conservation to standard worked problems",
+            "Connect Potential Energy and Conservation to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "cm_010",
+          "title": "Power",
+          "prerequisites": [
+            "cm_009"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Power",
+            "Apply Power to standard worked problems",
+            "Connect Power to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "cm_011",
+          "title": "Linear Momentum",
+          "prerequisites": [
+            "cm_010"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Linear Momentum",
+            "Apply Linear Momentum to standard worked problems",
+            "Connect Linear Momentum to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "cm_012",
+          "title": "Collisions",
+          "prerequisites": [
+            "cm_011"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Collisions",
+            "Apply Collisions to standard worked problems",
+            "Connect Collisions to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "cm_013",
+          "title": "Center of Mass",
+          "prerequisites": [
+            "cm_012"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Center of Mass",
+            "Apply Center of Mass to standard worked problems",
+            "Connect Center of Mass to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "cm_014",
+          "title": "Systems of Particles",
+          "prerequisites": [
+            "cm_013"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Systems of Particles",
+            "Apply Systems of Particles to standard worked problems",
+            "Connect Systems of Particles to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "cm_m03",
+      "title": "Rotational Dynamics",
+      "order": 3,
+      "concepts": [
+        {
+          "id": "cm_015",
+          "title": "Angular Kinematics",
+          "prerequisites": [
+            "cm_014"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Angular Kinematics",
+            "Apply Angular Kinematics to standard worked problems",
+            "Connect Angular Kinematics to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "cm_016",
+          "title": "Torque",
+          "prerequisites": [
+            "cm_015"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Torque",
+            "Apply Torque to standard worked problems",
+            "Connect Torque to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "cm_017",
+          "title": "Moment of Inertia",
+          "prerequisites": [
+            "cm_016"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Moment of Inertia",
+            "Apply Moment of Inertia to standard worked problems",
+            "Connect Moment of Inertia to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "cm_018",
+          "title": "Angular Momentum",
+          "prerequisites": [
+            "cm_017"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Angular Momentum",
+            "Apply Angular Momentum to standard worked problems",
+            "Connect Angular Momentum to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "cm_019",
+          "title": "Rolling Motion",
+          "prerequisites": [
+            "cm_018"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Rolling Motion",
+            "Apply Rolling Motion to standard worked problems",
+            "Connect Rolling Motion to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "cm_020",
+          "title": "Gyroscopic Motion",
+          "prerequisites": [
+            "cm_019"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Gyroscopic Motion",
+            "Apply Gyroscopic Motion to standard worked problems",
+            "Connect Gyroscopic Motion to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "cm_021",
+          "title": "Static Equilibrium",
+          "prerequisites": [
+            "cm_020"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Static Equilibrium",
+            "Apply Static Equilibrium to standard worked problems",
+            "Connect Static Equilibrium to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 4
+        }
+      ]
+    },
+    {
+      "id": "cm_m04",
+      "title": "Advanced Formulations",
+      "order": 4,
+      "concepts": [
+        {
+          "id": "cm_022",
+          "title": "Oscillations and SHM",
+          "prerequisites": [
+            "cm_021"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Oscillations and SHM",
+            "Apply Oscillations and SHM to standard worked problems",
+            "Connect Oscillations and SHM to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "cm_023",
+          "title": "Damped and Driven Oscillations",
+          "prerequisites": [
+            "cm_022"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Damped and Driven Oscillations",
+            "Apply Damped and Driven Oscillations to standard worked problems",
+            "Connect Damped and Driven Oscillations to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "cm_024",
+          "title": "Central Force Motion",
+          "prerequisites": [
+            "cm_023"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Central Force Motion",
+            "Apply Central Force Motion to standard worked problems",
+            "Connect Central Force Motion to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "cm_025",
+          "title": "Kepler's Laws",
+          "prerequisites": [
+            "cm_024"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Kepler's Laws",
+            "Apply Kepler's Laws to standard worked problems",
+            "Connect Kepler's Laws to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "cm_026",
+          "title": "Lagrangian Mechanics",
+          "prerequisites": [
+            "cm_025"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Lagrangian Mechanics",
+            "Apply Lagrangian Mechanics to standard worked problems",
+            "Connect Lagrangian Mechanics to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "cm_027",
+          "title": "The Euler-Lagrange Equation",
+          "prerequisites": [
+            "cm_026"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Euler-Lagrange Equation",
+            "Apply The Euler-Lagrange Equation to standard worked problems",
+            "Connect The Euler-Lagrange Equation to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "cm_028",
+          "title": "Hamiltonian Mechanics",
+          "prerequisites": [
+            "cm_027"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Hamiltonian Mechanics",
+            "Apply Hamiltonian Mechanics to standard worked problems",
+            "Connect Hamiltonian Mechanics to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "cm_029",
+          "title": "Normal Modes",
+          "prerequisites": [
+            "cm_028"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Normal Modes",
+            "Apply Normal Modes to standard worked problems",
+            "Connect Normal Modes to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "cm_030",
+          "title": "Coupled Oscillators",
+          "prerequisites": [
+            "cm_029"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Coupled Oscillators",
+            "Apply Coupled Oscillators to standard worked problems",
+            "Connect Coupled Oscillators to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "cm_031",
+          "title": "Noether's Theorem",
+          "prerequisites": [
+            "cm_030"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Noether's Theorem",
+            "Apply Noether's Theorem to standard worked problems",
+            "Connect Noether's Theorem to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "cm_032",
+          "title": "Chaos and Nonlinear Dynamics",
+          "prerequisites": [
+            "cm_031"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Chaos and Nonlinear Dynamics",
+            "Apply Chaos and Nonlinear Dynamics to standard worked problems",
+            "Connect Chaos and Nonlinear Dynamics to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "cm_033",
+          "title": "Classical Mechanics Capstone",
+          "prerequisites": [
+            "cm_032"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Classical Mechanics Capstone",
+            "Apply Classical Mechanics Capstone to standard worked problems",
+            "Connect Classical Mechanics Capstone to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 4
+        }
+      ]
+    }
+  ]
+}

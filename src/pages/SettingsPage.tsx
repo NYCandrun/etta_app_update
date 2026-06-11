@@ -20,6 +20,9 @@ export function SettingsPage() {
   const [apiKeyInput, setApiKeyInput] = useState("");
   const [busy, setBusy] = useState(false);
 
+  const [models, setModels] = useState<string[]>([]);
+  const [testState, setTestState] = useState<"idle" | "testing" | "ok" | "fail">("idle");
+
   // Load persisted settings once into the store.
   useEffect(() => {
     let active = true;
@@ -74,6 +77,37 @@ export function SettingsPage() {
     if (!res.ok) showError(res.error, () => void onChangeGoal(minutes));
   };
 
+  // Load the model list for the picker once (cached server-side; no completion
+  // request is burned). Falls back to the current hardcoded list on failure.
+  useEffect(() => {
+    let active = true;
+    void ipc.listAvailableModels().then((res) => {
+      if (active && res.ok) setModels(res.data);
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const onChangeModel = async (model: string) => {
+    setSettings({ ...settings, baseModel: model });
+    setTestState("idle");
+    const res = await ipc.setSetting("base_model", model);
+    if (!res.ok) showError(res.error, () => void onChangeModel(model));
+  };
+
+  // Real connectivity test using the CONFIGURED model (a tiny completion).
+  const onTestConnection = async () => {
+    setTestState("testing");
+    const res = await ipc.testConnection();
+    if (!res.ok) {
+      setTestState("fail");
+      showError(res.error, () => void onTestConnection());
+      return;
+    }
+    setTestState(res.data ? "ok" : "fail");
+  };
+
   if (!hydrated) {
     return (
       <Card>
@@ -119,6 +153,53 @@ export function SettingsPage() {
             </Button>
             <span className="text-sm text-text-muted">
               {settings.apiKeyPresent ? "Key present" : "No key set"}
+            </span>
+          </div>
+        </div>
+      </Card>
+
+      <Card>
+        <h2 className="text-base font-semibold text-text">Model</h2>
+        <p className="mt-1 text-sm text-text-muted">
+          The single model used for every AI request. The list comes from your
+          account; the connection test uses this same model.
+        </p>
+        <div className="mt-3 flex flex-col gap-2">
+          <label htmlFor="base-model" className="text-sm font-medium text-text">
+            Base model
+          </label>
+          <select
+            id="base-model"
+            value={settings.baseModel}
+            onChange={(e) => void onChangeModel(e.target.value)}
+            className="rounded-md border border-surface-border bg-surface px-3 py-2 text-sm text-text"
+          >
+            {/* Always include the current value so the select is never empty. */}
+            {(models.includes(settings.baseModel)
+              ? models
+              : [settings.baseModel, ...models]
+            ).map((m) => (
+              <option key={m} value={m}>
+                {m}
+              </option>
+            ))}
+          </select>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="secondary"
+              onClick={() => void onTestConnection()}
+              disabled={testState === "testing" || !settings.apiKeyPresent}
+            >
+              {testState === "testing" ? "Testing…" : "Test connection"}
+            </Button>
+            <span className="text-sm text-text-muted">
+              {testState === "ok"
+                ? "Connected"
+                : testState === "fail"
+                  ? "Connection failed"
+                  : !settings.apiKeyPresent
+                    ? "Set an API key first"
+                    : ""}
             </span>
           </div>
         </div>

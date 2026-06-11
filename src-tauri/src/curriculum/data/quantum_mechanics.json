@@ -1,0 +1,615 @@
+{
+  "domain": "quantum_mechanics",
+  "display_name": "Quantum Mechanics",
+  "phase": 3,
+  "description": "Wavefunctions, operators, and the Schrodinger equation.",
+  "prerequisites": [
+    "multivariable_calculus",
+    "differential_equations",
+    "linear_algebra"
+  ],
+  "modules": [
+    {
+      "id": "qm_m01",
+      "title": "Foundations",
+      "order": 1,
+      "concepts": [
+        {
+          "id": "qm_001",
+          "title": "The Photoelectric Effect",
+          "prerequisites": [
+            "lin_001"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Photoelectric Effect",
+            "Apply The Photoelectric Effect to standard worked problems",
+            "Connect The Photoelectric Effect to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "qm_002",
+          "title": "Wave-Particle Duality",
+          "prerequisites": [
+            "qm_001"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Wave-Particle Duality",
+            "Apply Wave-Particle Duality to standard worked problems",
+            "Connect Wave-Particle Duality to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "qm_003",
+          "title": "The de Broglie Hypothesis",
+          "prerequisites": [
+            "qm_002"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The de Broglie Hypothesis",
+            "Apply The de Broglie Hypothesis to standard worked problems",
+            "Connect The de Broglie Hypothesis to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "qm_004",
+          "title": "The Uncertainty Principle",
+          "prerequisites": [
+            "qm_003"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Uncertainty Principle",
+            "Apply The Uncertainty Principle to standard worked problems",
+            "Connect The Uncertainty Principle to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "qm_005",
+          "title": "The Wavefunction",
+          "prerequisites": [
+            "qm_004"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Wavefunction",
+            "Apply The Wavefunction to standard worked problems",
+            "Connect The Wavefunction to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "qm_006",
+          "title": "Probability and Normalization",
+          "prerequisites": [
+            "qm_005"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Probability and Normalization",
+            "Apply Probability and Normalization to standard worked problems",
+            "Connect Probability and Normalization to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "qm_007",
+          "title": "Bridge: Probability Amplitudes and Statistics",
+          "prerequisites": [
+            "qm_006"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Bridge: Probability Amplitudes and Statistics",
+            "Apply Bridge: Probability Amplitudes and Statistics to standard worked problems",
+            "Connect Bridge: Probability Amplitudes and Statistics to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "qm_m02",
+      "title": "The Schrodinger Equation",
+      "order": 2,
+      "concepts": [
+        {
+          "id": "qm_008",
+          "title": "The Time-Dependent Schrodinger Equation",
+          "prerequisites": [
+            "qm_007"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Time-Dependent Schrodinger Equation",
+            "Apply The Time-Dependent Schrodinger Equation to standard worked problems",
+            "Connect The Time-Dependent Schrodinger Equation to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "qm_009",
+          "title": "The Time-Independent Schrodinger Equation",
+          "prerequisites": [
+            "qm_008"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Time-Independent Schrodinger Equation",
+            "Apply The Time-Independent Schrodinger Equation to standard worked problems",
+            "Connect The Time-Independent Schrodinger Equation to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "qm_010",
+          "title": "The Infinite Square Well",
+          "prerequisites": [
+            "qm_009"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Infinite Square Well",
+            "Apply The Infinite Square Well to standard worked problems",
+            "Connect The Infinite Square Well to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "qm_011",
+          "title": "The Finite Square Well",
+          "prerequisites": [
+            "qm_010"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Finite Square Well",
+            "Apply The Finite Square Well to standard worked problems",
+            "Connect The Finite Square Well to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "qm_012",
+          "title": "Quantum Tunneling",
+          "prerequisites": [
+            "qm_011"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Quantum Tunneling",
+            "Apply Quantum Tunneling to standard worked problems",
+            "Connect Quantum Tunneling to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "qm_013",
+          "title": "The Harmonic Oscillator",
+          "prerequisites": [
+            "qm_012"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Harmonic Oscillator",
+            "Apply The Harmonic Oscillator to standard worked problems",
+            "Connect The Harmonic Oscillator to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "qm_m03",
+      "title": "Formalism",
+      "order": 3,
+      "concepts": [
+        {
+          "id": "qm_014",
+          "title": "Operators and Observables",
+          "prerequisites": [
+            "qm_013"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Operators and Observables",
+            "Apply Operators and Observables to standard worked problems",
+            "Connect Operators and Observables to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "qm_015",
+          "title": "Eigenvalues and Expectation Values",
+          "prerequisites": [
+            "qm_014"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Eigenvalues and Expectation Values",
+            "Apply Eigenvalues and Expectation Values to standard worked problems",
+            "Connect Eigenvalues and Expectation Values to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "qm_016",
+          "title": "Hermitian Operators",
+          "prerequisites": [
+            "qm_015"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Hermitian Operators",
+            "Apply Hermitian Operators to standard worked problems",
+            "Connect Hermitian Operators to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "qm_017",
+          "title": "Commutators",
+          "prerequisites": [
+            "qm_016"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Commutators",
+            "Apply Commutators to standard worked problems",
+            "Connect Commutators to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "qm_018",
+          "title": "Dirac Notation",
+          "prerequisites": [
+            "qm_017"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Dirac Notation",
+            "Apply Dirac Notation to standard worked problems",
+            "Connect Dirac Notation to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "qm_019",
+          "title": "Hilbert Spaces",
+          "prerequisites": [
+            "qm_018"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Hilbert Spaces",
+            "Apply Hilbert Spaces to standard worked problems",
+            "Connect Hilbert Spaces to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 4
+        }
+      ]
+    },
+    {
+      "id": "qm_m04",
+      "title": "Three Dimensions and Spin",
+      "order": 4,
+      "concepts": [
+        {
+          "id": "qm_020",
+          "title": "The Hydrogen Atom",
+          "prerequisites": [
+            "qm_019"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Hydrogen Atom",
+            "Apply The Hydrogen Atom to standard worked problems",
+            "Connect The Hydrogen Atom to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "qm_021",
+          "title": "Angular Momentum",
+          "prerequisites": [
+            "qm_020"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Angular Momentum",
+            "Apply Angular Momentum to standard worked problems",
+            "Connect Angular Momentum to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "qm_022",
+          "title": "Spherical Harmonics",
+          "prerequisites": [
+            "qm_021"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Spherical Harmonics",
+            "Apply Spherical Harmonics to standard worked problems",
+            "Connect Spherical Harmonics to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "qm_023",
+          "title": "Electron Spin",
+          "prerequisites": [
+            "qm_022"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Electron Spin",
+            "Apply Electron Spin to standard worked problems",
+            "Connect Electron Spin to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "qm_024",
+          "title": "The Pauli Exclusion Principle",
+          "prerequisites": [
+            "qm_023"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Pauli Exclusion Principle",
+            "Apply The Pauli Exclusion Principle to standard worked problems",
+            "Connect The Pauli Exclusion Principle to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "qm_025",
+          "title": "Identical Particles",
+          "prerequisites": [
+            "qm_024"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Identical Particles",
+            "Apply Identical Particles to standard worked problems",
+            "Connect Identical Particles to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "qm_026",
+          "title": "Perturbation Theory",
+          "prerequisites": [
+            "qm_025"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Perturbation Theory",
+            "Apply Perturbation Theory to standard worked problems",
+            "Connect Perturbation Theory to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "qm_027",
+          "title": "The Variational Method",
+          "prerequisites": [
+            "qm_026"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind The Variational Method",
+            "Apply The Variational Method to standard worked problems",
+            "Connect The Variational Method to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "qm_028",
+          "title": "Quantum Mechanics Capstone",
+          "prerequisites": [
+            "qm_027"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Quantum Mechanics Capstone",
+            "Apply Quantum Mechanics Capstone to standard worked problems",
+            "Connect Quantum Mechanics Capstone to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "qm_029",
+          "title": "Multi-Electron Atoms",
+          "prerequisites": [
+            "qm_028"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Multi-Electron Atoms",
+            "Apply Multi-Electron Atoms to standard worked problems",
+            "Connect Multi-Electron Atoms to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "qm_030",
+          "title": "Entanglement Basics",
+          "prerequisites": [
+            "qm_029"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Entanglement Basics",
+            "Apply Entanglement Basics to standard worked problems",
+            "Connect Entanglement Basics to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "qm_031",
+          "title": "Quantum Measurement",
+          "prerequisites": [
+            "qm_030"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Quantum Measurement",
+            "Apply Quantum Measurement to standard worked problems",
+            "Connect Quantum Measurement to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 4
+        }
+      ]
+    }
+  ]
+}

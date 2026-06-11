@@ -1,0 +1,842 @@
+{
+  "domain": "single_variable_calculus",
+  "display_name": "Single-Variable Calculus",
+  "phase": 2,
+  "description": "Limits, derivatives, integrals of single-variable functions.",
+  "prerequisites": [
+    "precalculus"
+  ],
+  "modules": [
+    {
+      "id": "svc_m01",
+      "title": "Limits and Continuity",
+      "order": 1,
+      "concepts": [
+        {
+          "id": "svc_001",
+          "title": "Epsilon-Delta Definition",
+          "prerequisites": [
+            "prec_001"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Epsilon-Delta Definition",
+            "Apply Epsilon-Delta Definition to standard worked problems",
+            "Connect Epsilon-Delta Definition to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "svc_002",
+          "title": "Limit Laws",
+          "prerequisites": [
+            "svc_001"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Limit Laws",
+            "Apply Limit Laws to standard worked problems",
+            "Connect Limit Laws to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "svc_003",
+          "title": "Limits at Infinity",
+          "prerequisites": [
+            "svc_002"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Limits at Infinity",
+            "Apply Limits at Infinity to standard worked problems",
+            "Connect Limits at Infinity to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "svc_004",
+          "title": "Indeterminate Forms",
+          "prerequisites": [
+            "svc_003"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Indeterminate Forms",
+            "Apply Indeterminate Forms to standard worked problems",
+            "Connect Indeterminate Forms to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "svc_005",
+          "title": "Squeeze Theorem",
+          "prerequisites": [
+            "svc_004"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Squeeze Theorem",
+            "Apply Squeeze Theorem to standard worked problems",
+            "Connect Squeeze Theorem to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "svc_006",
+          "title": "Continuity and Discontinuities",
+          "prerequisites": [
+            "svc_005"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Continuity and Discontinuities",
+            "Apply Continuity and Discontinuities to standard worked problems",
+            "Connect Continuity and Discontinuities to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "svc_007",
+          "title": "Intermediate Value Theorem",
+          "prerequisites": [
+            "svc_006"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Intermediate Value Theorem",
+            "Apply Intermediate Value Theorem to standard worked problems",
+            "Connect Intermediate Value Theorem to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 1
+        }
+      ]
+    },
+    {
+      "id": "svc_m02",
+      "title": "Derivatives",
+      "order": 2,
+      "concepts": [
+        {
+          "id": "svc_008",
+          "title": "Definition of the Derivative",
+          "prerequisites": [
+            "svc_007"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Definition of the Derivative",
+            "Apply Definition of the Derivative to standard worked problems",
+            "Connect Definition of the Derivative to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 1
+        },
+        {
+          "id": "svc_009",
+          "title": "Power Rule",
+          "prerequisites": [
+            "svc_008"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Power Rule",
+            "Apply Power Rule to standard worked problems",
+            "Connect Power Rule to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "svc_010",
+          "title": "Product Rule",
+          "prerequisites": [
+            "svc_009"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Product Rule",
+            "Apply Product Rule to standard worked problems",
+            "Connect Product Rule to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "svc_011",
+          "title": "Quotient Rule",
+          "prerequisites": [
+            "svc_010"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Quotient Rule",
+            "Apply Quotient Rule to standard worked problems",
+            "Connect Quotient Rule to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "svc_012",
+          "title": "Chain Rule",
+          "prerequisites": [
+            "svc_011"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Chain Rule",
+            "Apply Chain Rule to standard worked problems",
+            "Connect Chain Rule to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "svc_013",
+          "title": "Implicit Differentiation",
+          "prerequisites": [
+            "svc_012"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Implicit Differentiation",
+            "Apply Implicit Differentiation to standard worked problems",
+            "Connect Implicit Differentiation to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "svc_014",
+          "title": "Derivatives of Trig Functions",
+          "prerequisites": [
+            "svc_013"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Derivatives of Trig Functions",
+            "Apply Derivatives of Trig Functions to standard worked problems",
+            "Connect Derivatives of Trig Functions to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "svc_015",
+          "title": "Derivatives of Exp and Log",
+          "prerequisites": [
+            "svc_014"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Derivatives of Exp and Log",
+            "Apply Derivatives of Exp and Log to standard worked problems",
+            "Connect Derivatives of Exp and Log to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 2
+        }
+      ]
+    },
+    {
+      "id": "svc_m03",
+      "title": "Applications of Derivatives",
+      "order": 3,
+      "concepts": [
+        {
+          "id": "svc_016",
+          "title": "Related Rates",
+          "prerequisites": [
+            "svc_015"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Related Rates",
+            "Apply Related Rates to standard worked problems",
+            "Connect Related Rates to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 2
+        },
+        {
+          "id": "svc_017",
+          "title": "Linear Approximation",
+          "prerequisites": [
+            "svc_016"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Linear Approximation",
+            "Apply Linear Approximation to standard worked problems",
+            "Connect Linear Approximation to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "svc_018",
+          "title": "Extrema and Critical Points",
+          "prerequisites": [
+            "svc_017"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Extrema and Critical Points",
+            "Apply Extrema and Critical Points to standard worked problems",
+            "Connect Extrema and Critical Points to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "svc_019",
+          "title": "Mean Value Theorem",
+          "prerequisites": [
+            "svc_018"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Mean Value Theorem",
+            "Apply Mean Value Theorem to standard worked problems",
+            "Connect Mean Value Theorem to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "svc_020",
+          "title": "First Derivative Test",
+          "prerequisites": [
+            "svc_019"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind First Derivative Test",
+            "Apply First Derivative Test to standard worked problems",
+            "Connect First Derivative Test to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "svc_021",
+          "title": "Concavity and Inflection",
+          "prerequisites": [
+            "svc_020"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Concavity and Inflection",
+            "Apply Concavity and Inflection to standard worked problems",
+            "Connect Concavity and Inflection to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "svc_022",
+          "title": "Optimization Problems",
+          "prerequisites": [
+            "svc_021"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Optimization Problems",
+            "Apply Optimization Problems to standard worked problems",
+            "Connect Optimization Problems to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "svc_023",
+          "title": "L'Hopital's Rule",
+          "prerequisites": [
+            "svc_022"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind L'Hopital's Rule",
+            "Apply L'Hopital's Rule to standard worked problems",
+            "Connect L'Hopital's Rule to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 3
+        }
+      ]
+    },
+    {
+      "id": "svc_m04",
+      "title": "Integration",
+      "order": 4,
+      "concepts": [
+        {
+          "id": "svc_024",
+          "title": "Antiderivatives",
+          "prerequisites": [
+            "svc_023"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Antiderivatives",
+            "Apply Antiderivatives to standard worked problems",
+            "Connect Antiderivatives to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "svc_025",
+          "title": "Riemann Sums",
+          "prerequisites": [
+            "svc_024"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Riemann Sums",
+            "Apply Riemann Sums to standard worked problems",
+            "Connect Riemann Sums to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "svc_026",
+          "title": "Definite Integral",
+          "prerequisites": [
+            "svc_025"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Definite Integral",
+            "Apply Definite Integral to standard worked problems",
+            "Connect Definite Integral to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "svc_027",
+          "title": "Fundamental Theorem of Calculus",
+          "prerequisites": [
+            "svc_026"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Fundamental Theorem of Calculus",
+            "Apply Fundamental Theorem of Calculus to standard worked problems",
+            "Connect Fundamental Theorem of Calculus to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "svc_028",
+          "title": "u-Substitution",
+          "prerequisites": [
+            "svc_027"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind u-Substitution",
+            "Apply u-Substitution to standard worked problems",
+            "Connect u-Substitution to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "svc_029",
+          "title": "Integration by Parts",
+          "prerequisites": [
+            "svc_028"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Integration by Parts",
+            "Apply Integration by Parts to standard worked problems",
+            "Connect Integration by Parts to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "svc_030",
+          "title": "Trigonometric Integrals",
+          "prerequisites": [
+            "svc_029"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Trigonometric Integrals",
+            "Apply Trigonometric Integrals to standard worked problems",
+            "Connect Trigonometric Integrals to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "svc_031",
+          "title": "Partial Fractions",
+          "prerequisites": [
+            "svc_030"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Partial Fractions",
+            "Apply Partial Fractions to standard worked problems",
+            "Connect Partial Fractions to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 4
+        }
+      ]
+    },
+    {
+      "id": "svc_m05",
+      "title": "Applications of Integration",
+      "order": 5,
+      "concepts": [
+        {
+          "id": "svc_032",
+          "title": "Area Between Curves",
+          "prerequisites": [
+            "svc_031"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Area Between Curves",
+            "Apply Area Between Curves to standard worked problems",
+            "Connect Area Between Curves to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "svc_033",
+          "title": "Volumes of Revolution",
+          "prerequisites": [
+            "svc_032"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Volumes of Revolution",
+            "Apply Volumes of Revolution to standard worked problems",
+            "Connect Volumes of Revolution to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "svc_034",
+          "title": "Arc Length",
+          "prerequisites": [
+            "svc_033"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Arc Length",
+            "Apply Arc Length to standard worked problems",
+            "Connect Arc Length to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "svc_035",
+          "title": "Average Value",
+          "prerequisites": [
+            "svc_034"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Average Value",
+            "Apply Average Value to standard worked problems",
+            "Connect Average Value to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "svc_036",
+          "title": "Improper Integrals",
+          "prerequisites": [
+            "svc_035"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Improper Integrals",
+            "Apply Improper Integrals to standard worked problems",
+            "Connect Improper Integrals to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "swaps_dependent_and_independent_variables",
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient"
+          ],
+          "difficulty_tier": 3
+        },
+        {
+          "id": "svc_037",
+          "title": "Sequences",
+          "prerequisites": [
+            "svc_036"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Sequences",
+            "Apply Sequences to standard worked problems",
+            "Connect Sequences to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "ignores_domain_restrictions",
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "svc_038",
+          "title": "Convergence Tests",
+          "prerequisites": [
+            "svc_037"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Convergence Tests",
+            "Apply Convergence Tests to standard worked problems",
+            "Connect Convergence Tests to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_necessary_and_sufficient",
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "svc_039",
+          "title": "Taylor and Maclaurin Series",
+          "prerequisites": [
+            "svc_038"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Taylor and Maclaurin Series",
+            "Apply Taylor and Maclaurin Series to standard worked problems",
+            "Connect Taylor and Maclaurin Series to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "memorizes_without_understanding",
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "svc_040",
+          "title": "Power Series",
+          "prerequisites": [
+            "svc_039"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Power Series",
+            "Apply Power Series to standard worked problems",
+            "Connect Power Series to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "sign_error_in_manipulation",
+            "confuses_definition_with_example",
+            "drops_units_in_calculation"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "svc_041",
+          "title": "Numerical Integration",
+          "prerequisites": [
+            "svc_040"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Numerical Integration",
+            "Apply Numerical Integration to standard worked problems",
+            "Connect Numerical Integration to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "confuses_definition_with_example",
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "svc_042",
+          "title": "Differential Equations Preview",
+          "prerequisites": [
+            "svc_041"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind Differential Equations Preview",
+            "Apply Differential Equations Preview to standard worked problems",
+            "Connect Differential Equations Preview to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "drops_units_in_calculation",
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing"
+          ],
+          "difficulty_tier": 4
+        },
+        {
+          "id": "svc_043",
+          "title": "SVC Capstone",
+          "prerequisites": [
+            "svc_042"
+          ],
+          "learning_objectives": [
+            "State the precise definition behind SVC Capstone",
+            "Apply SVC Capstone to standard worked problems",
+            "Connect SVC Capstone to its prerequisite ideas and recognize when it applies"
+          ],
+          "error_patterns": [
+            "misapplies_a_rule_out_of_domain",
+            "off_by_one_in_indexing",
+            "forgets_boundary_conditions",
+            "swaps_dependent_and_independent_variables"
+          ],
+          "difficulty_tier": 4
+        }
+      ]
+    }
+  ]
+}
