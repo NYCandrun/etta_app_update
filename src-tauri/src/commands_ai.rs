@@ -389,16 +389,25 @@ pub async fn grade_quiz(
         graded.push(g);
     }
 
-    let final_score = if graded.is_empty() {
-        0.0
-    } else {
-        graded.iter().map(|g| g.score).sum::<f64>() / graded.len() as f64
-    };
+    // Score over the CANONICAL question count, not the number of submitted
+    // answers: a client that omits its wrong answers must not shrink the
+    // denominator and inflate its score (grading is server-authoritative).
+    let final_score = final_score(&graded, questions.len());
 
     Ok(GradeQuizResult {
         answers: graded,
         final_score,
     })
+}
+
+/// Mean score over the canonical question count. Unanswered questions count as
+/// 0 (the denominator is the number of questions, never the submitted-answer
+/// count), so omitting answers cannot inflate the result.
+fn final_score(graded: &[GradedAnswer], question_count: usize) -> f64 {
+    if question_count == 0 {
+        return 0.0;
+    }
+    graded.iter().map(|g| g.score).sum::<f64>() / question_count as f64
 }
 
 /// Build the free_response grading turn. The learner's answer and the rubric are
@@ -479,4 +488,33 @@ fn map_concept_summary(r: &rusqlite::Row) -> rusqlite::Result<ConceptSummary> {
         title: r.get(3)?,
         difficulty_tier: r.get(4)?,
     })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn ga(score: f64) -> GradedAnswer {
+        GradedAnswer {
+            question_id: "q".into(),
+            user_answer: String::new(),
+            is_correct: score >= 1.0,
+            score,
+            error_pattern_detected: None,
+        }
+    }
+
+    /// The denominator is the canonical question count, so a client that submits
+    /// only its correct answers cannot inflate the score: 2 correct answers out
+    /// of a 4-question quiz is 0.5, not 1.0.
+    #[test]
+    fn final_score_uses_question_count_not_submitted_count() {
+        let two_correct = vec![ga(1.0), ga(1.0)];
+        assert_eq!(final_score(&two_correct, 4), 0.5);
+        // Honest full submission is unaffected.
+        let all = vec![ga(1.0), ga(0.0), ga(1.0), ga(1.0)];
+        assert_eq!(final_score(&all, 4), 0.75);
+        // No questions → no division by zero.
+        assert_eq!(final_score(&[], 0), 0.0);
+    }
 }
