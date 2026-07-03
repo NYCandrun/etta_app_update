@@ -23,6 +23,19 @@ export interface Segment {
 
 // Split on $$...$$ (block) first, then $...$ (inline). A backslash-escaped
 // \$ is treated as a literal dollar sign, not a delimiter.
+//
+// Currency guard: bare dollar amounts in word problems ("You have $5 and earn
+// $3") must stay literal text, so an INLINE span only opens when all of these
+// hold (Pandoc-style rules):
+//   - the char after the opening $ is non-space,
+//   - the closing $ is the VERY NEXT unescaped $ (math content never contains
+//     a bare $), on the SAME line,
+//   - the char before the closing $ is non-space,
+//   - the closing $ is not immediately followed by a digit ("$5-$10").
+// A $ that fails these rules is literal text and scanning continues after it,
+// so a later well-formed span still renders ("You have $5 and $x$" keeps the
+// $5 literal but typesets x). Block $$...$$ keeps the original greedy
+// multi-line behavior.
 export function tokenize(input: string): Segment[] {
   const segments: Segment[] = [];
   let i = 0;
@@ -44,21 +57,41 @@ export function tokenize(input: string): Segment[] {
     }
     if (ch === "$") {
       const isBlock = input[i + 1] === "$";
-      const delim = isBlock ? "$$" : "$";
-      const start = i + delim.length;
-      const end = findClosing(input, start, delim);
-      if (end === -1) {
-        // Unterminated delimiter: treat the rest as literal text.
-        buf += input.slice(i);
-        break;
+      if (isBlock) {
+        const start = i + 2;
+        const end = findClosing(input, start, "$$");
+        if (end === -1) {
+          // Unterminated block delimiter: rest is literal text (streaming-safe).
+          buf += input.slice(i);
+          break;
+        }
+        flushText();
+        segments.push({ kind: "math", value: input.slice(start, end), display: true });
+        i = end + 2;
+        continue;
+      }
+      // Inline span: validate the currency rules against the NEXT unescaped $.
+      const start = i + 1;
+      const after = input[start];
+      const openOk = after !== undefined && !/\s/.test(after);
+      const end = openOk ? findClosing(input, start, "$") : -1;
+      const content = end === -1 ? "" : input.slice(start, end);
+      const closeOk =
+        end !== -1 &&
+        end > start &&
+        !content.includes("\n") &&
+        !/\s/.test(input[end - 1] ?? "") &&
+        !/[0-9]/.test(input[end + 1] ?? "");
+      if (!closeOk) {
+        // Not a math span (currency, unterminated, or cross-line): this $ is
+        // literal; keep scanning so later valid spans still render.
+        buf += "$";
+        i += 1;
+        continue;
       }
       flushText();
-      segments.push({
-        kind: "math",
-        value: input.slice(start, end),
-        display: isBlock,
-      });
-      i = end + delim.length;
+      segments.push({ kind: "math", value: content, display: false });
+      i = end + 1;
       continue;
     }
     buf += ch;

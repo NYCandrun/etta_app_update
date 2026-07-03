@@ -16,7 +16,7 @@
           "id": "mvc_001",
           "title": "Vectors in Three Dimensions",
           "prerequisites": [
-            "svc_001"
+            "svc_043"
           ],
           "learning_objectives": [
             "State the precise definition behind Vectors in Three Dimensions",
@@ -140,7 +140,7 @@
             "memorizes_without_understanding",
             "sign_error_in_manipulation"
           ],
-          "difficulty_tier": 2
+          "difficulty_tier": 1
         }
       ]
     },
@@ -165,7 +165,7 @@
             "memorizes_without_understanding",
             "sign_error_in_manipulation"
           ],
-          "difficulty_tier": 1
+          "difficulty_tier": 2
         },
         {
           "id": "mvc_009",
@@ -295,7 +295,7 @@
             "ignores_domain_restrictions",
             "confuses_necessary_and_sufficient"
           ],
-          "difficulty_tier": 2
+          "difficulty_tier": 3
         },
         {
           "id": "mvc_016",
@@ -357,7 +357,7 @@
             "memorizes_without_understanding",
             "sign_error_in_manipulation"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 3
         },
         {
           "id": "mvc_019",
@@ -376,7 +376,7 @@
             "confuses_definition_with_example",
             "drops_units_in_calculation"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 3
         },
         {
           "id": "mvc_020",
@@ -394,7 +394,7 @@
             "confuses_definition_with_example",
             "drops_units_in_calculation"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 3
         },
         {
           "id": "mvc_021",
@@ -475,7 +475,7 @@
             "forgets_boundary_conditions",
             "swaps_dependent_and_independent_variables"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 4
         },
         {
           "id": "mvc_025",
@@ -549,7 +549,7 @@
             "memorizes_without_understanding",
             "sign_error_in_manipulation"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 5
         },
         {
           "id": "mvc_029",
@@ -568,7 +568,7 @@
             "confuses_definition_with_example",
             "drops_units_in_calculation"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 5
         },
         {
           "id": "mvc_030",
@@ -586,7 +586,7 @@
             "confuses_definition_with_example",
             "drops_units_in_calculation"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 5
         },
         {
           "id": "mvc_031",
@@ -605,7 +605,7 @@
             "misapplies_a_rule_out_of_domain",
             "off_by_one_in_indexing"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 5
         },
         {
           "id": "mvc_032",
@@ -623,7 +623,7 @@
             "misapplies_a_rule_out_of_domain",
             "off_by_one_in_indexing"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 5
         },
         {
           "id": "mvc_033",

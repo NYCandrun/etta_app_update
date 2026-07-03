@@ -1,45 +1,30 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import type { ReactNode } from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import { Card, InlineError, Skeleton, useToast } from "./ui";
-import { ipc } from "../lib/ipc";
+import { Card, InlineError, Skeleton } from "./ui";
+import { useOnboardingStore } from "../stores/useOnboardingStore";
 
-// First-run routing gate. On launch we ask the backend whether onboarding +
-// placement has completed (the reserved `__onboarding_complete` flag). Until we
-// know, we show the shared skeleton (no layout shift, #18); if the learner
-// hasn't onboarded we redirect to /onboarding. The onboarding + placement routes
-// themselves are NOT gated (otherwise we'd redirect away from them).
-type GateState =
-  | { status: "checking" }
-  | { status: "error"; message: string }
-  | { status: "complete"; done: boolean };
+// First-run routing gate (C1). The onboarding-complete flag lives in
+// useOnboardingStore and is hydrated exactly ONCE at boot; `done` is TERMINAL,
+// so navigating around the app never re-checks the backend and never flashes
+// the skeleton again. PlacementPage calls markComplete() on BOTH success paths
+// (place_learner and skip), which unblocks the gate immediately — no relaunch.
+// The onboarding + placement routes themselves are NOT gated (otherwise we'd
+// redirect away from them).
 
 const ONBOARDING_PATHS = ["/onboarding", "/placement"];
 
 export function OnboardingGate({ children }: { children: ReactNode }) {
   const location = useLocation();
-  const { showError } = useToast();
-  const [state, setState] = useState<GateState>({ status: "checking" });
+  const status = useOnboardingStore((s) => s.status);
+  const error = useOnboardingStore((s) => s.error);
+  const hydrate = useOnboardingStore((s) => s.hydrate);
 
+  // Hydrate once at boot. hydrate() is idempotent (no-op unless the store is
+  // in `unknown` or `error`), so re-renders and re-mounts never re-fetch.
   useEffect(() => {
-    let cancelled = false;
-    const check = () => {
-      setState({ status: "checking" });
-      void ipc.getOnboardingComplete().then((res) => {
-        if (cancelled) return;
-        if (!res.ok) {
-          setState({ status: "error", message: res.error });
-          showError(`Could not check your setup: ${res.error}`, check);
-          return;
-        }
-        setState({ status: "complete", done: res.data });
-      });
-    };
-    check();
-    return () => {
-      cancelled = true;
-    };
-  }, [showError]);
+    hydrate();
+  }, [hydrate]);
 
   // Don't gate the onboarding/placement flow itself.
   const onOnboardingFlow = ONBOARDING_PATHS.some((p) =>
@@ -47,7 +32,7 @@ export function OnboardingGate({ children }: { children: ReactNode }) {
   );
   if (onOnboardingFlow) return <>{children}</>;
 
-  if (state.status === "checking") {
+  if (status === "unknown" || status === "checking") {
     return (
       <div className="mx-auto flex min-h-full max-w-xl items-center px-4">
         <Card className="w-full">
@@ -60,17 +45,20 @@ export function OnboardingGate({ children }: { children: ReactNode }) {
     );
   }
 
-  if (state.status === "error") {
+  if (status === "error") {
     return (
       <div className="mx-auto flex min-h-full max-w-xl items-center px-4">
         <Card className="w-full">
-          <InlineError message={state.message} />
+          <InlineError
+            message={`Could not check your setup: ${error ?? "unknown error"}`}
+            onRetry={hydrate}
+          />
         </Card>
       </div>
     );
   }
 
-  if (!state.done) {
+  if (status === "pending") {
     return <Navigate to="/onboarding" replace />;
   }
 

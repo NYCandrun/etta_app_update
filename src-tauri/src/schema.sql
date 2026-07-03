@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS settings (
 CREATE TABLE IF NOT EXISTS content_cache (
     id              INTEGER PRIMARY KEY AUTOINCREMENT,
     concept_id      TEXT NOT NULL REFERENCES concepts(id) ON DELETE CASCADE,
-    content_type    TEXT NOT NULL CHECK(content_type IN ('lesson','quiz','explain','review')),
+    content_type    TEXT NOT NULL CHECK(content_type IN ('lesson','lesson_reinforced','quiz','explain','review')),
     payload_json    TEXT NOT NULL,                       -- CLEAN JSON only; NEVER append metadata
     mastery_band    TEXT,                                -- 'low'|'mid'|'high' side-band
     model_version   TEXT,

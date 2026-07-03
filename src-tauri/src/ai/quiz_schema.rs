@@ -15,13 +15,63 @@ use serde_json::Value;
 
 use crate::contract::{Question, QuestionType, QuizOption};
 
+/// The smallest quiz worth presenting or caching. An empty (or near-empty)
+/// array parses as valid JSON, and v1 happily cached `[]` and served a blank
+/// quiz page for 7 days (H21) — so degenerate counts are a VALIDATION error.
+pub const MIN_QUESTIONS: usize = 3;
+
 /// Parse and validate a model's quiz output (a JSON array). Returns the repaired
 /// list of `Question`s, or an error describing the first unrepairable problem.
 /// A `short_answer` type is coerced to `free_response`; truly unknown types are
-/// rejected with a clear error (NOT auto-zeroed).
+/// rejected with a clear error (NOT auto-zeroed). Quizzes with fewer than
+/// `MIN_QUESTIONS` questions are rejected outright — callers cache only Ok
+/// values, so a degenerate quiz can never poison the cache (H21).
+///
+/// DUPLICATE QUESTION IDS ARE REJECTED here (belt): a duplicate-id quiz breaks
+/// the exact-permutation gate's denominator, making an honest full submission
+/// unsubmittable for the cache's whole life. The GENERATION paths avoid ever
+/// hitting this by re-numbering fresh model output (`parse_and_renumber`); this
+/// strict check covers every OTHER consumer (cache re-validation, grading).
 pub fn parse_and_repair(raw: &str) -> Result<Vec<Question>, String> {
+    let out = parse_questions(raw)?;
+    let mut seen: std::collections::HashSet<&str> = std::collections::HashSet::new();
+    for q in &out {
+        if !seen.insert(q.id.as_str()) {
+            return Err(format!("duplicate question id {:?}", q.id));
+        }
+    }
+    Ok(out)
+}
+
+/// Parse fresh MODEL output for the generation paths: same validation/repair,
+/// then the ids are deterministically re-numbered q1..qN (the same pattern
+/// placement uses) — so duplicate or odd model-emitted ids are NORMALIZED
+/// rather than rejected, and cache/wire/grading always agree on q1..qN.
+pub fn parse_and_renumber(raw: &str) -> Result<Vec<Question>, String> {
+    let mut out = parse_questions(raw)?;
+    renumber_ids(&mut out);
+    Ok(out)
+}
+
+/// Deterministic canonical ids: q1..qN in array order.
+pub fn renumber_ids(questions: &mut [Question]) {
+    for (i, q) in questions.iter_mut().enumerate() {
+        q.id = format!("q{}", i + 1);
+    }
+}
+
+/// Shared parse core (no id-uniqueness policy — see the two public wrappers).
+/// Tolerates a markdown code fence around the JSON array, exactly like
+/// `parse_free_response_grade` does (models drift into fencing either output).
+fn parse_questions(raw: &str) -> Result<Vec<Question>, String> {
+    let trimmed = raw
+        .trim()
+        .trim_start_matches("```json")
+        .trim_start_matches("```")
+        .trim_end_matches("```")
+        .trim();
     let value: Value =
-        serde_json::from_str(raw).map_err(|e| format!("quiz output is not valid JSON: {e}"))?;
+        serde_json::from_str(trimmed).map_err(|e| format!("quiz output is not valid JSON: {e}"))?;
     let arr = value
         .as_array()
         .ok_or_else(|| "quiz output must be a JSON array".to_string())?;
@@ -29,6 +79,12 @@ pub fn parse_and_repair(raw: &str) -> Result<Vec<Question>, String> {
     let mut out = Vec::with_capacity(arr.len());
     for (i, item) in arr.iter().enumerate() {
         out.push(repair_one(item).map_err(|e| format!("question[{i}]: {e}"))?);
+    }
+    if out.len() < MIN_QUESTIONS {
+        return Err(format!(
+            "quiz has too few questions ({} < {MIN_QUESTIONS})",
+            out.len()
+        ));
     }
     Ok(out)
 }
@@ -172,13 +228,93 @@ mod tests {
     #[test]
     fn short_answer_is_repaired_to_free_response() {
         let raw = r#"[
-          {"id":"q1","type":"short_answer","prompt":"Define a limit.",
-           "explanation":"...","difficulty":2,"is_transfer":false}
+          {"id":"q1","type":"free_response","prompt":"a","rubric":"r",
+           "explanation":"","difficulty":1,"is_transfer":false},
+          {"id":"q2","type":"short_answer","prompt":"Define a limit.",
+           "explanation":"...","difficulty":2,"is_transfer":false},
+          {"id":"q3","type":"free_response","prompt":"c","rubric":"r",
+           "explanation":"","difficulty":1,"is_transfer":false}
         ]"#;
         let qs = parse_and_repair(raw).expect("should repair, not fail");
-        assert_eq!(qs.len(), 1);
-        assert_eq!(qs[0].question_type, QuestionType::FreeResponse);
-        assert!(qs[0].rubric.is_some(), "synthesized rubric for grading");
+        assert_eq!(qs.len(), 3);
+        assert_eq!(qs[1].question_type, QuestionType::FreeResponse);
+        assert!(qs[1].rubric.is_some(), "synthesized rubric for grading");
+    }
+
+    /// H21: an empty array is VALID JSON but a degenerate quiz — it must be
+    /// rejected (v1 cached `[]` and served a blank quiz page for 7 days). The
+    /// same applies to any count below the minimum; the minimum itself passes.
+    #[test]
+    fn empty_or_too_small_quiz_is_rejected() {
+        let err = parse_and_repair("[]").unwrap_err();
+        assert!(err.contains("too few questions"), "got: {err}");
+
+        let two = r#"[
+          {"id":"q1","type":"free_response","prompt":"a","rubric":"r",
+           "explanation":"","difficulty":1},
+          {"id":"q2","type":"free_response","prompt":"b","rubric":"r",
+           "explanation":"","difficulty":1}
+        ]"#;
+        assert!(parse_and_repair(two).is_err(), "2 < MIN_QUESTIONS");
+
+        let three = r#"[
+          {"id":"q1","type":"free_response","prompt":"a","rubric":"r",
+           "explanation":"","difficulty":1},
+          {"id":"q2","type":"free_response","prompt":"b","rubric":"r",
+           "explanation":"","difficulty":1},
+          {"id":"q3","type":"free_response","prompt":"c","rubric":"r",
+           "explanation":"","difficulty":1}
+        ]"#;
+        assert_eq!(parse_and_repair(three).unwrap().len(), MIN_QUESTIONS);
+    }
+
+    /// R2: duplicate model-emitted question ids. The strict parse (cache
+    /// re-validation, grading) REJECTS them; the generation parse NORMALIZES
+    /// them to q1..qN, and the permutation gate then accepts an honest full
+    /// submission of the served quiz.
+    #[test]
+    fn duplicate_ids_rejected_strictly_but_renumbered_for_generation() {
+        let dup = r#"[
+          {"id":"q1","type":"free_response","prompt":"a","rubric":"r",
+           "explanation":"","difficulty":1},
+          {"id":"q2","type":"free_response","prompt":"b","rubric":"r",
+           "explanation":"","difficulty":1},
+          {"id":"q2","type":"free_response","prompt":"c","rubric":"r",
+           "explanation":"","difficulty":1}
+        ]"#;
+
+        let err = parse_and_repair(dup).unwrap_err();
+        assert!(err.contains("duplicate question id"), "got: {err}");
+
+        let qs = parse_and_renumber(dup).expect("generation path normalizes");
+        let ids: Vec<&str> = qs.iter().map(|q| q.id.as_str()).collect();
+        assert_eq!(ids, ["q1", "q2", "q3"], "unique sequential ids");
+        // The served quiz is gradable: a full submission passes the H9/H15
+        // exact-permutation gate.
+        assert!(crate::validate::answer_permutation(&ids, ["q3", "q1", "q2"]).is_ok());
+        // And the normalized payload re-passes the STRICT parse (what the
+        // cache-hit and grading paths run).
+        let payload = serde_json::to_string(&qs).unwrap();
+        assert!(parse_and_repair(&payload).is_ok());
+    }
+
+    /// R10: a markdown-fenced JSON array parses (same tolerance as
+    /// `parse_free_response_grade`) — with and without the `json` language tag.
+    #[test]
+    fn markdown_fenced_json_is_tolerated() {
+        let inner = r#"[
+          {"id":"q1","type":"free_response","prompt":"a","rubric":"r",
+           "explanation":"","difficulty":1},
+          {"id":"q2","type":"free_response","prompt":"b","rubric":"r",
+           "explanation":"","difficulty":1},
+          {"id":"q3","type":"free_response","prompt":"c","rubric":"r",
+           "explanation":"","difficulty":1}
+        ]"#;
+        let fenced_json = format!("```json\n{inner}\n```");
+        assert_eq!(parse_and_repair(&fenced_json).unwrap().len(), 3);
+        let fenced_bare = format!("```\n{inner}\n```");
+        assert_eq!(parse_and_repair(&fenced_bare).unwrap().len(), 3);
+        assert_eq!(parse_and_renumber(&fenced_json).unwrap().len(), 3);
     }
 
     /// A genuinely unknown type is rejected with an error — NOT auto-zeroed.

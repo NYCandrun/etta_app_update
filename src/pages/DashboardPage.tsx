@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Card, InlineError, OfflineNotice, Skeleton, useToast } from "../components/ui";
+import { ApiKeyHint } from "../components/ApiKeyHint";
 import { CurriculumDiagram } from "../components/CurriculumDiagram";
 import { ConceptList } from "../components/ConceptList";
 import { ProgressIndicators } from "../components/ProgressIndicators";
 import { ipc } from "../lib/ipc";
 import { useOnline } from "../lib/useOnline";
+import { useCachedLessonIds } from "../lib/useLessonCache";
 import { LABELS } from "../lib/labels";
 import { useCurriculumStore } from "../stores/useCurriculumStore";
 import type { Concept, DailySession } from "../types/contract";
@@ -66,6 +68,26 @@ export function DashboardPage() {
     [concepts],
   );
 
+  // Offline coherence: probe the content cache for every startable (non-
+  // locked) concept while offline. Dashboard CTAs and the ConceptList rows
+  // below consume the SAME result, so "startable offline" reads identically
+  // everywhere.
+  const probeIds = useMemo(
+    () =>
+      Object.values(concepts)
+        .filter((c) => c.state !== "locked")
+        .map((c) => c.id)
+        .sort(),
+    [concepts],
+  );
+  const cachedLessonIds = useCachedLessonIds(probeIds, online);
+  // Online: everything is startable. Offline: only concepts the probe
+  // confirmed as cached (no verdict yet = not startable, the safe default).
+  const isStartable = useCallback(
+    (id: string): boolean => online || (cachedLessonIds?.has(id) ?? false),
+    [online, cachedLessonIds],
+  );
+
   // The first concept of today's interleaved set is where "Start Learning"
   // begins. Prefer a new concept, then a review, then anything in the set.
   const firstConceptId = useMemo(() => {
@@ -78,10 +100,15 @@ export function DashboardPage() {
     );
   }, [session]);
 
-  // "Continue where you left off": the most-recent in_progress concept.
+  // "Continue where you left off": the MOST RECENTLY attempted in_progress
+  // concept (max lastAttemptAt — ISO 8601 strings compare lexicographically;
+  // never-attempted in_progress concepts sort last).
   const continueConcept = useMemo<Concept | null>(() => {
     const inProgress = Object.values(concepts).filter(
       (c) => c.state === "in_progress",
+    );
+    inProgress.sort((a, b) =>
+      (b.lastAttemptAt ?? "").localeCompare(a.lastAttemptAt ?? ""),
     );
     return inProgress[0] ?? null;
   }, [concepts]);
@@ -111,6 +138,7 @@ export function DashboardPage() {
     return (
       <Card>
         <InlineError message={error} onRetry={load} />
+        <ApiKeyHint error={error} />
       </Card>
     );
   }
@@ -149,34 +177,46 @@ export function DashboardPage() {
                 Nothing scheduled right now — browse concepts below to begin.
               </p>
             )}
-            {!online && (
-              <OfflineNotice
-                className="mt-4"
-                detail="You're offline. Lessons and quizzes need a connection, so starting a session is paused. You can still browse your curriculum below."
-              />
-            )}
-            <div className="mt-5 flex items-center justify-between">
+            <OfflineNotice
+              className="mt-4"
+              detail="You're offline. Lessons marked 'Available offline' are cached and still startable; everything else needs a connection. Quizzes always need a connection."
+            />
+            <div className="mt-5 flex items-center justify-between gap-3">
               {continueConcept ? (
                 <button
                   type="button"
                   onClick={() => navigate(`/lesson/${continueConcept.id}`)}
-                  disabled={!online}
-                  aria-disabled={!online}
-                  title={!online ? "Lessons need a connection" : undefined}
+                  disabled={!isStartable(continueConcept.id)}
+                  aria-disabled={!isStartable(continueConcept.id)}
+                  title={
+                    !isStartable(continueConcept.id)
+                      ? "Lessons need a connection"
+                      : undefined
+                  }
                   className="rounded text-sm text-primary underline hover:no-underline disabled:cursor-not-allowed disabled:text-text-muted disabled:no-underline"
                 >
                   Continue where you left off: {continueConcept.title}
+                  {!online && isStartable(continueConcept.id)
+                    ? " (available offline)"
+                    : ""}
                 </button>
               ) : (
                 <span />
               )}
               <Button
                 onClick={startSession}
-                disabled={!firstConceptId || !online}
-                aria-disabled={!online}
-                title={!online ? "Lessons need a connection" : undefined}
+                disabled={!firstConceptId || !isStartable(firstConceptId)}
+                aria-disabled={!firstConceptId || !isStartable(firstConceptId)}
+                title={
+                  firstConceptId && !isStartable(firstConceptId)
+                    ? "Lessons need a connection"
+                    : undefined
+                }
               >
                 {LABELS.startLearning}
+                {!online && firstConceptId && isStartable(firstConceptId)
+                  ? " (available offline)"
+                  : ""}
               </Button>
             </div>
           </>
@@ -193,10 +233,17 @@ export function DashboardPage() {
         <CurriculumDiagram className="mt-4" />
       </Card>
 
-      {/* Browse concepts: the actual searchable, keyboard-navigable surface. */}
+      {/* Browse concepts: the actual searchable, keyboard-navigable surface.
+          It shares the SAME offline cache verdicts as the CTAs above. */}
       <Card>
         <h2 className="text-base font-semibold text-text">Browse concepts</h2>
-        {statesLoaded && <ConceptList className="mt-3" />}
+        {statesLoaded && (
+          <ConceptList
+            className="mt-3"
+            offline={!online}
+            cachedLessonIds={cachedLessonIds}
+          />
+        )}
       </Card>
     </div>
   );

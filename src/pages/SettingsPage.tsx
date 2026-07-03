@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { save } from "@tauri-apps/plugin-dialog";
 import { writeTextFile } from "@tauri-apps/plugin-fs";
-import { Button, Card, OfflineNotice, Spinner, useToast } from "../components/ui";
-import { ipc } from "../lib/ipc";
+import { Button, Card, InlineError, OfflineNotice, Skeleton, useToast } from "../components/ui";
+import { formatIpcError, ipc } from "../lib/ipc";
 import { useOnline } from "../lib/useOnline";
 import { useSettingsStore } from "../stores/useSettingsStore";
 import type { ThemePreference } from "../lib/theme";
@@ -32,24 +32,25 @@ export function SettingsPage() {
   const [busy, setBusy] = useState(false);
 
   const [models, setModels] = useState<string[]>([]);
+  const [modelsError, setModelsError] = useState<string | null>(null);
   const [testState, setTestState] = useState<"idle" | "testing" | "ok" | "fail">("idle");
   const [exportState, setExportState] = useState<"idle" | "exporting" | "done">("idle");
+  const [hydrateError, setHydrateError] = useState<string | null>(null);
 
-  // Load persisted settings once into the store.
+  // Load persisted settings once into the store. A failure renders a real
+  // inline error card with Retry in place of the skeleton — never a permanent
+  // skeleton once a transient toast has dismissed.
+  const loadSettings = useCallback(() => {
+    setHydrateError(null);
+    void ipc.getSettings().then((res) => {
+      if (res.ok) setSettings(res.data);
+      else setHydrateError(res.error);
+    });
+  }, [setSettings]);
+
   useEffect(() => {
-    let active = true;
-    const load = () => {
-      void ipc.getSettings().then((res) => {
-        if (!active) return;
-        if (res.ok) setSettings(res.data);
-        else showError(res.error, load);
-      });
-    };
-    load();
-    return () => {
-      active = false;
-    };
-  }, [setSettings, showError]);
+    loadSettings();
+  }, [loadSettings]);
 
   const onSaveKey = async () => {
     if (!apiKeyInput.trim()) return;
@@ -61,6 +62,9 @@ export function SettingsPage() {
       return;
     }
     setApiKeyInput("");
+    // A REPLACED key invalidates any previous "Connected" verdict — the test
+    // proved the OLD key worked, not this one.
+    setTestState("idle");
     const refreshed = await ipc.getSettings();
     if (refreshed.ok) setSettings(refreshed.data);
   };
@@ -73,39 +77,73 @@ export function SettingsPage() {
       showError(res.error, () => void onDeleteKey());
       return;
     }
+    // No key -> "Connected" would be a lie; reset the verdict.
+    setTestState("idle");
     const refreshed = await ipc.getSettings();
     if (refreshed.ok) setSettings(refreshed.data);
   };
 
+  // Optimistic writes ROLL BACK on IPC failure: the store must mirror what is
+  // actually on disk again, never keep an unpersisted value that a relaunch
+  // would silently revert (H6). Rollbacks are FIELD-granular and applied
+  // against the store's CURRENT snapshot: a whole-settings snapshot captured
+  // at handler start would revert unrelated fields whose own concurrent
+  // writes succeeded. And if a LATER write already changed this same field,
+  // the rollback is skipped — reverting would clobber the newer value.
   const onChangeTheme = async (theme: ThemePreference) => {
+    const previous = settings.theme;
     setTheme(theme); // applies live; store is source of truth
     const res = await ipc.setSetting("theme", theme);
-    if (!res.ok) showError(res.error, () => void onChangeTheme(theme));
+    if (!res.ok) {
+      if (useSettingsStore.getState().settings.theme === theme) {
+        setTheme(previous);
+      }
+      showError(formatIpcError(res.error), () => void onChangeTheme(theme));
+    }
   };
 
   const onChangeGoal = async (minutes: number) => {
+    const previousGoal = settings.dailyGoalMinutes;
     setSettings({ ...settings, dailyGoalMinutes: minutes as 15 | 30 | 45 | 60 });
     const res = await ipc.setSetting("daily_goal_minutes", String(minutes));
-    if (!res.ok) showError(res.error, () => void onChangeGoal(minutes));
+    if (!res.ok) {
+      const current = useSettingsStore.getState().settings;
+      if (current.dailyGoalMinutes === minutes) {
+        setSettings({ ...current, dailyGoalMinutes: previousGoal });
+      }
+      showError(formatIpcError(res.error), () => void onChangeGoal(minutes));
+    }
   };
 
   // Load the model list for the picker once (cached server-side; no completion
-  // request is burned). Falls back to the current hardcoded list on failure.
-  useEffect(() => {
-    let active = true;
+  // request is burned). A failure is surfaced INLINE with retry — the picker
+  // still works with the current value, but the learner must know the list is
+  // incomplete rather than silently seeing one option.
+  const loadModels = useCallback(() => {
+    setModelsError(null);
     void ipc.listAvailableModels().then((res) => {
-      if (active && res.ok) setModels(res.data);
+      if (res.ok) setModels(res.data);
+      else setModelsError(res.error);
     });
-    return () => {
-      active = false;
-    };
   }, []);
 
+  useEffect(() => {
+    loadModels();
+  }, [loadModels]);
+
   const onChangeModel = async (model: string) => {
+    const previousModel = settings.baseModel;
     setSettings({ ...settings, baseModel: model });
     setTestState("idle");
     const res = await ipc.setSetting("base_model", model);
-    if (!res.ok) showError(res.error, () => void onChangeModel(model));
+    if (!res.ok) {
+      // Field-granular rollback against the CURRENT snapshot (see above).
+      const current = useSettingsStore.getState().settings;
+      if (current.baseModel === model) {
+        setSettings({ ...current, baseModel: previousModel });
+      }
+      showError(formatIpcError(res.error), () => void onChangeModel(model));
+    }
   };
 
   // Real connectivity test using the CONFIGURED model (a tiny completion).
@@ -114,7 +152,7 @@ export function SettingsPage() {
     const res = await ipc.testConnection();
     if (!res.ok) {
       setTestState("fail");
-      showError(res.error, () => void onTestConnection());
+      showError(formatIpcError(res.error), () => void onTestConnection());
       return;
     }
     setTestState(res.data ? "ok" : "fail");
@@ -161,10 +199,36 @@ export function SettingsPage() {
   };
 
   if (!hydrated) {
+    if (hydrateError) {
+      return (
+        <div className="flex flex-col gap-4">
+          <Card>
+            <InlineError
+              message={`Could not load your settings: ${formatIpcError(hydrateError)}`}
+              onRetry={loadSettings}
+            />
+          </Card>
+        </div>
+      );
+    }
+    // Full-page loading uses the app-wide Skeleton primitive, sized roughly
+    // like the settings cards (Spinner is reserved for inline button-busy
+    // states — blocklist #18).
     return (
-      <Card>
-        <Spinner label="Loading settings" />
-      </Card>
+      <div className="flex flex-col gap-4" aria-busy="true">
+        <Card>
+          <Skeleton className="h-6 w-1/4" />
+        </Card>
+        <Card>
+          <Skeleton className="h-5 w-1/3" />
+          <Skeleton className="mt-3 h-10 w-full" />
+          <Skeleton className="mt-2 h-9 w-2/3" />
+        </Card>
+        <Card>
+          <Skeleton className="h-5 w-1/4" />
+          <Skeleton className="mt-3 h-10 w-full" />
+        </Card>
+      </div>
     );
   }
 
@@ -236,6 +300,12 @@ export function SettingsPage() {
               </option>
             ))}
           </select>
+          {modelsError && (
+            <InlineError
+              message={`Could not load the model list: ${formatIpcError(modelsError)}`}
+              onRetry={loadModels}
+            />
+          )}
           <div className="flex items-center gap-2">
             <Button
               variant="secondary"
@@ -258,7 +328,7 @@ export function SettingsPage() {
                       : ""}
             </span>
           </div>
-          {!online && <OfflineNotice className="mt-3" />}
+          <OfflineNotice className="mt-3" />
         </div>
       </Card>
 

@@ -16,7 +16,7 @@
           "id": "de_001",
           "title": "Introduction to Differential Equations",
           "prerequisites": [
-            "svc_001"
+            "svc_043"
           ],
           "learning_objectives": [
             "State the precise definition behind Introduction to Differential Equations",
@@ -221,7 +221,7 @@
             "misapplies_a_rule_out_of_domain",
             "off_by_one_in_indexing"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 2
         },
         {
           "id": "de_012",
@@ -320,7 +320,7 @@
             "ignores_domain_restrictions",
             "confuses_necessary_and_sufficient"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 3
         },
         {
           "id": "de_017",
@@ -339,7 +339,7 @@
             "memorizes_without_understanding",
             "sign_error_in_manipulation"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 3
         },
         {
           "id": "de_018",
@@ -401,7 +401,7 @@
             "confuses_definition_with_example",
             "drops_units_in_calculation"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 4
         },
         {
           "id": "de_021",
@@ -457,7 +457,7 @@
             "forgets_boundary_conditions",
             "swaps_dependent_and_independent_variables"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 5
         },
         {
           "id": "de_024",
@@ -475,7 +475,7 @@
             "forgets_boundary_conditions",
             "swaps_dependent_and_independent_variables"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 5
         },
         {
           "id": "de_025",
@@ -494,7 +494,7 @@
             "ignores_domain_restrictions",
             "confuses_necessary_and_sufficient"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 5
         },
         {
           "id": "de_026",
@@ -512,7 +512,7 @@
             "ignores_domain_restrictions",
             "confuses_necessary_and_sufficient"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 5
         },
         {
           "id": "de_027",

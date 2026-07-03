@@ -46,7 +46,10 @@ function escapeXml(s) {
 
 const NODE = 12; // concept dot diameter
 const NODE_GAP = 6;
-const NODES_PER_ROW = 6;
+// 8 per row (was 6): widens the card so every wrapped title line fits the
+// 11px-semibold text budget — the longest line ("Statistical Mechanics")
+// needs ~135px, and 8 columns give ~138px inside the padding.
+const NODES_PER_ROW = 8;
 const CARD_PAD = 14;
 const CARD_HEADER = 26;
 const CARD_GAP_Y = 24;
@@ -58,9 +61,42 @@ function domainConcepts(domain) {
   return domain.modules.flatMap((m) => m.concepts);
 }
 
-function cardHeight(conceptCount) {
+// Title typography: 11px semibold ≈ 6.4px average glyph width. Long domain
+// names ("Single-Variable Calculus") overflow the 130px card, so titles wrap
+// to at most two lines and the card header grows per extra line.
+const TITLE_CHAR_W = 6.4;
+const TITLE_LINE_H = 14;
+const TITLE_BUDGET = Math.floor((COL_W - CARD_PAD * 2) / TITLE_CHAR_W);
+
+function wrapTitle(name) {
+  const words = String(name).split(/\s+/);
+  const lines = [];
+  let cur = "";
+  for (const w of words) {
+    const candidate = cur ? `${cur} ${w}` : w;
+    if (candidate.length <= TITLE_BUDGET || !cur) {
+      cur = candidate;
+    } else {
+      lines.push(cur);
+      cur = w;
+    }
+  }
+  if (cur) lines.push(cur);
+  // Two lines max: fold any overflow into the second line (rare; slightly
+  // over-budget beats a third line that bloats the header).
+  if (lines.length > 2) {
+    return [lines[0], lines.slice(1).join(" ")];
+  }
+  return lines;
+}
+
+function headerHeight(titleLines) {
+  return CARD_HEADER + (titleLines.length - 1) * TITLE_LINE_H;
+}
+
+function cardHeight(conceptCount, headerH) {
   const rows = Math.max(1, Math.ceil(conceptCount / NODES_PER_ROW));
-  return CARD_HEADER + CARD_PAD + rows * (NODE + NODE_GAP) - NODE_GAP + CARD_PAD;
+  return headerH + CARD_PAD + rows * (NODE + NODE_GAP) - NODE_GAP + CARD_PAD;
 }
 
 // ---- Build layout ----
@@ -76,10 +112,14 @@ function layout(domains) {
     let y = MARGIN + CARD_HEADER; // leave room for the phase title
     for (const d of domains.filter((dd) => dd.phase === phase)) {
       const concepts = domainConcepts(d);
-      const h = cardHeight(concepts.length);
+      const titleLines = wrapTitle(d.display_name);
+      const headerH = headerHeight(titleLines);
+      const h = cardHeight(concepts.length, headerH);
       cards.push({
         domain: d.domain,
         display_name: d.display_name,
+        titleLines,
+        headerH,
         phase,
         x,
         y,
@@ -92,7 +132,7 @@ function layout(domains) {
         const col = i % NODES_PER_ROW;
         positions[c.id] = {
           cx: x + CARD_PAD + col * (NODE + NODE_GAP) + NODE / 2,
-          cy: y + CARD_HEADER + CARD_PAD + row * (NODE + NODE_GAP) + NODE / 2,
+          cy: y + headerH + CARD_PAD + row * (NODE + NODE_GAP) + NODE / 2,
         };
       });
       y += h + CARD_GAP_Y;
@@ -160,11 +200,21 @@ function render(domains) {
       const a = cardCenter(e.from);
       const b = cardCenter(e.to);
       if (!a || !b) return "";
-      // Anchor edges to card right/left mid-points for a cleaner read.
-      const x1 = a.c.x + a.c.w;
       const y1 = a.c.y + a.c.h / 2;
-      const x2 = b.c.x;
       const y2 = b.c.y + b.c.h / 2;
+      if (a.c.x === b.c.x) {
+        // SAME-COLUMN edge (e.g. algebra → trigonometry within phase 1): the
+        // right→left anchoring would draw a backwards loop underneath the
+        // cards. Route it as a clean lane bulging out on the LEFT of the
+        // column instead, anchored to both cards' left mid-points.
+        const x1 = a.c.x;
+        const x2 = b.c.x;
+        const mx = a.c.x - 36;
+        return `<path d="M${x1.toFixed(1)},${y1.toFixed(1)} C${mx.toFixed(1)},${y1.toFixed(1)} ${mx.toFixed(1)},${y2.toFixed(1)} ${x2.toFixed(1)},${y2.toFixed(1)}" fill="none" stroke="rgb(var(--color-surface-border))" stroke-width="1.5" opacity="0.7"/>`;
+      }
+      // Cross-column: anchor to card right/left mid-points for a clean read.
+      const x1 = a.c.x + a.c.w;
+      const x2 = b.c.x;
       const mx = (x1 + x2) / 2;
       return `<path d="M${x1.toFixed(1)},${y1.toFixed(1)} C${mx.toFixed(1)},${y1.toFixed(1)} ${mx.toFixed(1)},${y2.toFixed(1)} ${x2.toFixed(1)},${y2.toFixed(1)}" fill="none" stroke="rgb(var(--color-surface-border))" stroke-width="1.5" opacity="0.7"/>`;
     })
@@ -178,14 +228,22 @@ function render(domains) {
     .join("\n");
 
   const cardSvg = cards
-    .map(
-      (c) =>
+    .map((c) => {
+      // Wrapped title lines (never overflowing the card width).
+      const title = c.titleLines
+        .map(
+          (line, i) =>
+            `<text x="${c.x + CARD_PAD}" y="${c.y + 17 + i * TITLE_LINE_H}" font-size="11" font-weight="600" fill="rgb(var(--color-text))">${escapeXml(line)}</text>`,
+        )
+        .join("");
+      return (
         `<g>` +
         `<rect x="${c.x}" y="${c.y}" width="${c.w}" height="${c.h}" rx="10" ` +
         `fill="rgb(var(--color-surface-raised))" stroke="rgb(var(--color-surface-border))" stroke-width="1"/>` +
-        `<text x="${c.x + CARD_PAD}" y="${c.y + 17}" font-size="11" font-weight="600" fill="rgb(var(--color-text))">${escapeXml(c.display_name)}</text>` +
-        `</g>`,
-    )
+        title +
+        `</g>`
+      );
+    })
     .join("\n");
 
   // Static concept nodes (neutral). Live status is overlaid by the React layer

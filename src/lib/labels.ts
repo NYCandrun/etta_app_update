@@ -1,14 +1,18 @@
 // Standardized, app-wide button/action labels (blocklist #19). Import from
 // here instead of hardcoding strings so quiz submission, navigation, etc. read
-// identically on every screen.
+// identically on every screen. Every entry here MUST have a consumer — dead
+// entries (nextQuestion, saveSettings) were deleted rather than left as
+// aspirational strings.
 export const LABELS = {
-  // The quiz answer submit action is ALWAYS "Check Answer" — never a mix of
-  // "Submit" / "Check" / "Continue".
-  checkAnswer: "Check Answer",
-  nextQuestion: "Next Question",
+  // Quiz/placement advance actions: "Next" between questions, an explicit
+  // finish label on the last one (the button advances/submits — it never
+  // reveals per-question correctness, so "Check Answer" was a lie; WP3).
+  next: "Next",
+  finishQuiz: "Finish quiz",
+  finishPlacement: "Finish placement",
   startLearning: "Start Learning",
+  // Shared by ErrorToast and InlineError (and any page-level retry actions).
   retry: "Retry",
-  saveSettings: "Save Settings",
   continue: "Continue",
 } as const;
 

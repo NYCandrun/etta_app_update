@@ -22,7 +22,11 @@ use serde::Deserialize;
 use crate::validate::is_valid_concept_id;
 
 /// Bump when the bundled curriculum content changes so the loader re-imports.
-pub const CURRICULUM_VERSION: i64 = 1;
+/// v2: H14 — cross-domain anchors moved from each prerequisite domain's FIRST
+/// concept to its LAST (capstone), and difficulty_tier recomputed over the
+/// domain's total concept count. Without this bump the re-anchoring would be a
+/// silent no-op on existing DBs (the loader only re-imports on version change).
+pub const CURRICULUM_VERSION: i64 = 2;
 
 /// The 12 bundled domain files (Appendix D.2 ordering by phase).
 const DOMAIN_FILES: &[&str] = &[
@@ -307,5 +311,103 @@ mod tests {
             "expected ~420 concepts, got {}",
             concepts.len()
         );
+    }
+
+    /// H14: every cross-domain prerequisite edge must point at the LAST concept
+    /// (capstone) of the prerequisite domain — never its first concept, which
+    /// let a learner satisfy e.g. "requires Algebra" after one intro concept.
+    /// Also locks the tier fix: with the domain-total denominator, each domain
+    /// spans the full tier range (first concept tier 1, capstone tier 5).
+    #[test]
+    fn cross_domain_anchors_are_domain_capstones() {
+        let concepts = parse_bundled().expect("parse bundled domains");
+        // parse_bundled emits concepts in module order, so the last concept
+        // seen per domain is that domain's capstone.
+        let mut capstone: HashMap<&str, &LoadedConcept> = HashMap::new();
+        let mut first: HashMap<&str, &LoadedConcept> = HashMap::new();
+        let mut domain_of: HashMap<&str, &str> = HashMap::new();
+        for c in &concepts {
+            capstone.insert(c.domain.as_str(), c);
+            first.entry(c.domain.as_str()).or_insert(c);
+            domain_of.insert(c.id.as_str(), c.domain.as_str());
+        }
+
+        let mut cross_edges = 0;
+        for c in &concepts {
+            for p in &c.prerequisites {
+                let pd = domain_of[p.as_str()];
+                if pd != c.domain {
+                    cross_edges += 1;
+                    assert_eq!(
+                        p,
+                        &capstone[pd].id,
+                        "cross-domain edge {} -> {} must anchor {}'s capstone",
+                        c.id,
+                        p,
+                        pd
+                    );
+                }
+            }
+        }
+        // One anchor per non-root domain (11 of 12 domains anchor upstream).
+        assert_eq!(cross_edges, 11, "expected exactly one anchor per domain");
+
+        for (domain, c) in &capstone {
+            assert_eq!(c.difficulty_tier, 5, "{domain} capstone must be tier 5");
+        }
+        for (domain, c) in &first {
+            assert_eq!(c.difficulty_tier, 1, "{domain} first concept is tier 1");
+        }
+    }
+
+    /// H14 (binding constraint): a CURRICULUM_VERSION change must re-import the
+    /// bundled data through the upsert path — updating authored fields like
+    /// `prerequisites` on EXISTING rows while preserving learner progress.
+    /// Without the version bump the re-anchoring is a silent no-op on any DB
+    /// that already imported v1.
+    #[test]
+    fn version_change_reimports_through_upsert_preserving_progress() {
+        let conn = rusqlite::Connection::open_in_memory().unwrap();
+        crate::db::init_schema(&conn).unwrap();
+
+        // Simulate a DB imported at the PREVIOUS curriculum version: trig_001
+        // still carries the old first-concept anchor plus real learner progress.
+        conn.execute(
+            "INSERT INTO concepts(id, domain, module, title, prerequisites, \
+                                  mastery_score, attempt_count) \
+             VALUES('trig_001', 'trigonometry', 'trig_m01', 'Stale Title', \
+                    '[\"alg_001\"]', 0.55, 4)",
+            [],
+        )
+        .unwrap();
+        crate::settings::set_curriculum_version(&conn, CURRICULUM_VERSION - 1).unwrap();
+
+        let n = load_into_db(&conn).expect("version change must re-import");
+        assert!(n > 0, "re-import must run on a version change");
+
+        let (prereqs, title, mastery, attempts): (String, String, f64, i64) = conn
+            .query_row(
+                "SELECT prerequisites, title, mastery_score, attempt_count \
+                 FROM concepts WHERE id = 'trig_001'",
+                [],
+                |r| Ok((r.get(0)?, r.get(1)?, r.get(2)?, r.get(3)?)),
+            )
+            .unwrap();
+
+        // Authored fields refreshed through the upsert: the anchor now points
+        // at the bundled (capstone) prerequisite, not the stale alg_001.
+        let got: Vec<String> = serde_json::from_str(&prereqs).unwrap();
+        let bundled = parse_bundled().unwrap();
+        let expected = &bundled.iter().find(|c| c.id == "trig_001").unwrap();
+        assert_eq!(got, expected.prerequisites);
+        assert_ne!(got, vec!["alg_001".to_string()], "stale anchor must be replaced");
+        assert_eq!(title, expected.title, "authored title refreshed");
+
+        // Learner progress columns preserved by the upsert.
+        assert!((mastery - 0.55).abs() < 1e-9, "mastery preserved");
+        assert_eq!(attempts, 4, "attempt_count preserved");
+
+        // And at the current version the loader is a no-op (idempotent).
+        assert_eq!(load_into_db(&conn).unwrap(), 0);
     }
 }

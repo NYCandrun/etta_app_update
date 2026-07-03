@@ -18,7 +18,7 @@
           "id": "cm_001",
           "title": "Position, Velocity, Acceleration",
           "prerequisites": [
-            "mvc_001"
+            "mvc_033"
           ],
           "learning_objectives": [
             "State the precise definition behind Position, Velocity, Acceleration",
@@ -142,7 +142,7 @@
             "memorizes_without_understanding",
             "sign_error_in_manipulation"
           ],
-          "difficulty_tier": 2
+          "difficulty_tier": 1
         }
       ]
     },
@@ -260,7 +260,7 @@
             "forgets_boundary_conditions",
             "swaps_dependent_and_independent_variables"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 2
         },
         {
           "id": "cm_014",
@@ -278,7 +278,7 @@
             "forgets_boundary_conditions",
             "swaps_dependent_and_independent_variables"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 2
         }
       ]
     },
@@ -359,7 +359,7 @@
             "memorizes_without_understanding",
             "sign_error_in_manipulation"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 3
         },
         {
           "id": "cm_019",
@@ -378,7 +378,7 @@
             "confuses_definition_with_example",
             "drops_units_in_calculation"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 3
         },
         {
           "id": "cm_020",
@@ -396,7 +396,7 @@
             "confuses_definition_with_example",
             "drops_units_in_calculation"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 3
         },
         {
           "id": "cm_021",
@@ -440,7 +440,7 @@
             "misapplies_a_rule_out_of_domain",
             "off_by_one_in_indexing"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 4
         },
         {
           "id": "cm_023",
@@ -459,7 +459,7 @@
             "forgets_boundary_conditions",
             "swaps_dependent_and_independent_variables"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 4
         },
         {
           "id": "cm_024",
@@ -477,7 +477,7 @@
             "forgets_boundary_conditions",
             "swaps_dependent_and_independent_variables"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 4
         },
         {
           "id": "cm_025",
@@ -496,7 +496,7 @@
             "ignores_domain_restrictions",
             "confuses_necessary_and_sufficient"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 4
         },
         {
           "id": "cm_026",
@@ -514,7 +514,7 @@
             "ignores_domain_restrictions",
             "confuses_necessary_and_sufficient"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 4
         },
         {
           "id": "cm_027",
@@ -533,7 +533,7 @@
             "memorizes_without_understanding",
             "sign_error_in_manipulation"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 4
         },
         {
           "id": "cm_028",
@@ -551,7 +551,7 @@
             "memorizes_without_understanding",
             "sign_error_in_manipulation"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 5
         },
         {
           "id": "cm_029",
@@ -570,7 +570,7 @@
             "confuses_definition_with_example",
             "drops_units_in_calculation"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 5
         },
         {
           "id": "cm_030",
@@ -588,7 +588,7 @@
             "confuses_definition_with_example",
             "drops_units_in_calculation"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 5
         },
         {
           "id": "cm_031",
@@ -607,7 +607,7 @@
             "misapplies_a_rule_out_of_domain",
             "off_by_one_in_indexing"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 5
         },
         {
           "id": "cm_032",
@@ -625,7 +625,7 @@
             "misapplies_a_rule_out_of_domain",
             "off_by_one_in_indexing"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 5
         },
         {
           "id": "cm_033",
@@ -644,7 +644,7 @@
             "forgets_boundary_conditions",
             "swaps_dependent_and_independent_variables"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 5
         }
       ]
     }

@@ -16,7 +16,7 @@
           "id": "svc_001",
           "title": "Epsilon-Delta Definition",
           "prerequisites": [
-            "prec_001"
+            "prec_025"
           ],
           "learning_objectives": [
             "State the precise definition behind Epsilon-Delta Definition",
@@ -184,7 +184,7 @@
             "confuses_definition_with_example",
             "drops_units_in_calculation"
           ],
-          "difficulty_tier": 2
+          "difficulty_tier": 1
         },
         {
           "id": "svc_010",
@@ -339,7 +339,7 @@
             "memorizes_without_understanding",
             "sign_error_in_manipulation"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 2
         },
         {
           "id": "svc_018",
@@ -357,7 +357,7 @@
             "memorizes_without_understanding",
             "sign_error_in_manipulation"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 2
         },
         {
           "id": "svc_019",
@@ -494,7 +494,7 @@
             "ignores_domain_restrictions",
             "confuses_necessary_and_sufficient"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 3
         },
         {
           "id": "svc_026",
@@ -512,7 +512,7 @@
             "ignores_domain_restrictions",
             "confuses_necessary_and_sufficient"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 3
         },
         {
           "id": "svc_027",
@@ -630,7 +630,7 @@
             "misapplies_a_rule_out_of_domain",
             "off_by_one_in_indexing"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 4
         },
         {
           "id": "svc_033",
@@ -649,7 +649,7 @@
             "forgets_boundary_conditions",
             "swaps_dependent_and_independent_variables"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 4
         },
         {
           "id": "svc_034",
@@ -667,7 +667,7 @@
             "forgets_boundary_conditions",
             "swaps_dependent_and_independent_variables"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 4
         },
         {
           "id": "svc_035",
@@ -686,7 +686,7 @@
             "ignores_domain_restrictions",
             "confuses_necessary_and_sufficient"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 4
         },
         {
           "id": "svc_036",
@@ -704,7 +704,7 @@
             "ignores_domain_restrictions",
             "confuses_necessary_and_sufficient"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 5
         },
         {
           "id": "svc_037",
@@ -723,7 +723,7 @@
             "memorizes_without_understanding",
             "sign_error_in_manipulation"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 5
         },
         {
           "id": "svc_038",
@@ -741,7 +741,7 @@
             "memorizes_without_understanding",
             "sign_error_in_manipulation"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 5
         },
         {
           "id": "svc_039",
@@ -760,7 +760,7 @@
             "confuses_definition_with_example",
             "drops_units_in_calculation"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 5
         },
         {
           "id": "svc_040",
@@ -778,7 +778,7 @@
             "confuses_definition_with_example",
             "drops_units_in_calculation"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 5
         },
         {
           "id": "svc_041",
@@ -797,7 +797,7 @@
             "misapplies_a_rule_out_of_domain",
             "off_by_one_in_indexing"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 5
         },
         {
           "id": "svc_042",
@@ -815,7 +815,7 @@
             "misapplies_a_rule_out_of_domain",
             "off_by_one_in_indexing"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 5
         },
         {
           "id": "svc_043",
@@ -834,7 +834,7 @@
             "forgets_boundary_conditions",
             "swaps_dependent_and_independent_variables"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 5
         }
       ]
     }

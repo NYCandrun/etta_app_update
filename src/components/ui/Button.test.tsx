@@ -4,9 +4,9 @@ import { Button } from "./Button";
 import { LABELS } from "../../lib/labels";
 
 describe("Button design-system component", () => {
-  it("renders the standardized Check Answer label", () => {
-    render(<Button variant="primary">{LABELS.checkAnswer}</Button>);
-    expect(screen.getByRole("button")).toHaveTextContent("Check Answer");
+  it("renders the standardized quiz advance labels", () => {
+    render(<Button variant="primary">{LABELS.next}</Button>);
+    expect(screen.getByRole("button")).toHaveTextContent("Next");
   });
 
   it("defaults to type=button to avoid accidental form submits", () => {

@@ -18,7 +18,7 @@
           "id": "em_001",
           "title": "Electric Charge and Coulomb's Law",
           "prerequisites": [
-            "mvc_001"
+            "mvc_033"
           ],
           "learning_objectives": [
             "State the precise definition behind Electric Charge and Coulomb's Law",
@@ -223,7 +223,7 @@
             "misapplies_a_rule_out_of_domain",
             "off_by_one_in_indexing"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 2
         },
         {
           "id": "em_012",
@@ -322,7 +322,7 @@
             "ignores_domain_restrictions",
             "confuses_necessary_and_sufficient"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 3
         },
         {
           "id": "em_017",
@@ -440,7 +440,7 @@
             "misapplies_a_rule_out_of_domain",
             "off_by_one_in_indexing"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 5
         },
         {
           "id": "em_023",
@@ -459,7 +459,7 @@
             "forgets_boundary_conditions",
             "swaps_dependent_and_independent_variables"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 5
         },
         {
           "id": "em_024",

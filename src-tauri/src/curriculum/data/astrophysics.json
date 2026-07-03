@@ -19,7 +19,7 @@
           "id": "astr_001",
           "title": "Celestial Coordinates",
           "prerequisites": [
-            "cm_001"
+            "cm_033"
           ],
           "learning_objectives": [
             "State the precise definition behind Celestial Coordinates",
@@ -187,7 +187,7 @@
             "confuses_definition_with_example",
             "drops_units_in_calculation"
           ],
-          "difficulty_tier": 2
+          "difficulty_tier": 1
         },
         {
           "id": "astr_010",
@@ -205,7 +205,7 @@
             "confuses_definition_with_example",
             "drops_units_in_calculation"
           ],
-          "difficulty_tier": 2
+          "difficulty_tier": 1
         },
         {
           "id": "astr_011",
@@ -379,7 +379,7 @@
             "confuses_definition_with_example",
             "drops_units_in_calculation"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 2
         },
         {
           "id": "astr_020",
@@ -515,7 +515,7 @@
             "ignores_domain_restrictions",
             "confuses_necessary_and_sufficient"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 3
         },
         {
           "id": "astr_027",
@@ -534,7 +534,7 @@
             "memorizes_without_understanding",
             "sign_error_in_manipulation"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 3
         },
         {
           "id": "astr_028",
@@ -552,7 +552,7 @@
             "memorizes_without_understanding",
             "sign_error_in_manipulation"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 3
         },
         {
           "id": "astr_029",
@@ -571,7 +571,7 @@
             "confuses_definition_with_example",
             "drops_units_in_calculation"
           ],
-          "difficulty_tier": 5
+          "difficulty_tier": 3
         },
         {
           "id": "astr_030",
@@ -589,7 +589,7 @@
             "confuses_definition_with_example",
             "drops_units_in_calculation"
           ],
-          "difficulty_tier": 5
+          "difficulty_tier": 4
         },
         {
           "id": "astr_031",
@@ -608,7 +608,7 @@
             "misapplies_a_rule_out_of_domain",
             "off_by_one_in_indexing"
           ],
-          "difficulty_tier": 5
+          "difficulty_tier": 4
         },
         {
           "id": "astr_032",
@@ -626,7 +626,7 @@
             "misapplies_a_rule_out_of_domain",
             "off_by_one_in_indexing"
           ],
-          "difficulty_tier": 5
+          "difficulty_tier": 4
         }
       ]
     },
@@ -652,7 +652,7 @@
             "forgets_boundary_conditions",
             "swaps_dependent_and_independent_variables"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 4
         },
         {
           "id": "astr_034",
@@ -670,7 +670,7 @@
             "forgets_boundary_conditions",
             "swaps_dependent_and_independent_variables"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 4
         },
         {
           "id": "astr_035",
@@ -689,7 +689,7 @@
             "ignores_domain_restrictions",
             "confuses_necessary_and_sufficient"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 4
         },
         {
           "id": "astr_036",
@@ -707,7 +707,7 @@
             "ignores_domain_restrictions",
             "confuses_necessary_and_sufficient"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 4
         },
         {
           "id": "astr_037",
@@ -726,7 +726,7 @@
             "memorizes_without_understanding",
             "sign_error_in_manipulation"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 4
         },
         {
           "id": "astr_038",
@@ -744,7 +744,7 @@
             "memorizes_without_understanding",
             "sign_error_in_manipulation"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 4
         },
         {
           "id": "astr_039",
@@ -763,7 +763,7 @@
             "confuses_definition_with_example",
             "drops_units_in_calculation"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 5
         },
         {
           "id": "astr_040",
@@ -781,7 +781,7 @@
             "confuses_definition_with_example",
             "drops_units_in_calculation"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 5
         },
         {
           "id": "astr_041",
@@ -800,7 +800,7 @@
             "misapplies_a_rule_out_of_domain",
             "off_by_one_in_indexing"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 5
         },
         {
           "id": "astr_042",
@@ -818,7 +818,7 @@
             "misapplies_a_rule_out_of_domain",
             "off_by_one_in_indexing"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 5
         },
         {
           "id": "astr_043",
@@ -837,7 +837,7 @@
             "forgets_boundary_conditions",
             "swaps_dependent_and_independent_variables"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 5
         },
         {
           "id": "astr_044",
@@ -855,7 +855,7 @@
             "forgets_boundary_conditions",
             "swaps_dependent_and_independent_variables"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 5
         },
         {
           "id": "astr_045",
@@ -874,7 +874,7 @@
             "ignores_domain_restrictions",
             "confuses_necessary_and_sufficient"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 5
         },
         {
           "id": "astr_046",
@@ -892,7 +892,7 @@
             "ignores_domain_restrictions",
             "confuses_necessary_and_sufficient"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 5
         },
         {
           "id": "astr_047",
@@ -911,7 +911,7 @@
             "memorizes_without_understanding",
             "sign_error_in_manipulation"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 5
         }
       ]
     }

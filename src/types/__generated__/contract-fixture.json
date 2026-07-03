@@ -1,4 +1,9 @@
 {
+  "answerSubmission": {
+    "answer": "b",
+    "latencyMs": 6400,
+    "questionId": "q1"
+  },
   "appSettings": {
     "apiKeyPresent": false,
     "baseModel": "claude-sonnet-4-6",
@@ -18,6 +23,7 @@
     ],
     "id": "alg_001",
     "intervalDays": 6,
+    "lastAttemptAt": "2026-06-11T09:41:12Z",
     "learningObjectives": [
       "Classify real numbers"
     ],
@@ -27,6 +33,10 @@
     "prerequisites": [],
     "state": "in_progress",
     "title": "Real Number System"
+  },
+  "dailyProgress": {
+    "goalMinutes": 30,
+    "minutesToday": 12
   },
   "dailySession": {
     "conceptsNew": [
@@ -72,53 +82,114 @@
     },
     "xp": 1234
   },
-  "ipcErr": {
-    "error": "something failed",
-    "ok": false
+  "placementResult": {
+    "conceptId": "alg_017",
+    "correctCount": 3,
+    "domain": "algebra",
+    "title": "Systems of Linear Equations",
+    "total": 5
   },
-  "ipcOk": {
-    "data": {
-      "apiKeyPresent": false,
-      "baseModel": "claude-sonnet-4-6",
-      "dailyGoalMinutes": 30,
-      "newConceptsPerSession": 3,
-      "notificationsEnabled": false,
-      "reasoningModel": "claude-opus-4-8",
-      "theme": "system"
+  "quizOutcome": {
+    "allCorrect": false,
+    "finalScore": 0.6,
+    "gamification": {
+      "badges": [
+        {
+          "earnedAt": "2026-06-10T12:00:00Z",
+          "iconName": "icon-badge-first",
+          "id": "first_lesson",
+          "name": "First Lesson"
+        }
+      ],
+      "level": {
+        "level": 5,
+        "title": "Stargazer",
+        "xpForNextLevel": 200,
+        "xpIntoLevel": 34
+      },
+      "recentXpEvents": [
+        {
+          "amount": 20,
+          "createdAt": "2026-06-11T09:30:00Z",
+          "description": "Completed Real Number System",
+          "source": "lesson_complete"
+        }
+      ],
+      "streak": {
+        "currentStreak": 7,
+        "freezesAvailable": 2,
+        "lastActiveDate": "2026-06-11",
+        "longestStreak": 12
+      },
+      "xp": 1234
     },
-    "ok": true
+    "perQuestion": [
+      {
+        "correctAnswer": "Irrationals",
+        "errorPatternDetected": null,
+        "feedback": "The square root of 2 cannot be written as a fraction.",
+        "isCorrect": true,
+        "questionId": "q1",
+        "score": 1.0,
+        "userAnswer": "b"
+      },
+      {
+        "correctAnswer": "1/2 or 0.5",
+        "errorPatternDetected": "rounds_instead_of_simplifying",
+        "feedback": "Simplify the fraction before converting.",
+        "isCorrect": false,
+        "questionId": "q2",
+        "score": 0.0,
+        "userAnswer": "0.6"
+      },
+      {
+        "correctAnswer": null,
+        "errorPatternDetected": null,
+        "feedback": "Good — also mention it never terminates.",
+        "isCorrect": true,
+        "questionId": "q3",
+        "score": 0.8,
+        "userAnswer": "Because the decimal never repeats."
+      }
+    ],
+    "recorded": true,
+    "retryToken": null
   },
-  "question": {
-    "difficulty": 2,
-    "explanation": "Square root of 2 is irrational.",
+  "quizPayload": {
+    "questions": [
+      {
+        "id": "q1",
+        "isTransfer": false,
+        "options": [
+          {
+            "id": "a",
+            "text": "Rationals"
+          },
+          {
+            "id": "b",
+            "text": "Irrationals"
+          }
+        ],
+        "prompt": "Which set contains $\\sqrt{2}$?",
+        "type": "multiple_choice"
+      }
+    ],
+    "quizId": "42"
+  },
+  "wireQuestion": {
     "id": "q1",
     "isTransfer": false,
     "options": [
       {
         "id": "a",
-        "isCorrect": false,
         "text": "Rationals"
       },
       {
         "id": "b",
-        "isCorrect": true,
         "text": "Irrationals"
       }
     ],
     "prompt": "Which set contains $\\sqrt{2}$?",
     "type": "multiple_choice"
-  },
-  "quizResult": {
-    "answers": [
-      {
-        "errorPatternDetected": null,
-        "isCorrect": true,
-        "questionId": "q1",
-        "score": 1.0,
-        "userAnswer": "b"
-      }
-    ],
-    "conceptId": "alg_001",
-    "finalScore": 0.9
   }
 }

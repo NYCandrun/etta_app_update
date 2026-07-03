@@ -27,9 +27,11 @@ export const useSettingsStore = create<SettingsStore>((set) => ({
   settings: DEFAULT_SETTINGS,
   hydrated: false,
   setSettings: (settings) => set({ settings, hydrated: true }),
-  setTheme: (theme) =>
-    set((state) => {
-      applyTheme(theme);
-      return { settings: { ...state.settings, theme } };
-    }),
+  setTheme: (theme) => {
+    // State update first, DOM side effect AFTER the updater — zustand updaters
+    // must stay pure (applyTheme is also idempotent, so the theme-bridge
+    // effect re-applying on the store change is harmless).
+    set((state) => ({ settings: { ...state.settings, theme } }));
+    applyTheme(theme);
+  },
 }));

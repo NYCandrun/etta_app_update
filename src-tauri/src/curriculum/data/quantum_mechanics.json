@@ -18,7 +18,7 @@
           "id": "qm_001",
           "title": "The Photoelectric Effect",
           "prerequisites": [
-            "lin_001"
+            "lin_030"
           ],
           "learning_objectives": [
             "State the precise definition behind The Photoelectric Effect",
@@ -142,7 +142,7 @@
             "memorizes_without_understanding",
             "sign_error_in_manipulation"
           ],
-          "difficulty_tier": 2
+          "difficulty_tier": 1
         }
       ]
     },
@@ -223,7 +223,7 @@
             "misapplies_a_rule_out_of_domain",
             "off_by_one_in_indexing"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 2
         },
         {
           "id": "qm_012",
@@ -241,7 +241,7 @@
             "misapplies_a_rule_out_of_domain",
             "off_by_one_in_indexing"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 2
         },
         {
           "id": "qm_013",
@@ -260,7 +260,7 @@
             "forgets_boundary_conditions",
             "swaps_dependent_and_independent_variables"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 2
         }
       ]
     },
@@ -322,7 +322,7 @@
             "ignores_domain_restrictions",
             "confuses_necessary_and_sufficient"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 3
         },
         {
           "id": "qm_017",
@@ -341,7 +341,7 @@
             "memorizes_without_understanding",
             "sign_error_in_manipulation"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 3
         },
         {
           "id": "qm_018",
@@ -359,7 +359,7 @@
             "memorizes_without_understanding",
             "sign_error_in_manipulation"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 3
         },
         {
           "id": "qm_019",
@@ -378,7 +378,7 @@
             "confuses_definition_with_example",
             "drops_units_in_calculation"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 3
         }
       ]
     },
@@ -403,7 +403,7 @@
             "confuses_definition_with_example",
             "drops_units_in_calculation"
           ],
-          "difficulty_tier": 2
+          "difficulty_tier": 4
         },
         {
           "id": "qm_021",
@@ -422,7 +422,7 @@
             "misapplies_a_rule_out_of_domain",
             "off_by_one_in_indexing"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 4
         },
         {
           "id": "qm_022",
@@ -440,7 +440,7 @@
             "misapplies_a_rule_out_of_domain",
             "off_by_one_in_indexing"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 4
         },
         {
           "id": "qm_023",
@@ -459,7 +459,7 @@
             "forgets_boundary_conditions",
             "swaps_dependent_and_independent_variables"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 4
         },
         {
           "id": "qm_024",
@@ -477,7 +477,7 @@
             "forgets_boundary_conditions",
             "swaps_dependent_and_independent_variables"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 4
         },
         {
           "id": "qm_025",
@@ -496,7 +496,7 @@
             "ignores_domain_restrictions",
             "confuses_necessary_and_sufficient"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 4
         },
         {
           "id": "qm_026",
@@ -514,7 +514,7 @@
             "ignores_domain_restrictions",
             "confuses_necessary_and_sufficient"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 5
         },
         {
           "id": "qm_027",
@@ -533,7 +533,7 @@
             "memorizes_without_understanding",
             "sign_error_in_manipulation"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 5
         },
         {
           "id": "qm_028",
@@ -551,7 +551,7 @@
             "memorizes_without_understanding",
             "sign_error_in_manipulation"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 5
         },
         {
           "id": "qm_029",
@@ -570,7 +570,7 @@
             "confuses_definition_with_example",
             "drops_units_in_calculation"
           ],
-          "difficulty_tier": 3
+          "difficulty_tier": 5
         },
         {
           "id": "qm_030",
@@ -588,7 +588,7 @@
             "confuses_definition_with_example",
             "drops_units_in_calculation"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 5
         },
         {
           "id": "qm_031",
@@ -607,7 +607,7 @@
             "misapplies_a_rule_out_of_domain",
             "off_by_one_in_indexing"
           ],
-          "difficulty_tier": 4
+          "difficulty_tier": 5
         }
       ]
     }

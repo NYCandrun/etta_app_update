@@ -1,5 +1,6 @@
 import { Button } from "./Button";
 import { cn } from "../../lib/cn";
+import { LABELS } from "../../lib/labels";
 
 export interface InlineErrorProps {
   message: string;
@@ -27,10 +28,11 @@ export function InlineError({ message, onRetry, className }: InlineErrorProps) {
         {onRetry && (
           <Button
             variant="secondary"
-            className="mt-2 px-3 py-1 text-xs"
+            size="sm"
+            className="mt-2"
             onClick={onRetry}
           >
-            Retry
+            {LABELS.retry}
           </Button>
         )}
       </div>

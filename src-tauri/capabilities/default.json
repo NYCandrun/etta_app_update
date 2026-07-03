@@ -1,7 +1,7 @@
 {
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "default",
-  "description": "Minimal capability set for Etta: dialog (incl. save) and fs scoped to app-data plus the user's standard export destinations (Downloads/Documents/Desktop). No shell access.",
+  "description": "Minimal capability set for Etta: dialog (incl. save) plus a WRITE-ONLY text-file grant scoped to the user's standard export destinations (Downloads/Documents/Desktop) for the export flow. The webview has no fs read/mkdir/exists commands at all, and $APPDATA (etta.db, canonical answer keys) is not in the fs scope. No shell access.",
   "windows": ["main"],
   "permissions": [
     "core:default",
@@ -10,8 +10,6 @@
     {
       "identifier": "fs:scope",
       "allow": [
-        { "path": "$APPDATA" },
-        { "path": "$APPDATA/**" },
         { "path": "$DOWNLOAD" },
         { "path": "$DOWNLOAD/**" },
         { "path": "$DOCUMENT" },
@@ -20,10 +18,7 @@
         { "path": "$DESKTOP/**" }
       ]
     },
-    "fs:allow-read-file",
-    "fs:allow-write-file",
-    "fs:allow-mkdir",
-    "fs:allow-exists",
+    "fs:allow-write-text-file",
     "updater:default"
   ]
 }

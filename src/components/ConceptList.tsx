@@ -22,30 +22,40 @@ const STATE_META: Record<
   locked: { label: "Locked", icon: "🔒", className: "text-text-muted" },
 };
 
-// Domain ordering follows the curriculum phases (algebra → astrophysics). Any
-// domain not listed sorts last, alphabetically, so the list never silently
-// drops concepts.
-const DOMAIN_ORDER = [
-  "algebra",
-  "precalculus",
-  "trigonometry",
-  "single_variable_calculus",
-  "multivariable_calculus",
-  "linear_algebra",
-  "differential_equations",
-  "classical_mechanics",
-  "electromagnetism",
-  "thermodynamics",
-  "quantum_mechanics",
-  "astrophysics",
-];
+// Domain ordering and display names follow the curriculum source of truth
+// (scripts/gen_curriculum.py PHASES / the domain JSONs): the declared order is
+// algebra → trigonometry → pre-calculus → … → astrophysics (trigonometry
+// comes BEFORE its dependent pre-calculus), and headings use each domain's
+// display_name (e.g. "Thermodynamics & Statistical Mechanics", not a
+// re-derived "Thermodynamics"). Any domain not listed sorts last,
+// alphabetically, so the list never silently drops concepts.
+const DOMAIN_META = [
+  { id: "algebra", displayName: "Algebra" },
+  { id: "trigonometry", displayName: "Trigonometry" },
+  { id: "precalculus", displayName: "Pre-Calculus" },
+  { id: "single_variable_calculus", displayName: "Single-Variable Calculus" },
+  { id: "multivariable_calculus", displayName: "Multivariable Calculus" },
+  { id: "linear_algebra", displayName: "Linear Algebra" },
+  { id: "differential_equations", displayName: "Differential Equations" },
+  { id: "classical_mechanics", displayName: "Classical Mechanics" },
+  { id: "electromagnetism", displayName: "Electromagnetism" },
+  {
+    id: "thermodynamics",
+    displayName: "Thermodynamics & Statistical Mechanics",
+  },
+  { id: "quantum_mechanics", displayName: "Quantum Mechanics" },
+  { id: "astrophysics", displayName: "Astrophysics" },
+] as const;
 
 function domainRank(domain: string): number {
-  const i = DOMAIN_ORDER.indexOf(domain);
-  return i === -1 ? DOMAIN_ORDER.length : i;
+  const i = DOMAIN_META.findIndex((d) => d.id === domain);
+  return i === -1 ? DOMAIN_META.length : i;
 }
 
-function prettyDomain(domain: string): string {
+function domainDisplayName(domain: string): string {
+  const meta = DOMAIN_META.find((d) => d.id === domain);
+  if (meta) return meta.displayName;
+  // Unknown domain: readable fallback derived from the id.
   return domain
     .split("_")
     .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
@@ -54,9 +64,19 @@ function prettyDomain(domain: string): string {
 
 export interface ConceptListProps {
   className?: string;
+  /** Offline coherence (WP3): when `offline`, rows whose lesson the probe
+   * confirmed cached stay startable with an "Available offline" hint; all
+   * others disable Start with the same message the dashboard CTAs use.
+   * `cachedLessonIds === null` means "no verdict yet" (treated as uncached). */
+  offline?: boolean;
+  cachedLessonIds?: ReadonlySet<string> | null;
 }
 
-export function ConceptList({ className }: ConceptListProps) {
+export function ConceptList({
+  className,
+  offline = false,
+  cachedLessonIds = null,
+}: ConceptListProps) {
   const navigate = useNavigate();
   const concepts = useCurriculumStore((s) => s.concepts);
   const [query, setQuery] = useState("");
@@ -112,15 +132,20 @@ export function ConceptList({ className }: ConceptListProps) {
       ) : (
         <div className="mt-3 space-y-5">
           {groups.map((group) => (
-            <section key={group.domain} aria-label={prettyDomain(group.domain)}>
+            <section
+              key={group.domain}
+              aria-label={domainDisplayName(group.domain)}
+            >
               <h3 className="text-sm font-semibold text-text-muted">
-                {prettyDomain(group.domain)}
+                {domainDisplayName(group.domain)}
               </h3>
               <ul className="mt-2 divide-y divide-surface-border rounded-lg border border-surface-border">
                 {group.items.map((c) => (
                   <ConceptRow
                     key={c.id}
                     concept={c}
+                    offline={offline}
+                    cachedOffline={cachedLessonIds?.has(c.id) ?? false}
                     onStart={() => navigate(`/lesson/${c.id}`)}
                   />
                 ))}
@@ -135,33 +160,54 @@ export function ConceptList({ className }: ConceptListProps) {
 
 function ConceptRow({
   concept,
+  offline,
+  cachedOffline,
   onStart,
 }: {
   concept: Concept;
+  offline: boolean;
+  cachedOffline: boolean;
   onStart: () => void;
 }) {
   const meta = STATE_META[concept.state];
   const locked = concept.state === "locked";
+  // Offline: only cached lessons stay startable (same rule + message as the
+  // dashboard CTAs — the two surfaces must never disagree).
+  const startBlocked = offline && !cachedOffline;
   return (
     <li
       className="flex items-center gap-3 px-3 py-2"
       aria-disabled={locked || undefined}
     >
-      {/* Status: icon + TEXT, never color alone (#33). */}
-      <span className={`flex items-center gap-1 text-xs ${meta.className}`}>
-        <span aria-hidden="true">{meta.icon}</span>
-        <span className="sr-only">{meta.label}: </span>
+      {/* Status: icon + TEXT, never color alone (#33). The ONE announced
+          status per row is the visible "· {label}" in the subtitle below;
+          the icon and the right-hand locked marker are aria-hidden so screen
+          readers never hear "Locked" two or three times. */}
+      <span
+        aria-hidden="true"
+        className={`flex items-center gap-1 text-xs ${meta.className}`}
+      >
+        {meta.icon}
       </span>
       <div className="min-w-0 flex-1">
         <p className="truncate text-sm text-text">{concept.title}</p>
         <p className="text-xs text-text-muted">
           {formatModuleLabel(concept.module)} · {meta.label}
+          {offline && !locked && cachedOffline ? " · Available offline" : ""}
         </p>
       </div>
       {locked ? (
-        <span className="text-xs text-text-muted">Locked</span>
+        <span aria-hidden="true" className="text-xs text-text-muted">
+          Locked
+        </span>
       ) : (
-        <Button variant="secondary" onClick={onStart}>
+        <Button
+          variant="secondary"
+          onClick={onStart}
+          disabled={startBlocked}
+          aria-disabled={startBlocked || undefined}
+          title={startBlocked ? "Lessons need a connection" : undefined}
+        >
           Start
         </Button>
       )}

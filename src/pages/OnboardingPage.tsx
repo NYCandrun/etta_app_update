@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Button, Card, Skeleton, useToast } from "../components/ui";
-import { ipc } from "../lib/ipc";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { Button, Card, InlineError, Skeleton, useToast } from "../components/ui";
+import { formatIpcError, ipc } from "../lib/ipc";
 import { LABELS } from "../lib/labels";
 import { useSettingsStore } from "../stores/useSettingsStore";
 import type { ThemePreference } from "../lib/theme";
@@ -16,14 +16,16 @@ import type { ThemePreference } from "../lib/theme";
 const GOALS = [15, 30, 45, 60] as const;
 const THEMES: ThemePreference[] = ["light", "dark", "system"];
 
-// The learning goals are informational framing only (they don't change the
-// curriculum, which always runs algebra→astrophysics); we persist the chosen
-// daily-time goal, which DOES drive the session builder.
+// The learning goals don't change the curriculum (which always runs
+// algebra→astrophysics), but the choice is NOT decorative: each goal maps to a
+// sensible daily-time goal that is persisted (dailyGoalMinutes drives the
+// session builder). The next step shows that suggestion pre-selected and lets
+// the learner adjust it.
 const LEARNING_GOALS = [
-  { id: "foundations", label: "Rebuild my math foundations" },
-  { id: "calculus", label: "Get through calculus" },
-  { id: "physics", label: "Reach university physics" },
-  { id: "curiosity", label: "Learn for curiosity" },
+  { id: "foundations", label: "Rebuild my math foundations", minutes: 30 },
+  { id: "calculus", label: "Get through calculus", minutes: 45 },
+  { id: "physics", label: "Reach university physics", minutes: 60 },
+  { id: "curiosity", label: "Learn for curiosity", minutes: 15 },
 ] as const;
 
 // A plausible Anthropic key shape. We validate FORMAT only here (a real
@@ -47,8 +49,17 @@ export function OnboardingPage() {
   const hydrated = useSettingsStore((s) => s.hydrated);
   const setSettings = useSettingsStore((s) => s.setSettings);
   const setTheme = useSettingsStore((s) => s.setTheme);
+  const [searchParams] = useSearchParams();
 
-  const [step, setStep] = useState<Step>("goal");
+  // Deep-linkable step (?step=key): pre-completion error surfaces (e.g. a
+  // rejected API key during placement, where /settings is gated away) link
+  // straight to the step that can fix the problem.
+  const [step, setStep] = useState<Step>(() => {
+    const requested = searchParams.get("step") ?? "";
+    return (STEP_ORDER as readonly string[]).includes(requested)
+      ? (requested as Step)
+      : "goal";
+  });
   const [learningGoal, setLearningGoal] = useState<string>("foundations");
 
   // API key local state: the raw input, its inline validation message, and a
@@ -57,21 +68,23 @@ export function OnboardingPage() {
   const [keyError, setKeyError] = useState<string | null>(null);
   const [savingKey, setSavingKey] = useState(false);
 
+  // Hydrate failure state: a failed getSettings must surface a PERSISTENT
+  // inline error with Retry (like the gate and the other pages), never strand
+  // the first-run learner on a skeleton after a transient toast dismisses.
+  const [hydrateError, setHydrateError] = useState<string | null>(null);
+
   // Hydrate settings once so the goal/theme pickers reflect any prior values.
+  const loadSettings = useCallback(() => {
+    setHydrateError(null);
+    void ipc.getSettings().then((res) => {
+      if (res.ok) setSettings(res.data);
+      else setHydrateError(res.error);
+    });
+  }, [setSettings]);
+
   useEffect(() => {
-    let active = true;
-    const load = () => {
-      void ipc.getSettings().then((res) => {
-        if (!active) return;
-        if (res.ok) setSettings(res.data);
-        else showError(res.error, load);
-      });
-    };
-    load();
-    return () => {
-      active = false;
-    };
-  }, [setSettings, showError]);
+    loadSettings();
+  }, [loadSettings]);
 
   const onChooseGoalMinutes = useCallback(
     async (minutes: number) => {
@@ -108,7 +121,7 @@ export function OnboardingPage() {
     setSavingKey(false);
     if (!res.ok) {
       // A backend rejection is shown inline (accessible), not as a native dialog.
-      setKeyError(res.error);
+      setKeyError(formatIpcError(res.error));
       return;
     }
     setApiKeyInput("");
@@ -117,6 +130,15 @@ export function OnboardingPage() {
     setStep("theme");
   }, [apiKeyInput, setSettings]);
 
+  // Leaving the goal step persists the goal's suggested daily minutes (the
+  // choice must actually DO something); the time step then shows it selected
+  // and the learner can still override there.
+  const onGoalNext = useCallback(() => {
+    const goal = LEARNING_GOALS.find((g) => g.id === learningGoal);
+    if (goal) void onChooseGoalMinutes(goal.minutes);
+    setStep("time");
+  }, [learningGoal, onChooseGoalMinutes]);
+
   const goToPlacement = useCallback(() => {
     navigate("/placement");
   }, [navigate]);
@@ -124,6 +146,18 @@ export function OnboardingPage() {
   const stepIndex = STEP_ORDER.indexOf(step);
 
   if (!hydrated) {
+    if (hydrateError) {
+      return (
+        <div className="mx-auto flex min-h-full max-w-xl items-center px-4">
+          <Card className="w-full">
+            <InlineError
+              message={`Could not load your settings: ${formatIpcError(hydrateError)}`}
+              onRetry={loadSettings}
+            />
+          </Card>
+        </div>
+      );
+    }
     return (
       <div className="mx-auto flex min-h-full max-w-xl items-center px-4">
         <Card className="w-full">
@@ -177,7 +211,7 @@ export function OnboardingPage() {
             ))}
           </fieldset>
           <div className="mt-5 flex justify-end">
-            <Button onClick={() => setStep("time")}>Next</Button>
+            <Button onClick={onGoalNext}>Next</Button>
           </div>
         </Card>
       )}
@@ -246,13 +280,29 @@ export function OnboardingPage() {
               {keyError ?? ""}
             </p>
           </div>
-          <div className="mt-5 flex justify-between">
+          {/* A key already in the keychain (e.g. re-running onboarding after a
+              reinstall, or backing up from the theme step) doesn't need to be
+              re-pasted — offer to keep it alongside replacing it. */}
+          {settings.apiKeyPresent && (
+            <p className="mt-3 text-sm text-text-muted" aria-live="polite">
+              A key is already saved in your keychain. You can keep using it, or
+              paste a new one to replace it.
+            </p>
+          )}
+          <div className="mt-5 flex justify-between gap-2">
             <Button variant="ghost" onClick={() => setStep("time")}>
               Back
             </Button>
-            <Button onClick={() => void onSaveKey()} disabled={savingKey}>
-              {savingKey ? "Saving…" : "Save key"}
-            </Button>
+            <div className="flex gap-2">
+              {settings.apiKeyPresent && (
+                <Button variant="secondary" onClick={() => setStep("theme")}>
+                  Use existing key
+                </Button>
+              )}
+              <Button onClick={() => void onSaveKey()} disabled={savingKey}>
+                {savingKey ? "Saving…" : "Save key"}
+              </Button>
+            </div>
           </div>
         </Card>
       )}

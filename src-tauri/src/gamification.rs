@@ -46,7 +46,7 @@ pub fn award_xp(
         "INSERT INTO xp_events(amount, source, description, created_at) VALUES(?1, ?2, ?3, ?4)",
         params![amount, source, description, now],
     )
-    .map_err(|e| format!("award xp: {e}"))?;
+    .map_err(|e| crate::util::internal_error("record the XP award", e))?;
     tracing::info!(amount, source, "xp awarded");
     Ok(())
 }
@@ -61,7 +61,7 @@ pub fn already_awarded(conn: &Connection, source: &str) -> Result<bool, String> 
             [source],
             |r| r.get(0),
         )
-        .map_err(|e| format!("check awarded: {e}"))?;
+        .map_err(|e| crate::util::internal_error("check the XP award guard", e))?;
     Ok(n > 0)
 }
 
@@ -71,7 +71,7 @@ pub fn total_xp(conn: &Connection) -> Result<i64, String> {
         .query_row("SELECT COALESCE(SUM(amount), 0) FROM xp_events", [], |r| {
             r.get(0)
         })
-        .map_err(|e| format!("sum xp: {e}"))?;
+        .map_err(|e| crate::util::internal_error("read your XP total", e))?;
     Ok(total)
 }
 
@@ -81,7 +81,7 @@ fn recent_xp_events(conn: &Connection) -> Result<Vec<XpEvent>, String> {
             "SELECT amount, source, description, created_at FROM xp_events \
              ORDER BY id DESC LIMIT ?1",
         )
-        .map_err(|e| format!("prepare recent xp: {e}"))?;
+        .map_err(|e| crate::util::internal_error("read recent XP events", e))?;
     let rows = stmt
         .query_map([RECENT_XP_LIMIT], |r| {
             Ok(XpEvent {
@@ -91,10 +91,10 @@ fn recent_xp_events(conn: &Connection) -> Result<Vec<XpEvent>, String> {
                 created_at: r.get(3)?,
             })
         })
-        .map_err(|e| format!("query recent xp: {e}"))?;
+        .map_err(|e| crate::util::internal_error("read recent XP events", e))?;
     let mut out = Vec::new();
     for r in rows {
-        out.push(r.map_err(|e| format!("row: {e}"))?);
+        out.push(r.map_err(|e| crate::util::internal_error("read recent XP events", e))?);
     }
     Ok(out)
 }
@@ -109,35 +109,29 @@ struct StoredStreak {
 }
 
 fn read_streak(conn: &Connection) -> Result<StoredStreak, String> {
-    let raw: Option<String> = conn
-        .query_row(
-            "SELECT value FROM settings WHERE key = ?1 LIMIT 1",
-            [STREAK_KEY],
-            |r| r.get::<_, String>(0),
-        )
-        .optional()
-        .map_err(|e| format!("read streak: {e}"))?;
-    match raw {
-        Some(s) => serde_json::from_str(&s).map_err(|e| format!("parse streak: {e}")),
+    match crate::settings::get_reserved(conn, STREAK_KEY)? {
+        Some(s) => serde_json::from_str(&s)
+            .map_err(|e| crate::util::internal_error("read your streak", e)),
         None => Ok(StoredStreak::default()),
     }
 }
 
 fn write_streak(conn: &Connection, s: &StoredStreak) -> Result<(), String> {
-    let json = serde_json::to_string(s).map_err(|e| format!("serialize streak: {e}"))?;
-    conn.execute(
-        "INSERT INTO settings(key, value) VALUES(?1, ?2) \
-         ON CONFLICT(key) DO UPDATE SET value = excluded.value",
-        params![STREAK_KEY, json],
-    )
-    .map_err(|e| format!("write streak: {e}"))?;
-    Ok(())
+    let json = serde_json::to_string(s)
+        .map_err(|e| crate::util::internal_error("save your streak", e))?;
+    crate::settings::set_reserved(conn, STREAK_KEY, &json)
 }
 
 /// Record activity for `today` (YYYY-MM-DD), advancing the streak. Idempotent
-/// within a day: a second call the same day does not double-count. A one-day gap
-/// continues the streak; a larger gap resets it to 1 (one freeze, if available,
-/// can bridge a single missed day). Returns the updated streak.
+/// within a day: a second call the same day does not double-count. A one-day
+/// gap continues the streak; a larger gap resets it to 1. A NEGATIVE gap (the
+/// clock rolled back — timezone hop, manual clock edit) is a no-op: it must
+/// neither reset the streak nor rewind `last_active_date`. Returns the updated
+/// streak.
+///
+/// NOTE on freezes: slim v1 never GRANTS a freeze (`freezes_available` starts
+/// at 0 and nothing increments it), so the bridge branch below is dormant.
+/// No user-facing copy may promise streak freezes until granting exists.
 pub fn touch_streak(conn: &Connection, today: &str) -> Result<StreakInfo, String> {
     let mut s = read_streak(conn)?;
 
@@ -148,12 +142,19 @@ pub fn touch_streak(conn: &Connection, today: &str) -> Result<StreakInfo, String
 
     let gap = day_gap(&s.last_active_date, today);
     match gap {
+        Some(g) if g < 0 => {
+            // Clock rollback: `today` is BEFORE the last recorded activity.
+            // Punishing the learner (reset) or rewinding last_active_date
+            // would both corrupt the record — keep state exactly as is.
+            return Ok(to_streak_info(&s));
+        }
         Some(0) => {} // same day (handled above), unreachable here
         Some(1) => {
             s.current_streak += 1;
         }
         Some(2) if s.freezes_available > 0 => {
-            // A single missed day bridged by a freeze keeps the streak alive.
+            // A single missed day bridged by a freeze keeps the streak alive
+            // (dormant in slim v1 — see the doc comment above).
             s.freezes_available -= 1;
             s.current_streak += 1;
         }
@@ -199,7 +200,7 @@ pub fn add_session_minutes(conn: &Connection, date: &str, minutes: i64) -> Resul
          ON CONFLICT(date) DO UPDATE SET minutes = minutes + excluded.minutes",
         params![date, minutes],
     )
-    .map_err(|e| format!("add session minutes: {e}"))?;
+    .map_err(|e| crate::util::internal_error("record your study minutes", e))?;
     Ok(())
 }
 
@@ -212,7 +213,7 @@ pub fn minutes_for_date(conn: &Connection, date: &str) -> Result<i64, String> {
             |r| r.get(0),
         )
         .optional()
-        .map_err(|e| format!("read minutes: {e}"))?
+        .map_err(|e| crate::util::internal_error("read your study minutes", e))?
         .unwrap_or(0);
     Ok(m)
 }
@@ -276,6 +277,28 @@ mod tests {
         let s3 = touch_streak(&conn, "2026-06-11").unwrap();
         assert_eq!(s3.current_streak, 2);
         assert_eq!(s3.longest_streak, 2);
+    }
+
+    /// A clock rollback (negative day gap) must neither reset the streak nor
+    /// rewind last_active_date; once the clock recovers, the streak continues.
+    #[test]
+    fn clock_rollback_does_not_reset_streak_or_rewind_date() {
+        let conn = db();
+        touch_streak(&conn, "2026-06-10").unwrap();
+        let before = touch_streak(&conn, "2026-06-11").unwrap();
+        assert_eq!(before.current_streak, 2);
+
+        // Clock rolls back two days: no reset, no date rewind, nothing written.
+        let rolled = touch_streak(&conn, "2026-06-09").unwrap();
+        assert_eq!(rolled.current_streak, 2, "rollback must not reset");
+        assert_eq!(
+            rolled.last_active_date, "2026-06-11",
+            "rollback must not rewind last_active_date"
+        );
+
+        // Clock recovers: the very next real day still continues the streak.
+        let after = touch_streak(&conn, "2026-06-12").unwrap();
+        assert_eq!(after.current_streak, 3);
     }
 
     #[test]

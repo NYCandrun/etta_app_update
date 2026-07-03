@@ -3,9 +3,11 @@
 //! The key is NEVER written to SQLite, never to a file, never XOR'd/obfuscated
 //! (blocklist #39). The `settings.api_key_present` boolean flag is the only
 //! thing persisted in the DB; the key material lives solely in the keychain.
-//! Service id MUST be `com.etta.app` (#39). `test_api_key` reads the STORED key
-//! rather than taking it as a parameter, so the key is never a logged argument
-//! (#40).
+//! Service id MUST be `com.etta.app` (#39). Every AI command (including the
+//! `test_connection` connectivity check) reads the STORED key via `get_key`
+//! per request rather than taking it as a parameter, so the key is never a
+//! logged argument (#40) — `set_api_key` is the single exception, and its
+//! argument is never logged.
 
 use std::sync::OnceLock;
 

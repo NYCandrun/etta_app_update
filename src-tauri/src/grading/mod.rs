@@ -29,16 +29,24 @@ pub fn grade_objective(question: &Question, user_answer: &str) -> Option<GradedA
     }
 }
 
+/// The canonical explanation as post-grade feedback (None when empty). Safe to
+/// reveal AFTER grading — the wire question is redacted precisely so this text
+/// (which typically spells out the answer) is never seen pre-grade (H10).
+fn explanation_feedback(question: &Question) -> Option<String> {
+    let e = question.explanation.trim();
+    (!e.is_empty()).then(|| e.to_string())
+}
+
 fn grade_multiple_choice(question: &Question, user_answer: &str) -> GradedAnswer {
     // Correctness is derived from the canonical options[].isCorrect — the FE's
     // claim about which option is right is irrelevant here.
-    let correct_id = question
+    let correct_option = question
         .options
         .as_ref()
-        .and_then(|opts| opts.iter().find(|o| o.is_correct))
-        .map(|o| o.id.as_str());
+        .and_then(|opts| opts.iter().find(|o| o.is_correct));
 
-    let is_correct = correct_id.is_some_and(|cid| cid.eq_ignore_ascii_case(user_answer.trim()));
+    let is_correct = correct_option
+        .is_some_and(|o| o.id.eq_ignore_ascii_case(user_answer.trim()));
 
     GradedAnswer {
         question_id: question.id.clone(),
@@ -46,6 +54,10 @@ fn grade_multiple_choice(question: &Question, user_answer: &str) -> GradedAnswer
         is_correct,
         score: if is_correct { 1.0 } else { 0.0 },
         error_pattern_detected: None,
+        // The correct option's TEXT (not its id — the review screen shows the
+        // human-readable answer).
+        correct_answer: correct_option.map(|o| o.text.clone()),
+        feedback: explanation_feedback(question),
     }
 }
 
@@ -62,24 +74,37 @@ fn grade_fill_in_blank(question: &Question, user_answer: &str) -> GradedAnswer {
         is_correct,
         score: if is_correct { 1.0 } else { 0.0 },
         error_pattern_detected: None,
+        // All accepted blanks, human-readable.
+        correct_answer: question
+            .blanks
+            .as_ref()
+            .filter(|b| !b.is_empty())
+            .map(|b| b.join(" or ")),
+        feedback: explanation_feedback(question),
     }
 }
 
-/// Package a model-produced free_response score (0.0–1.0) into a GradedAnswer.
-/// `score` is clamped; `is_correct` is true at or above the pass threshold.
+/// Package a model-produced free_response grade into a GradedAnswer. `score`
+/// is clamped; `is_correct` is true at or above the pass threshold. The
+/// model's `feedback` is KEPT (it used to be discarded) — free_response has no
+/// single canonical answer, so feedback is the review surface.
 pub fn grade_free_response_from_score(
     question: &Question,
     user_answer: &str,
     score: f64,
+    feedback: String,
     error_pattern_detected: Option<String>,
 ) -> GradedAnswer {
     let score = score.clamp(0.0, 1.0);
+    let feedback = feedback.trim().to_string();
     GradedAnswer {
         question_id: question.id.clone(),
         user_answer: user_answer.to_string(),
         is_correct: score >= 0.7,
         score,
         error_pattern_detected,
+        correct_answer: None,
+        feedback: (!feedback.is_empty()).then_some(feedback),
     }
 }
 
@@ -107,7 +132,7 @@ mod tests {
             ]),
             blanks: None,
             rubric: None,
-            explanation: String::new(),
+            explanation: "Because y.".into(),
             difficulty: 1,
             is_transfer: false,
         }
@@ -119,7 +144,7 @@ mod tests {
             question_type: QuestionType::FillInBlank,
             prompt: "x = ____".into(),
             options: None,
-            blanks: Some(vec!["1/2".into()]),
+            blanks: Some(vec!["1/2".into(), "0.5".into()]),
             rubric: None,
             explanation: String::new(),
             difficulty: 1,
@@ -147,5 +172,51 @@ mod tests {
         let mut q = fib();
         q.question_type = QuestionType::FreeResponse;
         assert!(grade_objective(&q, "anything").is_none());
+    }
+
+    /// multiple_choice populates the correct option's TEXT (not id) as
+    /// correct_answer and the canonical explanation as feedback — for wrong
+    /// AND right answers (the review screen shows both).
+    #[test]
+    fn mc_populates_correct_answer_text_and_feedback() {
+        let wrong = grade_objective(&mc(), "a").unwrap();
+        assert_eq!(wrong.correct_answer.as_deref(), Some("y"));
+        assert_eq!(wrong.feedback.as_deref(), Some("Because y."));
+        let right = grade_objective(&mc(), "b").unwrap();
+        assert_eq!(right.correct_answer.as_deref(), Some("y"));
+    }
+
+    /// fill_in_blank joins the accepted blanks; an empty explanation yields
+    /// feedback = None (never Some("")).
+    #[test]
+    fn fill_in_blank_populates_joined_blanks() {
+        let g = grade_objective(&fib(), "7").unwrap();
+        assert!(!g.is_correct);
+        assert_eq!(g.correct_answer.as_deref(), Some("1/2 or 0.5"));
+        assert_eq!(g.feedback, None, "empty explanation must not become Some(\"\")");
+    }
+
+    /// free_response keeps the model's feedback (previously discarded) and has
+    /// no single canonical answer.
+    #[test]
+    fn free_response_keeps_model_feedback() {
+        let mut q = fib();
+        q.question_type = QuestionType::FreeResponse;
+        let g = grade_free_response_from_score(
+            &q,
+            "my essay",
+            0.8,
+            "Good reasoning; cite the definition next time.".into(),
+            Some("skips_justification".into()),
+        );
+        assert!(g.is_correct);
+        assert_eq!(g.correct_answer, None);
+        assert_eq!(
+            g.feedback.as_deref(),
+            Some("Good reasoning; cite the definition next time.")
+        );
+        // Blank model feedback stays None.
+        let g = grade_free_response_from_score(&q, "x", 0.2, "   ".into(), None);
+        assert_eq!(g.feedback, None);
     }
 }

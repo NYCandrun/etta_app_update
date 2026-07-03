@@ -1,10 +1,16 @@
 // Shared FE/BE type contract — SINGLE SOURCE OF TRUTH for IPC (Appendix C).
 //
-// These interfaces mirror the Rust structs in `src-tauri/src/contract.rs`
-// 1:1. Rust serializes with `#[serde(rename_all = "camelCase")]`; these
-// camelCase fields must match exactly. A round-trip test
-// (`src/types/contract.roundtrip.test.ts`) asserts the JSON shape produced
-// by Rust matches these interfaces. Do NOT define divergent shapes elsewhere.
+// These interfaces mirror the WIRE-facing Rust structs in
+// `src-tauri/src/contract.rs` 1:1. Rust serializes with
+// `#[serde(rename_all = "camelCase")]`; these camelCase fields must match
+// exactly. A round-trip test (`src/types/contract.roundtrip.test.ts`) asserts
+// the JSON shape produced by Rust matches these interfaces. Do NOT define
+// divergent shapes elsewhere.
+//
+// NOTE: the canonical server-side Question (which carries the answer key —
+// option isCorrect flags, accepted blanks, rubric, explanation) is
+// deliberately NOT mirrored here. The webview only ever receives the redacted
+// WireQuestion (H10).
 
 // ---- Gamification ----
 export interface GamificationState {
@@ -54,38 +60,77 @@ export interface Concept {
   easeFactor: number;
   intervalDays: number;
   nextReview: string | null; // YYYY-MM-DD
+  lastAttemptAt: string | null; // ISO 8601; most recent quiz attempt (recency)
   state: "completed" | "in_progress" | "unlocked" | "locked";
 }
 
-// ---- Quiz (locked schema; mirrors Appendix A.1/A.3) ----
+// ---- Quiz (redacted wire shapes; the answer key never leaves the backend) ----
 export type QuestionType = "multiple_choice" | "fill_in_blank" | "free_response";
-export interface QuizOption {
+export interface WireQuizOption {
   id: string;
-  text: string;
-  isCorrect: boolean;
+  text: string; // display text only — NO isCorrect on the wire (H10)
 }
-export interface Question {
+export interface WireQuestion {
   id: string; // "q1".."q10"
   type: QuestionType;
   prompt: string; // may contain $...$ LaTeX
-  options?: QuizOption[]; // multiple_choice only
-  blanks?: string[]; // fill_in_blank only
-  rubric?: string; // free_response only
-  explanation: string;
-  difficulty: number; // 1-5
+  options?: WireQuizOption[]; // multiple_choice only
   isTransfer: boolean;
 }
+
+// What generateQuiz returns: the redacted questions plus the identity of the
+// exact quiz INSTANCE they came from. quizId is an opaque nonce that must be
+// passed back to gradeAndRecordQuiz, which grades against exactly that
+// instance — a quiz regenerated mid-attempt (other window, model switch)
+// reuses ids q1..qN, so without the nonce it could silently displace the
+// answered one.
+export interface QuizPayload {
+  quizId: string;
+  questions: WireQuestion[];
+}
+
+// One submitted answer: the raw answer plus the per-answer latency (folded in,
+// never a separately-indexed array). The frontend NEVER sends a correctness
+// flag — grading is server-authoritative.
+export interface AnswerSubmission {
+  questionId: string;
+  answer: string;
+  latencyMs: number | null;
+}
+
+// One graded answer — produced ONLY server-side; the frontend never sends
+// these back (persist retries replay a server-held copy via retryPersist).
 export interface GradedAnswer {
   questionId: string;
   userAnswer: string;
-  isCorrect: boolean; // computed SERVER-side, never trusted from FE
+  isCorrect: boolean; // computed server-side
   score: number; // 0-1
   errorPatternDetected: string | null;
+  // Post-grade review data (safe to reveal AFTER grading):
+  correctAnswer: string | null; // MCQ: correct option text; fill-in: accepted blanks joined; free_response: null
+  feedback: string | null; // free_response: model feedback; otherwise the canonical explanation
 }
-export interface QuizResult {
+
+// What gradeAndRecordQuiz / retryPersist return. recorded:false means grading
+// succeeded but persisting failed — show the score anyway; the graded result
+// is held server-side under retryToken and retryPersist(token) re-persists it
+// WITHOUT re-grading.
+export interface QuizOutcome {
+  perQuestion: GradedAnswer[];
+  finalScore: number; // over the CANONICAL question count
+  allCorrect: boolean;
+  recorded: boolean;
+  retryToken: string | null; // present exactly when recorded === false
+  gamification: GamificationState | null; // refreshed snapshot when recorded
+}
+
+// ---- Placement ----
+export interface PlacementResult {
   conceptId: string;
-  answers: GradedAnswer[];
-  finalScore: number; // MUST include the last answer (catches bug 0e)
+  domain: string;
+  title: string;
+  correctCount: number;
+  total: number; // the CANONICAL placement question count
 }
 
 // ---- Session ----
@@ -94,6 +139,12 @@ export interface DailySession {
   conceptsReview: string[];
   interleavedSet: string[]; // MUST be populated (interleaving actually called)
   estimatedMinutes: number;
+}
+
+// ---- Daily progress ----
+export interface DailyProgress {
+  minutesToday: number;
+  goalMinutes: number;
 }
 
 // ---- Settings ----
@@ -107,5 +158,11 @@ export interface AppSettings {
   apiKeyPresent: boolean; // the key itself lives in Keychain, never here
 }
 
-// ---- IPC result envelope (so errors are never silently swallowed) ----
+// ---- IPC result envelope (CLIENT-side synthesis) ----
+//
+// This union does NOT exist on the Rust side. Tauri commands return
+// Result<T, String>: the promise resolves with T on Ok and rejects with the
+// error string on Err. The `call()` wrapper in `src/lib/ipc.ts` catches the
+// rejection and synthesizes this envelope so every caller handles the error
+// branch explicitly (errors are never silently swallowed).
 export type IpcResult<T> = { ok: true; data: T } | { ok: false; error: string };

@@ -1,8 +1,14 @@
-//! Canonical sample values for each contract type. Used by the round-trip
+//! Canonical sample values for each WIRE contract type. Used by the round-trip
 //! test: Rust serializes these to a JSON fixture, and a TypeScript test
 //! (`src/types/contract.roundtrip.test.ts`) asserts the JSON shape matches the
 //! TS interfaces. Keeping the samples here (not in a test module) lets the
 //! fixture-writer binary reuse them.
+//!
+//! Samples are deliberately REALISTIC (populated optionals, mixed correctness)
+//! — an unrealistically empty sample hides shape mismatches from the frontend.
+//! Only types that actually cross the IPC boundary are sampled; the canonical
+//! `Question` (with its answer key) is server-internal and NOT in the fixture —
+//! the webview-facing shape is `WireQuestion` (H10).
 
 use crate::contract::*;
 use serde_json::Value;
@@ -52,46 +58,88 @@ pub fn concept() -> Concept {
         ease_factor: 2.5,
         interval_days: 6,
         next_review: Some("2026-06-17".into()),
+        last_attempt_at: Some("2026-06-11T09:41:12Z".into()),
         state: ConceptState::InProgress,
     }
 }
 
-pub fn question() -> Question {
-    Question {
+/// The REDACTED question shape the webview receives: prompt + options to
+/// render, no `isCorrect`, no `blanks`, no `rubric`, no `explanation`.
+pub fn wire_question() -> WireQuestion {
+    WireQuestion {
         id: "q1".into(),
         question_type: QuestionType::MultipleChoice,
         prompt: "Which set contains $\\sqrt{2}$?".into(),
         options: Some(vec![
-            QuizOption {
+            WireQuizOption {
                 id: "a".into(),
                 text: "Rationals".into(),
-                is_correct: false,
             },
-            QuizOption {
+            WireQuizOption {
                 id: "b".into(),
                 text: "Irrationals".into(),
-                is_correct: true,
             },
         ]),
-        blanks: None,
-        rubric: None,
-        explanation: "Square root of 2 is irrational.".into(),
-        difficulty: 2,
         is_transfer: false,
     }
 }
 
-pub fn quiz_result() -> QuizResult {
-    QuizResult {
-        concept_id: "alg_001".into(),
-        answers: vec![GradedAnswer {
-            question_id: "q1".into(),
-            user_answer: "b".into(),
-            is_correct: true,
-            score: 1.0,
-            error_pattern_detected: None,
-        }],
-        final_score: 0.9,
+/// What `generate_quiz` returns: the redacted questions plus the quiz-instance
+/// nonce (`quizId`) the frontend must hand back to `grade_and_record_quiz`.
+pub fn quiz_payload() -> QuizPayload {
+    QuizPayload {
+        quiz_id: "42".into(),
+        questions: vec![wire_question()],
+    }
+}
+
+pub fn answer_submission() -> AnswerSubmission {
+    AnswerSubmission {
+        question_id: "q1".into(),
+        answer: "b".into(),
+        latency_ms: Some(6400),
+    }
+}
+
+/// The merged grade+record outcome: mixed correctness, populated
+/// correctAnswer/feedback per question type, recorded with the refreshed
+/// gamification snapshot.
+pub fn quiz_outcome() -> QuizOutcome {
+    QuizOutcome {
+        per_question: vec![
+            GradedAnswer {
+                question_id: "q1".into(),
+                user_answer: "b".into(),
+                is_correct: true,
+                score: 1.0,
+                error_pattern_detected: None,
+                correct_answer: Some("Irrationals".into()),
+                feedback: Some("The square root of 2 cannot be written as a fraction.".into()),
+            },
+            GradedAnswer {
+                question_id: "q2".into(),
+                user_answer: "0.6".into(),
+                is_correct: false,
+                score: 0.0,
+                error_pattern_detected: Some("rounds_instead_of_simplifying".into()),
+                correct_answer: Some("1/2 or 0.5".into()),
+                feedback: Some("Simplify the fraction before converting.".into()),
+            },
+            GradedAnswer {
+                question_id: "q3".into(),
+                user_answer: "Because the decimal never repeats.".into(),
+                is_correct: true,
+                score: 0.8,
+                error_pattern_detected: None,
+                correct_answer: None,
+                feedback: Some("Good — also mention it never terminates.".into()),
+            },
+        ],
+        final_score: 0.6,
+        all_correct: false,
+        recorded: true,
+        retry_token: None,
+        gamification: Some(gamification_state()),
     }
 }
 
@@ -101,6 +149,23 @@ pub fn daily_session() -> DailySession {
         concepts_review: vec!["alg_001".into()],
         interleaved_set: vec!["alg_001".into(), "alg_002".into()],
         estimated_minutes: 30,
+    }
+}
+
+pub fn daily_progress() -> DailyProgress {
+    DailyProgress {
+        minutes_today: 12,
+        goal_minutes: 30,
+    }
+}
+
+pub fn placement_result() -> PlacementResult {
+    PlacementResult {
+        concept_id: "alg_017".into(),
+        domain: "algebra".into(),
+        title: "Systems of Linear Equations".into(),
+        correct_count: 3,
+        total: 5,
     }
 }
 
@@ -116,28 +181,18 @@ pub fn app_settings() -> AppSettings {
     }
 }
 
-pub fn ipc_ok() -> IpcResult<AppSettings> {
-    IpcResult::Ok {
-        data: app_settings(),
-    }
-}
-
-pub fn ipc_err() -> IpcResult<AppSettings> {
-    IpcResult::Err {
-        error: "something failed".into(),
-    }
-}
-
 /// Build the full fixture object keyed by contract type name.
 pub fn fixture() -> Value {
     serde_json::json!({
         "gamificationState": gamification_state(),
         "concept": concept(),
-        "question": question(),
-        "quizResult": quiz_result(),
+        "wireQuestion": wire_question(),
+        "quizPayload": quiz_payload(),
+        "answerSubmission": answer_submission(),
+        "quizOutcome": quiz_outcome(),
         "dailySession": daily_session(),
+        "dailyProgress": daily_progress(),
+        "placementResult": placement_result(),
         "appSettings": app_settings(),
-        "ipcOk": ipc_ok(),
-        "ipcErr": ipc_err(),
     })
 }

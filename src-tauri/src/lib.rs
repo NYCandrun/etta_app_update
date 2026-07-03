@@ -1,7 +1,7 @@
 //! Etta backend library. Milestone 1: foundation + data layer.
 //!
 //! - One SQLite connection in `AppState` behind a Mutex (never per-command).
-//! - Idempotent schema init, daily backup, cache purge, xp pruning on startup.
+//! - Idempotent schema init, WAL-safe daily backup, cache purge on startup.
 //! - Typed settings, keychain API-key storage, content cache, mastery reads.
 //! - Structured `tracing` logging; secrets are never logged.
 
@@ -19,7 +19,6 @@ pub mod export;
 pub mod gamification;
 pub mod grading;
 pub mod keychain;
-pub mod mastery;
 pub mod samples;
 pub mod settings;
 pub mod util;
@@ -63,13 +62,15 @@ pub fn run() {
             let conn = db::open(&data_dir).expect("open + init database");
 
             // Startup hygiene (best-effort; failures are logged, not fatal).
+            // NOTE: xp_events is deliberately NEVER pruned — the ledger is both
+            // the XP total (SUM over all rows) and the lesson/quiz one-shot
+            // award guard, and it is structurally bounded (at most two award
+            // rows per concept), so pruning would shrink the displayed total
+            // and re-open XP farming (H18).
             if let Err(e) = cache::purge_expired(&conn) {
                 tracing::error!(error = %e, "cache purge failed");
             }
-            if let Err(e) = mastery::prune_xp_events(&conn) {
-                tracing::error!(error = %e, "xp prune failed");
-            }
-            db::backup_if_stale(&data_dir);
+            db::backup_if_stale(&conn, &data_dir);
 
             // Load the bundled curriculum into the `concepts` table (first launch
             // and on a version bump). Validation (DAG, ids, required fields) is a
@@ -87,6 +88,12 @@ pub fn run() {
                 data_dir,
             });
             app.manage(ai_state);
+            // Graded-but-unpersisted quiz results awaiting a persist retry
+            // (server-held; the retry never accepts answers from the webview).
+            app.manage(commands_m3::PendingPersists::default());
+            // In-flight stream cancellation registry (requestId → flag),
+            // driven by generate_streamed / cancel_stream (H7).
+            app.manage(commands_ai::ActiveStreams::default());
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
@@ -95,22 +102,17 @@ pub fn run() {
             commands::set_setting,
             commands::set_api_key,
             commands::delete_api_key,
-            commands::has_api_key,
-            commands::test_api_key,
-            commands::cache_get,
-            commands::cache_put,
-            commands::get_mastery_history,
-            commands::write_mastery_snapshot,
+            commands::is_cached,
             commands::export_data,
             commands_ai::list_available_models,
             commands_ai::test_connection,
             commands_ai::generate_streamed,
+            commands_ai::cancel_stream,
             commands_ai::generate_quiz,
-            commands_ai::grade_quiz,
-            commands_ai::list_concepts,
+            commands_ai::grade_and_record_quiz,
             commands_m3::get_gamification_state,
             commands_m3::award_lesson_xp,
-            commands_m3::record_quiz_result,
+            commands_m3::retry_persist,
             commands_m3::build_session,
             commands_m3::get_concept_states,
             commands_m3::add_study_minutes,
@@ -162,24 +164,13 @@ mod contract_roundtrip {
         }
         check!(samples::gamification_state());
         check!(samples::concept());
-        check!(samples::question());
-        check!(samples::quiz_result());
+        check!(samples::wire_question());
+        check!(samples::quiz_payload());
+        check!(samples::answer_submission());
+        check!(samples::quiz_outcome());
         check!(samples::daily_session());
+        check!(samples::daily_progress());
+        check!(samples::placement_result());
         check!(samples::app_settings());
-        check!(samples::ipc_ok());
-        check!(samples::ipc_err());
-    }
-
-    /// The IPC envelope must use a real JSON boolean `ok`, matching the TS
-    /// discriminated union.
-    #[test]
-    fn ipc_envelope_uses_boolean_ok() {
-        let ok = serde_json::to_value(samples::ipc_ok()).unwrap();
-        assert_eq!(ok["ok"], serde_json::Value::Bool(true));
-        assert!(ok.get("data").is_some());
-
-        let err = serde_json::to_value(samples::ipc_err()).unwrap();
-        assert_eq!(err["ok"], serde_json::Value::Bool(false));
-        assert_eq!(err["error"], serde_json::json!("something failed"));
     }
 }

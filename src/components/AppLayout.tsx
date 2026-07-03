@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { cn } from "../lib/cn";
+import { useLeaveGuardStore } from "../stores/useLeaveGuardStore";
 import { ProgressIndicators } from "./ProgressIndicators";
 
 const NAV = [
@@ -9,6 +10,25 @@ const NAV = [
   { to: "/settings", label: "Settings" },
 ] as const;
 
+// Tracks the md breakpoint (Tailwind's 768px) so the drawer can be made inert
+// only when it is actually off-canvas: on md+ the sidebar is a static column
+// and must stay tabbable regardless of navOpen.
+const MD_QUERY = "(min-width: 768px)";
+
+function subscribeMd(onChange: () => void): () => void {
+  const mq = window.matchMedia(MD_QUERY);
+  mq.addEventListener("change", onChange);
+  return () => mq.removeEventListener("change", onChange);
+}
+
+function getMdSnapshot(): boolean {
+  return window.matchMedia(MD_QUERY).matches;
+}
+
+function useIsMdUp(): boolean {
+  return useSyncExternalStore(subscribeMd, getMdSnapshot, () => true);
+}
+
 // Shared app chrome (milestone 5, #37/#38). A fixed sidebar on md+ screens; on
 // small (phone-width) screens the sidebar collapses behind a hamburger and
 // slides in as an overlay so it never steals horizontal space (v1's fixed 240px
@@ -16,6 +36,7 @@ const NAV = [
 // the main content (#31); focus order is hamburger → nav → main.
 export function AppLayout() {
   const [navOpen, setNavOpen] = useState(false);
+  const isMdUp = useIsMdUp();
   const location = useLocation();
 
   // Close the mobile drawer whenever the route changes (so navigating doesn't
@@ -52,9 +73,12 @@ export function AppLayout() {
         />
       )}
 
-      {/* Sidebar: static column on md+, off-canvas drawer on small screens. */}
+      {/* Sidebar: static column on md+, off-canvas drawer on small screens.
+          While closed off-canvas it is `inert` so Tab can never land on the
+          invisible nav links (and screen readers skip it); md+ never inerts. */}
       <aside
         id="primary-navigation"
+        inert={!navOpen && !isMdUp}
         className={cn(
           "fixed inset-y-0 left-0 z-40 w-60 shrink-0 border-r border-surface-border bg-surface-raised",
           "transition-transform duration-base md:static md:translate-x-0 motion-reduce:transition-none",
@@ -79,6 +103,17 @@ export function AppLayout() {
               <li key={item.to}>
                 <NavLink
                   to={item.to}
+                  onClick={(e) => {
+                    // Leave guard (declarative HashRouter has no useBlocker):
+                    // an in-progress page (e.g. a mid-quiz QuizPage) registers
+                    // a guard; when it blocks, the page shows its own inline
+                    // confirm and navigates itself on "Leave".
+                    const guard = useLeaveGuardStore.getState().guard;
+                    if (guard && guard(item.to)) {
+                      e.preventDefault();
+                      setNavOpen(false); // reveal the page's confirm UI
+                    }
+                  }}
                   className={({ isActive }) =>
                     cn(
                       "block rounded-md px-3 py-2 text-sm transition-colors duration-base motion-reduce:transition-none",

@@ -16,7 +16,7 @@
           "id": "trig_001",
           "title": "Angle Measure and Degrees",
           "prerequisites": [
-            "alg_001"
+            "alg_056"
           ],
           "learning_objectives": [
             "State the precise definition behind Angle Measure and Degrees",
