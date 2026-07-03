@@ -33,6 +33,38 @@ describe("RichText markdown rendering", () => {
     expect(container.textContent).not.toContain("```");
   });
 
+  it("renders a GFM pipe table as a real table (not literal pipes)", () => {
+    const src = [
+      "| Parameter | Effect |",
+      "|---|---:|",
+      "| $h$ | Horizontal shift |",
+      "| $k$ | Vertical shift |",
+    ].join("\n");
+    const { container } = render(<RichText content={src} className="prose" />);
+    expect(container.querySelector("table")).not.toBeNull();
+    expect(container.querySelectorAll("thead th")).toHaveLength(2);
+    expect(container.querySelectorAll("tbody tr")).toHaveLength(2);
+    // Right-aligned second column carries the alignment from the delimiter.
+    expect(container.querySelectorAll("thead th")[1]).toHaveStyle({
+      textAlign: "right",
+    });
+    // No raw pipe/delimiter syntax leaks into the rendered text.
+    expect(container.textContent).not.toContain("|---");
+    expect(container.textContent).not.toContain("| Parameter |");
+    // Math in a cell still typesets.
+    expect(container.querySelector(".katex")).not.toBeNull();
+  });
+
+  it("renders '1.' as an ordered list and '---' as a horizontal rule", () => {
+    const src = "1. first\n2. second\n\n---\n\nafter";
+    const { container } = render(<RichText content={src} className="prose" />);
+    expect(container.querySelector("ol")).not.toBeNull();
+    expect(container.querySelectorAll("ol > li")).toHaveLength(2);
+    expect(container.querySelector("hr")).not.toBeNull();
+    expect(container.textContent).not.toContain("1. first");
+    expect(container.textContent).not.toContain("---");
+  });
+
   it("still renders $...$ through KaTeX (sanitized), never as literal LaTeX", () => {
     const { container } = render(<RichText content="Solve $3x-7=14$ now." />);
     expect(container.querySelector(".katex")).not.toBeNull();

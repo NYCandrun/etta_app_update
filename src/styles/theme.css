@@ -104,15 +104,48 @@ body {
 .prose h3 {
   font-size: 1.1rem;
 }
-/* RichText emits "- " bullet lists only (no ordered lists). list-style is
-   restated because Tailwind preflight strips it. */
+/* Bulleted ("- ") and numbered ("1.") lists. list-style is restated because
+   Tailwind preflight strips it. */
+.prose ul,
+.prose ol {
+  margin: 0 0 1rem 0;
+  padding-left: 1.5rem;
+}
 .prose ul {
   list-style: disc;
-  margin: 0 0 1rem 0;
-  padding-left: 1.25rem;
+}
+.prose ol {
+  list-style: decimal;
 }
 .prose li {
   margin: 0.25rem 0;
+}
+/* Thematic break ("---" / "***"). */
+.prose hr {
+  border: 0;
+  border-top: 1px solid rgb(var(--color-surface-border));
+  margin: 1.5rem 0;
+}
+/* GFM pipe tables. The wrapper scrolls a wide table instead of overflowing the
+   lesson column; borders/heading fill use surface tokens (never off-palette). */
+.prose .md-table-wrap {
+  margin: 0 0 1rem 0;
+  overflow-x: auto;
+}
+.prose table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.95rem;
+}
+.prose th,
+.prose td {
+  border: 1px solid rgb(var(--color-surface-border));
+  padding: 0.4rem 0.6rem;
+  text-align: left;
+  vertical-align: top;
+}
+.prose th {
+  @apply bg-surface-muted font-semibold text-text;
 }
 /* Code and math ARE monospace — the only place font-mono is used in prose. */
 .prose code {

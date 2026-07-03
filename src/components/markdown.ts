@@ -1,10 +1,11 @@
 import { tokenize } from "../lib/math";
 
 // Hand-rolled minimal markdown parser for the RichText surface (locked
-// decision 3). Block level: ##/### headings, "- " lists, ``` fenced code, and
-// paragraphs split on blank lines. Inline: **bold**, *italic*, `code` — all
-// emitted as a React-friendly node tree, NEVER as HTML strings (the only
-// injected HTML in the app remains DOMPurify-sanitized KaTeX output).
+// decision 3). Block level: ##/### headings, "- " and "1." lists, ``` fenced
+// code, GFM pipe tables, "---" thematic breaks, and paragraphs split on blank
+// lines. Inline: **bold**, *italic*, `code` — all emitted as a React-friendly
+// node tree, NEVER as HTML strings (the only injected HTML in the app remains
+// DOMPurify-sanitized KaTeX output).
 //
 // Composition with math: each non-fence block runs through the EXISTING
 // `$...$` tokenizer in ../lib/math FIRST. Math segments become opaque atoms
@@ -26,11 +27,15 @@ export type InlineNode =
   | { type: "em"; children: InlineNode[] }
   | { type: "code"; children: InlineNode[] };
 
+export type Align = "left" | "center" | "right" | null;
+
 export type Block =
   | { type: "heading"; level: 2 | 3; children: InlineNode[] }
   | { type: "paragraph"; children: InlineNode[] }
-  | { type: "list"; items: InlineNode[][] }
-  | { type: "codeBlock"; lang: string; code: string };
+  | { type: "list"; ordered: boolean; items: InlineNode[][] }
+  | { type: "codeBlock"; lang: string; code: string }
+  | { type: "table"; header: InlineNode[][]; aligns: Align[]; rows: InlineNode[][][] }
+  | { type: "thematicBreak" };
 
 // Placeholder for math atoms inside the inline-markdown pass. A Private Use
 // Area char never appears in model output; we strip any stray occurrences
@@ -45,6 +50,7 @@ export function parseMarkdown(content: string): Block[] {
 
   let para: string[] = [];
   let listItems: string[] = [];
+  let listOrdered = false;
   let inFence = false;
   let fenceLang = "";
   let fenceLines: string[] = [];
@@ -59,11 +65,22 @@ export function parseMarkdown(content: string): Block[] {
   };
   const flushList = () => {
     if (listItems.length === 0) return;
-    blocks.push({ type: "list", items: listItems.map((t) => parseInline(t)) });
+    blocks.push({ type: "list", ordered: listOrdered, items: listItems.map((t) => parseInline(t)) });
     listItems = [];
+    listOrdered = false;
+  };
+  const pushListItem = (text: string, ordered: boolean) => {
+    flushPara();
+    // A type switch (bulleted <-> numbered) starts a new list block.
+    if (listItems.length > 0 && listOrdered !== ordered) flushList();
+    listOrdered = ordered;
+    listItems.push(text);
   };
 
-  for (const line of lines) {
+  let i = 0;
+  while (i < lines.length) {
+    const line = lines[i] ?? "";
+
     if (inFence) {
       if (/^\s*```\s*$/.test(line)) {
         blocks.push({ type: "codeBlock", lang: fenceLang, code: fenceLines.join("\n") });
@@ -72,6 +89,7 @@ export function parseMarkdown(content: string): Block[] {
       } else {
         fenceLines.push(line);
       }
+      i += 1;
       continue;
     }
 
@@ -82,6 +100,33 @@ export function parseMarkdown(content: string): Block[] {
       inFence = true;
       fenceLang = (fenceOpen[1] ?? "").trim();
       fenceLines = [];
+      i += 1;
+      continue;
+    }
+
+    // GFM pipe table: a row containing "|" immediately followed by a delimiter
+    // row (|---|:--:|). Requires the delimiter to have already arrived, so mid
+    // stream the bare header renders as a paragraph until its delimiter lands
+    // (the same re-block-on-arrival behavior as fenced code).
+    if (
+      line.includes("|") &&
+      !isTableDelimiter(line) &&
+      i + 1 < lines.length &&
+      isTableDelimiter(lines[i + 1] ?? "")
+    ) {
+      flushPara();
+      flushList();
+      const header = splitCells(line).map((c) => parseInline(c));
+      const aligns = parseAligns(lines[i + 1] ?? "");
+      i += 2;
+      const rows: InlineNode[][][] = [];
+      while (i < lines.length) {
+        const r = lines[i] ?? "";
+        if (/^\s*$/.test(r) || !r.includes("|") || /^\s*```/.test(r)) break;
+        rows.push(splitCells(r).map((c) => parseInline(c)));
+        i += 1;
+      }
+      blocks.push({ type: "table", header, aligns, rows });
       continue;
     }
 
@@ -89,6 +134,7 @@ export function parseMarkdown(content: string): Block[] {
       // Blank line: block boundary (this is also the streaming re-block point).
       flushPara();
       flushList();
+      i += 1;
       continue;
     }
 
@@ -101,18 +147,38 @@ export function parseMarkdown(content: string): Block[] {
         level: (heading[1] ?? "").length === 2 ? 2 : 3,
         children: parseInline(heading[2] ?? ""),
       });
+      i += 1;
       continue;
     }
 
-    const item = /^\s*-\s+(.*)$/.exec(line);
-    if (item) {
+    // Thematic break: a line of only ---, ***, or ___ (>=3). Checked before the
+    // "- " list rule, which needs a space after the dash, so "---" never matches
+    // it.
+    if (/^\s*(-{3,}|\*{3,}|_{3,})\s*$/.test(line)) {
       flushPara();
-      listItems.push(item[1] ?? "");
+      flushList();
+      blocks.push({ type: "thematicBreak" });
+      i += 1;
+      continue;
+    }
+
+    const ordered = /^\s*\d+[.)]\s+(.*)$/.exec(line);
+    if (ordered) {
+      pushListItem(ordered[1] ?? "", true);
+      i += 1;
+      continue;
+    }
+
+    const item = /^\s*[-*]\s+(.*)$/.exec(line);
+    if (item) {
+      pushListItem(item[1] ?? "", false);
+      i += 1;
       continue;
     }
 
     flushList();
     para.push(line);
+    i += 1;
   }
 
   if (inFence) {
@@ -122,6 +188,66 @@ export function parseMarkdown(content: string): Block[] {
   flushPara();
   flushList();
   return blocks;
+}
+
+// ---------------------------------------------------------------------------
+// GFM pipe-table helpers.
+
+// A delimiter row is |---|:--:|---:| : every cell is optional colons around a
+// run of dashes, with at least one dash overall. Pipes are required so a plain
+// "---" thematic break never reads as a one-column table delimiter.
+function isTableDelimiter(line: string): boolean {
+  const s = line.trim();
+  if (!s.includes("|") || !s.includes("-")) return false;
+  const cells = s.replace(/^\|/, "").replace(/\|$/, "").split("|");
+  return cells.length > 0 && cells.every((c) => /^\s*:?-+:?\s*$/.test(c));
+}
+
+function parseAligns(line: string): Align[] {
+  const s = line.trim().replace(/^\|/, "").replace(/\|$/, "");
+  return s.split("|").map((c) => {
+    const t = c.trim();
+    const left = t.startsWith(":");
+    const right = t.endsWith(":");
+    if (left && right) return "center";
+    if (right) return "right";
+    if (left) return "left";
+    return null;
+  });
+}
+
+// Split a table row into trimmed cell strings. Pipes inside a $...$ math span
+// (e.g. absolute value |x|) and backslash-escaped \| are NOT separators.
+function splitCells(row: string): string[] {
+  const s = row.trim();
+  const cells: string[] = [];
+  let cur = "";
+  let inMath = false;
+  for (let k = 0; k < s.length; k += 1) {
+    const ch = s[k];
+    if (ch === "\\" && s[k + 1] === "|") {
+      cur += "|";
+      k += 1;
+      continue;
+    }
+    if (ch === "$") {
+      inMath = !inMath;
+      cur += ch;
+      continue;
+    }
+    if (ch === "|" && !inMath) {
+      cells.push(cur);
+      cur = "";
+      continue;
+    }
+    cur += ch;
+  }
+  cells.push(cur);
+  // Drop the empty edge cells produced by optional leading/trailing pipes,
+  // without swallowing a genuinely empty interior cell.
+  if (s.startsWith("|") && cells[0]?.trim() === "") cells.shift();
+  if (s.endsWith("|") && cells.at(-1)?.trim() === "") cells.pop();
+  return cells.map((c) => c.trim());
 }
 
 // ---------------------------------------------------------------------------

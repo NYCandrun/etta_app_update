@@ -26,6 +26,12 @@ function blockText(b: Block | undefined): string {
       return b.code;
     case "list":
       return b.items.map(inlineText).join("|");
+    case "thematicBreak":
+      return "---";
+    case "table":
+      return [b.header, ...b.rows]
+        .map((row) => row.map(inlineText).join(" ¦ "))
+        .join(" / ");
     default:
       return inlineText(b.children);
   }
@@ -71,6 +77,73 @@ describe("parseMarkdown — blocks", () => {
     const blocks = parseMarkdown("before\n\n```js\nconst a = 1;");
     expect(blocks.map((b) => b.type)).toEqual(["paragraph", "codeBlock"]);
     expect(blockText(blocks[1])).toBe("const a = 1;");
+  });
+});
+
+describe("parseMarkdown — tables, ordered lists, rules", () => {
+  it("groups consecutive '1.' lines into an ordered list", () => {
+    const blocks = parseMarkdown("steps:\n1. shift\n2. scale\n3. reflect\n\ndone");
+    expect(blocks.map((b) => b.type)).toEqual(["paragraph", "list", "paragraph"]);
+    expect(blocks[1]).toMatchObject({ type: "list", ordered: true });
+    expect(blockText(blocks[1])).toBe("shift|scale|reflect");
+  });
+
+  it("a type switch (numbered -> bulleted) starts a new list block", () => {
+    const blocks = parseMarkdown("1. one\n2. two\n- bullet");
+    expect(blocks.map((b) => b.type)).toEqual(["list", "list"]);
+    expect(blocks[0]).toMatchObject({ ordered: true });
+    expect(blocks[1]).toMatchObject({ ordered: false });
+    expect(blockText(blocks[0])).toBe("one|two");
+    expect(blockText(blocks[1])).toBe("bullet");
+  });
+
+  it("parses a GFM pipe table with a header, delimiter, and body rows", () => {
+    const src = [
+      "| Parameter | Effect |",
+      "|---|---|",
+      "| $h$ | Horizontal shift |",
+      "| $k$ | Vertical shift |",
+    ].join("\n");
+    const blocks = parseMarkdown(src);
+    expect(blocks).toHaveLength(1);
+    const table = blocks[0];
+    expect(table?.type).toBe("table");
+    if (table?.type !== "table") throw new Error("expected table");
+    expect(table.header.map(inlineText)).toEqual(["Parameter", "Effect"]);
+    expect(table.rows).toHaveLength(2);
+    // Math inside a cell is still tokenized (KaTeX), not literal.
+    expect(table.rows[0]?.map(inlineText)).toEqual(["[h]", "Horizontal shift"]);
+  });
+
+  it("reads column alignment from the delimiter row", () => {
+    const src = ["| L | C | R |", "|:---|:---:|---:|", "| a | b | c |"].join("\n");
+    const table = parseMarkdown(src)[0];
+    if (table?.type !== "table") throw new Error("expected table");
+    expect(table.aligns).toEqual(["left", "center", "right"]);
+  });
+
+  it("does not split cells on a pipe inside a $...$ math span", () => {
+    const src = ["| Expr | Note |", "|---|---|", "| $|x|$ | absolute value |"].join("\n");
+    const table = parseMarkdown(src)[0];
+    if (table?.type !== "table") throw new Error("expected table");
+    expect(table.rows[0]).toHaveLength(2);
+    expect(table.rows[0]?.map(inlineText)).toEqual(["[|x|]", "absolute value"]);
+  });
+
+  it("a header row without its delimiter yet stays a paragraph (mid-stream)", () => {
+    const blocks = parseMarkdown("| Parameter | Effect |");
+    expect(blocks.map((b) => b.type)).toEqual(["paragraph"]);
+  });
+
+  it("parses '---', '***', '___' as thematic breaks, not lists or headings", () => {
+    const blocks = parseMarkdown("above\n\n---\n\nbetween\n\n***\n\n___");
+    expect(blocks.map((b) => b.type)).toEqual([
+      "paragraph",
+      "thematicBreak",
+      "paragraph",
+      "thematicBreak",
+      "thematicBreak",
+    ]);
   });
 });
 
@@ -134,6 +207,18 @@ describe("streaming degradation (partial chunks)", () => {
     "",
     "- add $7$ to each side",
     "- divide by *three*",
+    "",
+    "The order of operations:",
+    "",
+    "1. add $7$",
+    "2. divide by $3$",
+    "",
+    "| Step | Result |",
+    "|---|---:|",
+    "| add $7$ | $3x = 21$ |",
+    "| divide | $x = 7$ |",
+    "",
+    "---",
     "",
     "```text",
     "3x = 21",

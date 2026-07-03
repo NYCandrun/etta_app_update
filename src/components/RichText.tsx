@@ -1,9 +1,9 @@
 import { useMemo } from "react";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import "katex/dist/katex.min.css";
 import { MATH_ERROR, renderMath } from "../lib/math";
 import { parseMarkdown } from "./markdown";
-import type { Block, InlineNode } from "./markdown";
+import type { Align, Block, InlineNode } from "./markdown";
 
 // ONE shared math/markdown renderer for lessons, quiz prompts, explanations,
 // and feedback (blocklist: a single RichText surface, never per-screen
@@ -11,10 +11,11 @@ import type { Block, InlineNode } from "./markdown";
 // with the `$...$` tokenizer in `../lib/math`; this file only turns the node
 // tree into React elements.
 //
-// Markdown: minimal hand-rolled subset — ##/### headings, "- " lists, fenced
-// code, paragraphs on blank lines, **bold**, *italic*, `code` — emitted as
-// REAL React elements so `.prose` typography applies. Unclosed markers
-// mid-stream degrade to literal text and never throw.
+// Markdown: minimal hand-rolled subset — ##/### headings, "- "/"1." lists,
+// fenced code, GFM pipe tables, "---" rules, paragraphs on blank lines,
+// **bold**, *italic*, `code` — emitted as REAL React elements so `.prose`
+// typography applies. Unclosed markers mid-stream degrade to literal text and
+// never throw.
 //
 // Math: every `$...$` (inline) and `$$...$$` (block) span is rendered by KaTeX
 // with MathML so screen readers get real MathML — we NEVER expose raw LaTeX as
@@ -61,6 +62,10 @@ function renderInline(nodes: InlineNode[]): ReactNode {
   });
 }
 
+function alignStyle(a: Align | undefined): CSSProperties | undefined {
+  return a ? { textAlign: a } : undefined;
+}
+
 function BlockNode({ block }: { block: Block }) {
   switch (block.type) {
     case "heading":
@@ -69,14 +74,41 @@ function BlockNode({ block }: { block: Block }) {
       ) : (
         <h3>{renderInline(block.children)}</h3>
       );
-    case "list":
+    case "list": {
+      const items = block.items.map((item, i) => <li key={i}>{renderInline(item)}</li>);
+      return block.ordered ? <ol>{items}</ol> : <ul>{items}</ul>;
+    }
+    case "table":
+      // Wrapped so a wide table scrolls horizontally instead of overflowing the
+      // lesson column.
       return (
-        <ul>
-          {block.items.map((item, i) => (
-            <li key={i}>{renderInline(item)}</li>
-          ))}
-        </ul>
+        <div className="md-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                {block.header.map((cell, i) => (
+                  <th key={i} style={alignStyle(block.aligns[i])}>
+                    {renderInline(cell)}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {block.rows.map((row, ri) => (
+                <tr key={ri}>
+                  {row.map((cell, ci) => (
+                    <td key={ci} style={alignStyle(block.aligns[ci])}>
+                      {renderInline(cell)}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       );
+    case "thematicBreak":
+      return <hr />;
     case "codeBlock":
       // Verbatim text: fenced content bypasses math and inline markdown.
       return (
