@@ -106,3 +106,71 @@ describe("RichText markdown rendering", () => {
     }
   });
 });
+
+// The `etta-chart` fenced block flows through the SAME verbatim codeBlock path
+// as any fence, but RichText's codeBlock branch intercepts `lang === "etta-chart"`
+// and dispatches to the inline chart renderer when the JSON body validates.
+describe("RichText — etta-chart blocks", () => {
+  const CHART = [
+    "Here is the graph:",
+    "",
+    "```etta-chart",
+    '{"domain":[-4,4],"funcs":[{"expr":"x^2","label":"parent"}]}',
+    "```",
+    "",
+    "Done.",
+  ].join("\n");
+
+  it("renders a complete etta-chart block as an <svg>, not literal JSON", () => {
+    const { container } = render(<RichText content={CHART} className="prose" />);
+    const svg = container.querySelector("svg");
+    expect(svg).not.toBeNull();
+    expect(svg?.getAttribute("role")).toBe("img");
+    expect(container.querySelector(".etta-chart-wrap")).not.toBeNull();
+    // The raw JSON must NOT appear as a code block.
+    expect(container.textContent).not.toContain('{"domain"');
+    expect(container.querySelector("pre")).toBeNull();
+  });
+
+  it("renders a truncated etta-chart prefix as <pre> and never throws (all prefixes)", () => {
+    // Every streamed prefix of the chart lesson must parse without throwing;
+    // while the JSON body is incomplete it degrades to a readable code block.
+    for (let cut = 0; cut <= CHART.length; cut += 1) {
+      expect(() =>
+        render(<RichText content={CHART.slice(0, cut)} />),
+      ).not.toThrow();
+    }
+    // A specific mid-JSON cut shows the partial body verbatim in a <pre>, not
+    // an <svg>.
+    const openIdx = CHART.indexOf("```etta-chart");
+    const partial = CHART.slice(0, CHART.indexOf('"label"'));
+    const { container } = render(<RichText content={partial} />);
+    expect(container.querySelector("svg")).toBeNull();
+    expect(container.querySelector("pre")).not.toBeNull();
+    expect(container.textContent).toContain('{"domain"');
+    expect(openIdx).toBeGreaterThanOrEqual(0);
+  });
+
+  it("falls back to a code block when the etta-chart body is complete but invalid", () => {
+    const bad = ["```etta-chart", '{"funcs":[{"expr":"xy"}]}', "```"].join("\n");
+    const { container } = render(<RichText content={bad} />);
+    // All funcs fail to compile -> null spec -> readable code block, no svg.
+    expect(container.querySelector("svg")).toBeNull();
+    expect(container.querySelector("pre code")).toHaveTextContent(
+      '{"funcs":[{"expr":"xy"}]}',
+    );
+  });
+
+  it("leaves a normal ```json fence unaffected (rendered as a code block)", () => {
+    const src = ["```json", '{"domain":[-4,4],"funcs":[{"expr":"x^2"}]}', "```"].join(
+      "\n",
+    );
+    const { container } = render(<RichText content={src} />);
+    // A non-etta-chart language is never turned into a chart.
+    expect(container.querySelector("svg")).toBeNull();
+    const pre = container.querySelector("pre");
+    expect(pre).not.toBeNull();
+    expect(pre?.getAttribute("data-lang")).toBe("json");
+    expect(container.querySelector("pre code")).toHaveTextContent('"expr":"x^2"');
+  });
+});

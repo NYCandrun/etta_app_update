@@ -2,6 +2,8 @@ import { useMemo } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import "katex/dist/katex.min.css";
 import { MATH_ERROR, renderMath } from "../lib/math";
+import { parseChartSpec } from "../lib/chartSpec";
+import { Chart, ChartErrorBoundary } from "./Chart";
 import { parseMarkdown } from "./markdown";
 import type { Align, Block, InlineNode } from "./markdown";
 
@@ -109,13 +111,31 @@ function BlockNode({ block }: { block: Block }) {
       );
     case "thematicBreak":
       return <hr />;
-    case "codeBlock":
+    case "codeBlock": {
       // Verbatim text: fenced content bypasses math and inline markdown.
-      return (
+      const raw = (
         <pre data-lang={block.lang || undefined}>
           <code>{block.code}</code>
         </pre>
       );
+      // The `etta-chart` language tag dispatches to the inline chart renderer.
+      // parseChartSpec is TOTAL (spec-or-null), so a truncated mid-stream JSON
+      // body simply returns null and we render the readable code block until it
+      // completes — the same graceful re-block behavior tables have. The
+      // ChartErrorBoundary guarantees any unforeseen render throw also degrades
+      // to `raw` rather than blanking the lesson.
+      if (block.lang === "etta-chart") {
+        const spec = parseChartSpec(block.code);
+        if (spec !== null) {
+          return (
+            <ChartErrorBoundary resetKey={block.code} fallback={raw}>
+              <Chart spec={spec} />
+            </ChartErrorBoundary>
+          );
+        }
+      }
+      return raw;
+    }
     case "paragraph":
       return <p>{renderInline(block.children)}</p>;
   }

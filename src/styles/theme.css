@@ -147,6 +147,20 @@ body {
 .prose th {
   @apply bg-surface-muted font-semibold text-text;
 }
+/* Inline charts (```etta-chart). Mirrors .md-table-wrap: a wide chart scrolls
+   horizontally instead of overflowing the lesson column. The SVG scales to the
+   wrapper width; its text/axis colors come from --color-* tokens (set inline in
+   Chart.tsx via rgb(var(--color-*))), so both themes re-color for free — there
+   is no dark-mode-specific chart CSS. */
+.prose .etta-chart-wrap {
+  margin: 0 0 1rem 0;
+  overflow-x: auto;
+}
+.prose .etta-chart-wrap svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
 /* Code and math ARE monospace — the only place font-mono is used in prose. */
 .prose code {
   @apply rounded bg-surface-muted px-1 py-0.5 text-text;
