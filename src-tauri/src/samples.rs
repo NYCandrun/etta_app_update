@@ -173,7 +173,7 @@ pub fn app_settings() -> AppSettings {
     AppSettings {
         daily_goal_minutes: 30,
         theme: "system".into(),
-        base_model: "claude-sonnet-4-6".into(),
+        base_model: "claude-sonnet-5".into(),
         reasoning_model: "claude-opus-4-8".into(),
         new_concepts_per_session: 3,
         notifications_enabled: false,

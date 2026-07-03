@@ -108,7 +108,11 @@ export function OnboardingPage() {
   );
 
   // Save the API key to the keychain. Validates format inline first; on success
-  // refreshes settings (so apiKeyPresent flips) and advances to the theme step.
+  // it DISCOVERS the account's models and defaults base_model to the most recent
+  // Sonnet (non-blocking — a discovery failure never blocks advancing), then
+  // refreshes settings (so apiKeyPresent AND the discovered baseModel flip) and
+  // advances to the theme step. The saving spinner stays up through discovery so
+  // the button never flickers mid-flow.
   const onSaveKey = useCallback(async () => {
     const err = apiKeyFormatError(apiKeyInput);
     if (err) {
@@ -118,15 +122,21 @@ export function OnboardingPage() {
     setKeyError(null);
     setSavingKey(true);
     const res = await ipc.setApiKey(apiKeyInput.trim());
-    setSavingKey(false);
     if (!res.ok) {
+      setSavingKey(false);
       // A backend rejection is shown inline (accessible), not as a native dialog.
       setKeyError(formatIpcError(res.error));
       return;
     }
     setApiKeyInput("");
+    // First-setup model discovery. NON-BLOCKING: we await it (so the discovered
+    // default is written before we re-read settings) but tolerate any failure —
+    // the backend command itself never errors onboarding, and even a rejected
+    // promise must not stop us reaching the theme step.
+    await ipc.initializeDefaultModel().catch(() => undefined);
     const refreshed = await ipc.getSettings();
     if (refreshed.ok) setSettings(refreshed.data);
+    setSavingKey(false);
     setStep("theme");
   }, [apiKeyInput, setSettings]);
 

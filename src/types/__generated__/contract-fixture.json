@@ -6,7 +6,7 @@
   },
   "appSettings": {
     "apiKeyPresent": false,
-    "baseModel": "claude-sonnet-4-6",
+    "baseModel": "claude-sonnet-5",
     "dailyGoalMinutes": 30,
     "newConceptsPerSession": 3,
     "notificationsEnabled": false,

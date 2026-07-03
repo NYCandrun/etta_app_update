@@ -39,8 +39,18 @@ export const ipc = {
   // ---- AI + curriculum (milestone 2) ----
 
   // Model ids for the Settings picker. Uses GET /v1/models (cached); never
-  // burns a completion request.
+  // burns a completion request. Ids come back newest-first.
   listAvailableModels: () => call<string[]>("list_available_models"),
+  // FORCE-refresh the model list (Settings "Refresh" button). Always re-fetches
+  // GET /v1/models (bypassing the cache) and SURFACES failures — no key /
+  // network / empty account becomes an error the user sees, never a silent
+  // fallback. Returns the ids newest-first.
+  refreshAvailableModels: () => call<string[]>("refresh_available_models"),
+  // FIRST-SETUP discovery: after the API key is saved, fetch the account's
+  // models and set base_model to the most recent Sonnet. NON-BLOCKING — it
+  // never errors onboarding; it resolves the effective base_model id (the
+  // discovered one, or the current default when there is no key / fetch fails).
+  initializeDefaultModel: () => call<string>("initialize_default_model"),
   // Real connectivity test: a tiny completion using the CONFIGURED model.
   testConnection: () => call<boolean>("test_connection"),
   // Quiz generation (cached). Returns REDACTED questions — no answer key ever

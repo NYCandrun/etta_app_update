@@ -105,6 +105,8 @@ pub fn run() {
             commands::is_cached,
             commands::export_data,
             commands_ai::list_available_models,
+            commands_ai::refresh_available_models,
+            commands_ai::initialize_default_model,
             commands_ai::test_connection,
             commands_ai::generate_streamed,
             commands_ai::cancel_stream,

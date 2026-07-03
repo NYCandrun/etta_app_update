@@ -143,7 +143,7 @@ fn default_for(key: &str) -> &'static str {
     match key {
         "daily_goal_minutes" => "30",
         "theme" => "system",
-        "base_model" => "claude-sonnet-4-6",
+        "base_model" => "claude-sonnet-5",
         "reasoning_model" => "claude-opus-4-8",
         "new_concepts_per_session" => "3",
         "notifications_enabled" => "false",
@@ -193,8 +193,10 @@ pub fn set_setting(conn: &Connection, key: &str, raw: &str) -> Result<(), String
 
 /// The configured base model for every AI call. There is exactly ONE source of
 /// truth (this accessor) — no call site hardcodes a model id (blocklist #2).
-/// Falls back to the contract default ("claude-sonnet-4-6") only when unset;
-/// the default is the current June-2026 id, never a stale dated id.
+/// Falls back to the contract default ("claude-sonnet-5") only when unset; the
+/// default is the current UNDATED Sonnet id, never a stale dated id. At first
+/// setup this default is overwritten with the account's most recent Sonnet via
+/// `initialize_default_model` once the API key is saved.
 pub fn base_model(conn: &Connection) -> Result<String, String> {
     Ok(get_string(conn, "base_model")?.unwrap_or_else(|| default_for("base_model").into()))
 }

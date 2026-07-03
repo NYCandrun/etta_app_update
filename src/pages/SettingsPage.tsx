@@ -33,6 +33,7 @@ export function SettingsPage() {
 
   const [models, setModels] = useState<string[]>([]);
   const [modelsError, setModelsError] = useState<string | null>(null);
+  const [refreshingModels, setRefreshingModels] = useState(false);
   const [testState, setTestState] = useState<"idle" | "testing" | "ok" | "fail">("idle");
   const [exportState, setExportState] = useState<"idle" | "exporting" | "done">("idle");
   const [hydrateError, setHydrateError] = useState<string | null>(null);
@@ -130,6 +131,22 @@ export function SettingsPage() {
   useEffect(() => {
     loadModels();
   }, [loadModels]);
+
+  // FORCE-refresh the dropdown from the account (Settings "Refresh" button).
+  // Unlike the passive initial load, this re-fetches GET /v1/models bypassing
+  // the cache and SURFACES failures inline (reusing modelsError) so the learner
+  // knows the refresh didn't work — no silent fallback. Disabled while pending.
+  const onRefreshModels = async () => {
+    setRefreshingModels(true);
+    const res = await ipc.refreshAvailableModels();
+    setRefreshingModels(false);
+    if (res.ok) {
+      setModels(res.data);
+      setModelsError(null);
+    } else {
+      setModelsError(res.error);
+    }
+  };
 
   const onChangeModel = async (model: string) => {
     const previousModel = settings.baseModel;
@@ -284,22 +301,32 @@ export function SettingsPage() {
           <label htmlFor="base-model" className="text-sm font-medium text-text">
             Base model
           </label>
-          <select
-            id="base-model"
-            value={settings.baseModel}
-            onChange={(e) => void onChangeModel(e.target.value)}
-            className="rounded-md border border-surface-border bg-surface px-3 py-2 text-sm text-text"
-          >
-            {/* Always include the current value so the select is never empty. */}
-            {(models.includes(settings.baseModel)
-              ? models
-              : [settings.baseModel, ...models]
-            ).map((m) => (
-              <option key={m} value={m}>
-                {m}
-              </option>
-            ))}
-          </select>
+          <div className="flex items-center gap-2">
+            <select
+              id="base-model"
+              value={settings.baseModel}
+              onChange={(e) => void onChangeModel(e.target.value)}
+              className="flex-1 rounded-md border border-surface-border bg-surface px-3 py-2 text-sm text-text"
+            >
+              {/* Always include the current value so the select is never empty. */}
+              {(models.includes(settings.baseModel)
+                ? models
+                : [settings.baseModel, ...models]
+              ).map((m) => (
+                <option key={m} value={m}>
+                  {m}
+                </option>
+              ))}
+            </select>
+            <Button
+              variant="secondary"
+              onClick={() => void onRefreshModels()}
+              disabled={refreshingModels}
+              aria-label="Refresh the list of available models"
+            >
+              {refreshingModels ? "Refreshing…" : "Refresh"}
+            </Button>
+          </div>
           {modelsError && (
             <InlineError
               message={`Could not load the model list: ${formatIpcError(modelsError)}`}

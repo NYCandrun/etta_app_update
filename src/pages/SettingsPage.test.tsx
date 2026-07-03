@@ -16,6 +16,7 @@ const boundary = vi.hoisted(() => ({
   setApiKey: vi.fn(),
   deleteApiKey: vi.fn(),
   listAvailableModels: vi.fn(),
+  refreshAvailableModels: vi.fn(),
   testConnection: vi.fn(),
   exportData: vi.fn(),
 }));
@@ -34,7 +35,7 @@ import { SettingsPage } from "./SettingsPage";
 const SETTINGS: AppSettings = {
   dailyGoalMinutes: 30,
   theme: "light",
-  baseModel: "claude-sonnet-4-6",
+  baseModel: "claude-sonnet-5",
   reasoningModel: "claude-opus-4-8",
   newConceptsPerSession: 3,
   notificationsEnabled: false,
@@ -158,5 +159,75 @@ describe("SettingsPage hydrate failure", () => {
       await screen.findByRole("heading", { name: "Settings" }),
     ).toBeInTheDocument();
     expect(boundary.getSettings).toHaveBeenCalledTimes(2);
+  });
+});
+
+// The Model "Refresh" button force-re-fetches the account's model list and
+// repopulates the dropdown: it calls refreshAvailableModels, disables while the
+// call is in flight, updates the <select> options on success, and surfaces a
+// failure INLINE (never a silent fallback).
+describe("SettingsPage model Refresh button", () => {
+  function refreshButton() {
+    return screen.getByRole("button", {
+      name: /refresh the list of available models/i,
+    });
+  }
+
+  it("refreshes the dropdown options on success and disables while pending", async () => {
+    let settleRefresh: (v: IpcResult<string[]>) => void = () => {};
+    boundary.refreshAvailableModels.mockImplementation(
+      () => new Promise<IpcResult<string[]>>((resolve) => (settleRefresh = resolve)),
+    );
+
+    renderSettings();
+    await screen.findByRole("heading", { name: "Settings" });
+
+    const btn = refreshButton();
+    expect(btn).not.toBeDisabled();
+    fireEvent.click(btn);
+
+    // Disabled + "Refreshing…" while the fetch is in flight.
+    await waitFor(() =>
+      expect(
+        screen.getByRole("button", { name: /refresh the list of available models/i }),
+      ).toBeDisabled(),
+    );
+    expect(screen.getByText("Refreshing…")).toBeInTheDocument();
+
+    // Resolve with a NEW, newest-first list including a fresh model id.
+    await act(async () => {
+      settleRefresh({
+        ok: true,
+        data: ["claude-sonnet-6", "claude-sonnet-5", "claude-opus-4-8"],
+      });
+    });
+
+    // The dropdown now offers the refreshed options, and the button re-enables.
+    await waitFor(() =>
+      expect(
+        screen.getByRole("button", { name: /refresh the list of available models/i }),
+      ).not.toBeDisabled(),
+    );
+    expect(screen.getByRole("option", { name: "claude-sonnet-6" })).toBeInTheDocument();
+    expect(screen.getByRole("option", { name: "claude-opus-4-8" })).toBeInTheDocument();
+    expect(boundary.refreshAvailableModels).toHaveBeenCalledTimes(1);
+  });
+
+  it("surfaces a refresh failure inline (no silent fallback)", async () => {
+    boundary.refreshAvailableModels.mockImplementation(async () => ({
+      ok: false,
+      error: "add your API key first to fetch the model list",
+    }));
+
+    renderSettings();
+    await screen.findByRole("heading", { name: "Settings" });
+
+    fireEvent.click(refreshButton());
+
+    // The inline model-list error appears with the backend message.
+    const alert = await screen.findByRole("alert");
+    expect(alert.textContent).toContain("add your API key first");
+    // The button re-enables after the failed attempt.
+    await waitFor(() => expect(refreshButton()).not.toBeDisabled());
   });
 });

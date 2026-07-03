@@ -16,7 +16,7 @@ export interface SettingsStore {
 const DEFAULT_SETTINGS: AppSettings = {
   dailyGoalMinutes: 30,
   theme: "system",
-  baseModel: "claude-sonnet-4-6",
+  baseModel: "claude-sonnet-5",
   reasoningModel: "claude-opus-4-8",
   newConceptsPerSession: 3,
   notificationsEnabled: false,

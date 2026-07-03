@@ -28,7 +28,7 @@ import { App } from "./App";
 const SETTINGS = {
   dailyGoalMinutes: 30 as const,
   theme: "dark",
-  baseModel: "claude-sonnet-4-6",
+  baseModel: "claude-sonnet-5",
   reasoningModel: "claude-opus-4-8",
   newConceptsPerSession: 3,
   notificationsEnabled: false,

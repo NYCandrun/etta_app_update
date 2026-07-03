@@ -146,6 +146,68 @@ pub async fn list_available_models(ai: State<'_, AiState>) -> Result<Vec<String>
     Ok(models::list_available_models(&ai.client, &ai.model_cache, key.as_deref()).await)
 }
 
+/// FORCE-refresh the model list (Settings "Refresh" button). Unlike the passive
+/// `list_available_models` — which serves a fresh cache and silently falls back
+/// on failure — this ALWAYS re-fetches GET /v1/models and SURFACES failures so
+/// the user knows the refresh did not work. Requires a key: without one it
+/// returns a friendly "add your API key first" error rather than the fallback
+/// list. Makes ZERO completion requests. Returns the ids newest-first.
+#[tauri::command]
+pub async fn refresh_available_models(ai: State<'_, AiState>) -> Result<Vec<String>, String> {
+    let key = keychain::get_key()?;
+    models::refresh_available_models(&ai.client, &ai.model_cache, key.as_deref()).await
+}
+
+/// FIRST-SETUP model discovery — NON-BLOCKING by design. Called right after the
+/// API key is saved in onboarding: if a key exists, it force-fetches the
+/// account's models and writes the MOST RECENT Sonnet (via
+/// `models::pick_default_model`) to `base_model`, returning the chosen id. If
+/// there is no key, the fetch fails, or the account exposes no models, it does
+/// NOT error the onboarding flow — it returns the CURRENT effective `base_model`
+/// unchanged. So this command essentially never fails onboarding; the frontend
+/// awaits it, then re-reads settings to reflect whatever the base model now is.
+#[tauri::command]
+pub async fn initialize_default_model(
+    state: State<'_, AppState>,
+    ai: State<'_, AiState>,
+) -> Result<String, String> {
+    // No key → nothing to discover; leave the default in place (never an error).
+    let key = match keychain::get_key()? {
+        Some(k) if !k.trim().is_empty() => k,
+        _ => {
+            let c = state.conn()?;
+            return settings::base_model(&c);
+        }
+    };
+
+    // Force-fetch (best-effort); a failure (network/parse/empty) is swallowed —
+    // discovery must never block first setup, so `None` here means "keep the
+    // current default".
+    let discovered = models::refresh_available_models(&ai.client, &ai.model_cache, Some(&key))
+        .await
+        .ok();
+    let c = state.conn()?;
+    apply_discovered_default(&c, discovered.as_deref())
+}
+
+/// The pure, testable core of `initialize_default_model` (no keychain, no
+/// network): given the OPTIONAL fetched id list, pick the most recent Sonnet
+/// and WRITE it to `base_model`, returning the chosen id. When discovery failed
+/// (`None`) or yielded no usable model, the current effective `base_model` is
+/// returned UNCHANGED — first setup is never blocked by this step.
+fn apply_discovered_default(
+    conn: &rusqlite::Connection,
+    discovered: Option<&[String]>,
+) -> Result<String, String> {
+    match discovered.and_then(models::pick_default_model) {
+        Some(chosen) => {
+            settings::set_setting(conn, "base_model", &chosen)?;
+            Ok(chosen)
+        }
+        None => settings::base_model(conn),
+    }
+}
+
 /// Real connectivity test: a tiny completion using the CONFIGURED model (never a
 /// hardcoded id). Returns true on a 2xx, false otherwise.
 #[tauri::command]
@@ -951,6 +1013,55 @@ mod tests {
         assert_eq!(final_score(&[], 0), 0.0);
     }
 
+    // ---- First-setup default-model discovery (apply_discovered_default) ----
+
+    fn settings_db() -> rusqlite::Connection {
+        let conn = rusqlite::Connection::open_in_memory().unwrap();
+        crate::db::init_schema(&conn).unwrap();
+        conn
+    }
+
+    /// With models available, the most recent Sonnet is WRITTEN to base_model
+    /// and returned — overriding the unset default. This is the first-setup
+    /// happy path (the fetched list is passed in directly; no network).
+    #[test]
+    fn initialize_default_writes_newest_sonnet_when_models_available() {
+        let conn = settings_db();
+        // Fresh install: base_model is the unset default.
+        assert_eq!(settings::base_model(&conn).unwrap(), "claude-sonnet-5");
+
+        // A newest-first list (as fetch returns) with an even-newer sonnet.
+        let discovered = vec![
+            "claude-sonnet-6".to_string(), // newest sonnet
+            "claude-opus-4-8".to_string(),
+            "claude-sonnet-5".to_string(),
+        ];
+        let chosen = apply_discovered_default(&conn, Some(&discovered)).unwrap();
+        assert_eq!(chosen, "claude-sonnet-6", "picks the newest sonnet");
+        // …and it is PERSISTED as the base model.
+        assert_eq!(settings::base_model(&conn).unwrap(), "claude-sonnet-6");
+    }
+
+    /// When discovery yielded nothing (no key / fetch failed / empty account →
+    /// `None`), base_model is left UNCHANGED and the current effective value is
+    /// returned — first setup is never blocked.
+    #[test]
+    fn initialize_default_leaves_base_model_unchanged_without_models() {
+        let conn = settings_db();
+        // Seed a non-default base model to prove it is not clobbered.
+        settings::set_setting(&conn, "base_model", "claude-opus-4-8").unwrap();
+
+        let unchanged = apply_discovered_default(&conn, None).unwrap();
+        assert_eq!(unchanged, "claude-opus-4-8", "returns current, unchanged");
+        assert_eq!(settings::base_model(&conn).unwrap(), "claude-opus-4-8");
+
+        // An empty fetched list is treated the same as no discovery.
+        let empty: Vec<String> = vec![];
+        let still = apply_discovered_default(&conn, Some(&empty)).unwrap();
+        assert_eq!(still, "claude-opus-4-8");
+        assert_eq!(settings::base_model(&conn).unwrap(), "claude-opus-4-8");
+    }
+
     // ---- WP2: streaming cancellation + C3 reinforcement decision ----
 
     fn seeded_db() -> rusqlite::Connection {
@@ -1161,7 +1272,7 @@ mod tests {
             "quiz",
             &payload,
             Some(mastery_band(0.0)),
-            Some("claude-sonnet-4-6"),
+            Some("claude-sonnet-5"),
         )
         .unwrap()
     }
@@ -1323,7 +1434,7 @@ mod tests {
         let newer_id = {
             let c = state.conn().unwrap();
             let payload = serde_json::to_string(&mc_questions("newer quiz", "b")).unwrap();
-            cache::put(&c, "alg_001", "quiz", &payload, Some("low"), Some("claude-sonnet-4-6"))
+            cache::put(&c, "alg_001", "quiz", &payload, Some("low"), Some("claude-sonnet-5"))
                 .unwrap()
         };
         assert_ne!(served_id, newer_id);
@@ -1521,7 +1632,7 @@ mod tests {
         };
         {
             let c = state.conn().unwrap();
-            cache::put(&c, "alg_001", "quiz", &mk("mid-band quiz"), Some("mid"), Some("claude-sonnet-4-6")).unwrap();
+            cache::put(&c, "alg_001", "quiz", &mk("mid-band quiz"), Some("mid"), Some("claude-sonnet-5")).unwrap();
             cache::put(&c, "alg_001", "quiz", &mk("opus quiz"), Some("low"), Some("claude-opus-4-8")).unwrap();
         }
 

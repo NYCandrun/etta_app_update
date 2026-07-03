@@ -151,7 +151,7 @@ export interface DailyProgress {
 export interface AppSettings {
   dailyGoalMinutes: 15 | 30 | 45 | 60;
   theme: "light" | "dark" | "system";
-  baseModel: string; // e.g. "claude-sonnet-4-6"
+  baseModel: string; // e.g. "claude-sonnet-5"
   reasoningModel: string; // e.g. "claude-opus-4-8"
   newConceptsPerSession: number;
   notificationsEnabled: boolean;
